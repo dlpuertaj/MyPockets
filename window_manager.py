@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from tkinter import ttk
 from tkinter import Toplevel
 from services import Services as serve
 import global_constants as glob_const
@@ -16,6 +17,9 @@ class WindowManager:
         self.login_message = glob_const.NEED_LOGIN
         self.menu_bar = tk.Menu(self.root)
         self.customize_menu()
+        self.main_frame = tk.Frame(self.root)
+        self.customize_main_frame()
+        self.show_transaction_data()
         # self.main_window_title = main_title
         # self.main_window_size = size
         # self.main_window = self.create_main_window(self.main_window_title,self.main_window_size)
@@ -77,3 +81,35 @@ class WindowManager:
                                   command=self.root.quit)
         log_in_button.pack()
         cancel_login_button.pack()
+
+    def customize_main_frame(self):
+        label_total = tk.Label(self.main_frame,text="This is the main frame")
+        label_total.pack()
+        new_income_button = tk.Button(self.main_frame, text="New Income",command=self.show_income_frame)
+        new_expense_button = tk.Button(self.main_frame, text="New Expense",command=lambda:self.show_expense_frame)
+        new_expense_button.pack()
+        new_income_button.pack()
+        self.main_frame.pack()
+
+    def show_income_frame(self):
+        return None
+
+    def show_expense_frame(self):
+        return None
+    
+    def show_transaction_data(self):
+        tree = ttk.Treeview(self.main_frame, column=("c1", "c2", "c3"), show='headings')
+
+        tree.column("#1", anchor=tk.CENTER)
+
+        tree.heading("#1", text="ID")
+
+        tree.column("#2", anchor=tk.CENTER)
+
+        tree.heading("#2", text="FNAME")
+
+        tree.column("#3", anchor=tk.CENTER)
+
+        tree.heading("#3", text="LNAME")
+
+        tree.pack()
