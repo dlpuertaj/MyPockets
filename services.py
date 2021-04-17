@@ -25,3 +25,24 @@ class Services:
 
         if result is not None:
             self.is_logged_in = True
+
+    @classmethod
+    def get_account_data_by_id(self, id):
+        connection = None
+        try:
+            connection = self.db_manager.create_connection(True)
+            result = self.db_manager.execute_sqlite_query(connection,
+                                                          db_constants.GET_ACCOUNT_DATA_BY_ID,
+                                                          id,
+                                                          False)
+        except error_sqlite as e:
+            print(e)
+        finally:
+            if connection is not None:
+                connection.close()
+
+        if result is not None:
+            return result
+        else:
+            return None
+

@@ -1,7 +1,4 @@
-import tkinter as tk
-from tkinter import messagebox
-
-from window_manager import WindowManager as wm
+from frames.window_manager import WindowManager as wm
 
 
 def main():

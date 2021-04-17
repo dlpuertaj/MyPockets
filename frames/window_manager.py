@@ -20,9 +20,7 @@ class WindowManager:
         self.main_frame = tk.Frame(self.root)
         self.customize_main_frame()
         self.show_transaction_data()
-        # self.main_window_title = main_title
-        # self.main_window_size = size
-        # self.main_window = self.create_main_window(self.main_window_title,self.main_window_size)
+
 
 
     def customize_menu(self):
@@ -35,8 +33,10 @@ class WindowManager:
         self.menu_bar.add_cascade(label="Pockets",menu=pocket_menu)
         self.menu_bar.add_cascade(label="Credit Cards",menu=cards_menu)
 
-        file_menu.add_command(label="New Account", command=self.root.quit)
-        file_menu.add_command(label="Edit Accounts", command=self.root.quit)
+        file_menu.add_command(label="New Account")
+        file_menu.add_command(label="Edit Account")
+        file_menu.add_command(label="Edit Expense Types")
+        file_menu.add_command(label="Edit Income Types")
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
 
@@ -101,15 +101,9 @@ class WindowManager:
         tree = ttk.Treeview(self.main_frame, column=("c1", "c2", "c3"), show='headings')
 
         tree.column("#1", anchor=tk.CENTER)
-
         tree.heading("#1", text="ID")
-
         tree.column("#2", anchor=tk.CENTER)
-
         tree.heading("#2", text="FNAME")
-
         tree.column("#3", anchor=tk.CENTER)
-
         tree.heading("#3", text="LNAME")
-
         tree.pack()

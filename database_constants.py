@@ -19,3 +19,5 @@ SEARCH_USER_BY_USERNAME = """ SELECT * FROM user WHERE username = ? """
 
 SEARCH_USER_BY_USERNAME_AND_PASSWORD = """ SELECT * FROM user WHERE username = ? AND password = ?"""
 
+
+GET_ACCOUNT_DATA_BY_ID = "SELECT * FROM account WHERE id = ?"

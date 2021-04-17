@@ -11,7 +11,10 @@ INSERT INTO user VALUES(1,'David','Puerta','dlpuerta@gmail.com','dlpuerta','123'
 
 CREATE TABLE account(
 id integer PRIMARY KEY,
+name text NOT NULL,
 amount integer NOT NULL);
+
+INSERT INTO account VALUES(1,'Ahorros',100)
 
 CREATE TABLE expense_type(
 id integer PRIMARY KEY,
