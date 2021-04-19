@@ -18,10 +18,14 @@ class WindowManager:
         self.menu_bar = tk.Menu(self.root)
         self.customize_menu()
         self.main_frame = tk.Frame(self.root)
+        self.pocket_frame = tk.Frame(self.root)
+        self.resume_frame = tk.Frame(self.root)
         self.customize_main_frame()
-        self.show_transaction_data()
-
-
+        #self.customize_pocket_frame()
+        #self.customize_resume_frame()
+        #self.show_pocket_table()
+        #self.show_resume_data()
+        self.list_box = tk.Listbox()
 
     def customize_menu(self):
         self.root.config(menu=self.menu_bar)
@@ -83,27 +87,57 @@ class WindowManager:
         cancel_login_button.pack()
 
     def customize_main_frame(self):
-        label_total = tk.Label(self.main_frame,text="This is the main frame")
-        label_total.pack()
-        new_income_button = tk.Button(self.main_frame, text="New Income",command=self.show_income_frame)
-        new_expense_button = tk.Button(self.main_frame, text="New Expense",command=lambda:self.show_expense_frame)
-        new_expense_button.pack()
+        self.customize_pocket_frame()
+        self.show_pocket_table()
+        self.customize_resume_frame()
+        self.show_resume_table()
+
+    def customize_pocket_frame(self):
+        new_income_button = tk.Button(self.pocket_frame, text="New Income",
+                                  command="")
+        new_expense_button = tk.Button(self.pocket_frame, text="New Expense",
+                                        command="")
+
         new_income_button.pack()
-        self.main_frame.pack()
+        new_expense_button.pack()
+        self.pocket_frame.pack(side="left",fill=tk.BOTH,expand=1)
+
+    def customize_resume_frame(self):
+        self.resume_frame.pack(side="right",fill=tk.BOTH,expand=1)
 
     def show_income_frame(self):
         return None
 
     def show_expense_frame(self):
         return None
-    
-    def show_transaction_data(self):
-        tree = ttk.Treeview(self.main_frame, column=("c1", "c2", "c3"), show='headings')
 
-        tree.column("#1", anchor=tk.CENTER)
-        tree.heading("#1", text="ID")
-        tree.column("#2", anchor=tk.CENTER)
-        tree.heading("#2", text="FNAME")
-        tree.column("#3", anchor=tk.CENTER)
-        tree.heading("#3", text="LNAME")
-        tree.pack()
+    def show_pocket_table(self):
+
+        pockets_table = ttk.Treeview(self.pocket_frame)
+        pockets_table['columns'] = ("Name","Amount")
+
+        pockets_table.column("#0",width=0, stretch=tk.NO)
+        pockets_table.column("Name",anchor=tk.W, width=100)
+        pockets_table.column("Amount",anchor=tk.W, width=100)
+
+        pockets_table.heading("0",text="",anchor=tk.W)
+        pockets_table.heading("Name",text="Name",anchor=tk.W)
+        pockets_table.heading("Amount",text="Amount",anchor=tk.W)
+        pockets_table.pack()
+
+    def show_resume_table(self):
+        resume_table = ttk.Treeview(self.resume_frame)
+        resume_table['columns'] = ("Income","Day","Type","Note")
+
+        resume_table.column("#0",width=0, stretch=tk.NO)
+        resume_table.column("Income",anchor=tk.W, width=100)
+        resume_table.column("Day",anchor=tk.W, width=100)
+        resume_table.column("Type",anchor=tk.W, width=100)
+        resume_table.column("Note",anchor=tk.W, width=100)
+
+        resume_table.heading("0",text="",anchor=tk.W)
+        resume_table.heading("Income",text="Income",anchor=tk.W)
+        resume_table.heading("Day",text="Day",anchor=tk.W)
+        resume_table.heading("Type",text="Type",anchor=tk.W)
+        resume_table.heading("Note",text="Amount",anchor=tk.W)
+        resume_table.pack()

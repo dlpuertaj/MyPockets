@@ -14,15 +14,25 @@ id integer PRIMARY KEY,
 name text NOT NULL,
 amount integer NOT NULL);
 
-INSERT INTO account VALUES(1,'Ahorros',100)
+INSERT INTO account VALUES(1,'Savings',100);
+INSERT INTO account VALUES(2,'Other',50);
 
 CREATE TABLE expense_type(
 id integer PRIMARY KEY,
-expense_name text NOT NULL);
+expense_name text NOT NULL,
+Note text NULL);
+
+INSERT INTO  expense_type VALUES(1,'Services','');
+INSERT INTO  expense_type VALUES(2,'Food','');
+INSERT INTO  expense_type VALUES(3,'People','');
 
 CREATE TABLE income_type(
 id integer PRIMARY KEY,
-income_name text NOT NUL);
+income_name text NOT NULL,
+Note text NULL);
+
+INSERT INTO  income_type VALUES(1,'Salary','');
+INSERT INTO  income_type VALUES(2,'Other','');
 
 CREATE TABLE expense_event(
 id integer PRIMARY KEY,
@@ -31,6 +41,9 @@ expense_type integer NOT NULL,
 expense_date text NOT NULL,
 description text NOT NULL,
 FOREIGN KEY(expense_type) REFERENCES expense_type(id));
+
+INSERT INTO  expense_event VALUES(1,50,1,'2021-04-15','Tigo');
+INSERT INTO  expense_event VALUES(2,50,2,'2021-04-15','Movistar');
 
 CREATE TABLE income_event(
 id integer PRIMARY KEY,
