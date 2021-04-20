@@ -17,6 +17,13 @@ amount integer NOT NULL);
 INSERT INTO account VALUES(1,'Savings',100);
 INSERT INTO account VALUES(2,'Other',50);
 
+CREATE TABLE pocket(
+id integer PRIMARY KEY,
+name text NOT NULL,
+amount integer NOT NULL
+);
+INSERT INTO pocket VALUES(1,'Other',500);
+
 CREATE TABLE expense_type(
 id integer PRIMARY KEY,
 expense_name text NOT NULL,
