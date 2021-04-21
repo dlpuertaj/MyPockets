@@ -51,7 +51,7 @@ class WindowManager:
         if self.service.is_logged_in:
             popup.grab_release()
             popup.destroy()
-            self.load_data_to_tables()
+            self.build_main_frame()
         else:
             message_label.config(text=glob_const.WRONG_USER_OR_PASSWORD)
 
@@ -80,11 +80,13 @@ class WindowManager:
         log_in_button.pack()
         cancel_login_button.pack()
 
-    def customize_main_frame(self):
+    def build_main_frame(self):
         self.customize_pocket_frame()
         self.build_pocket_table()
+        self.add_pockets_to_table()
         self.customize_resume_frame()
         self.build_resume_table()
+        self.add_resume_data_to_table()
 
     def customize_pocket_frame(self):
         new_income_button = tk.Button(self.pocket_frame, text="New Income",
@@ -108,7 +110,9 @@ class WindowManager:
         self.pockets_table.heading("Amount", text="Amount", anchor=tk.W)
 
     def customize_resume_frame(self):
+        expense_types = serve.get_expense_types()
         self.resume_frame.pack(side="right", fill=tk.BOTH, expand=1)
+
 
     def build_resume_table(self):
         resume_table = ttk.Treeview(self.resume_frame)
@@ -127,7 +131,7 @@ class WindowManager:
         resume_table.heading("Note", text="Amount", anchor=tk.W)
         resume_table.pack()
 
-    def load_data_to_tables(self):
+    def load_pockets_to_tables(self):
         iid = 0
         pockets_data = self.serve.get_pockets()
         for pocket in pockets_data:

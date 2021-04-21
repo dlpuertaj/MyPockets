@@ -63,3 +63,6 @@ class Services:
             return result
         else:
             return None
+
+    def get_expense_types(self):
+
