@@ -21,9 +21,8 @@ class WindowManager:
         self.pocket_frame = tk.Frame(self.root)
         self.resume_frame = tk.Frame(self.root)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
-        self.customize_main_frame()
-        self.build_pocket_table()
-        self.list_box = tk.Listbox()
+        self.resume_table = ttk.Treeview(self.resume_frame)
+        #self.build_main_frame()
 
     def customize_menu(self):
         self.root.config(menu=self.menu_bar)
@@ -47,8 +46,8 @@ class WindowManager:
 
     def verify_login(self, username, password):
 
-        self.service.verify_user_for_login(username, password)
-        if self.service.is_logged_in:
+        self.serve.verify_user_for_login(username, password)
+        if self.serve.is_logged_in:
             popup.grab_release()
             popup.destroy()
             self.build_main_frame()
@@ -83,10 +82,10 @@ class WindowManager:
     def build_main_frame(self):
         self.customize_pocket_frame()
         self.build_pocket_table()
-        self.add_pockets_to_table()
+        self.load_pockets_to_table()
         self.customize_resume_frame()
         self.build_resume_table()
-        self.add_resume_data_to_table()
+        self.load_resume_data_to_table()
 
     def customize_pocket_frame(self):
         new_income_button = tk.Button(self.pocket_frame, text="New Income",
@@ -109,35 +108,42 @@ class WindowManager:
         self.pockets_table.heading("Name", text="Name", anchor=tk.W)
         self.pockets_table.heading("Amount", text="Amount", anchor=tk.W)
 
-    def customize_resume_frame(self):
-        expense_types = serve.get_expense_types()
-        self.resume_frame.pack(side="right", fill=tk.BOTH, expand=1)
-
-
-    def build_resume_table(self):
-        resume_table = ttk.Treeview(self.resume_frame)
-        resume_table['columns'] = ("Income", "Day", "Type", "Note")
-
-        resume_table.column("#0", width=0, stretch=tk.NO)
-        resume_table.column("Income", anchor=tk.W, width=100)
-        resume_table.column("Day", anchor=tk.W, width=100)
-        resume_table.column("Type", anchor=tk.W, width=100)
-        resume_table.column("Note", anchor=tk.W, width=100)
-
-        resume_table.heading("0", text="", anchor=tk.W)
-        resume_table.heading("Income", text="Income", anchor=tk.W)
-        resume_table.heading("Day", text="Day", anchor=tk.W)
-        resume_table.heading("Type", text="Type", anchor=tk.W)
-        resume_table.heading("Note", text="Amount", anchor=tk.W)
-        resume_table.pack()
-
-    def load_pockets_to_tables(self):
+    def load_pockets_to_table(self):
         iid = 0
         pockets_data = self.serve.get_pockets()
         for pocket in pockets_data:
             self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent", values=(pocket[1], pocket[2]))
             iid = iid + 1
         self.pockets_table.pack()
+
+    def customize_resume_frame(self):
+        self.resume_frame.pack(side="right", fill=tk.BOTH, expand=1)
+
+    def build_resume_table(self):
+        resume_table = ttk.Treeview(self.resume_frame)
+        columns = []
+
+        expense_types = self.serve.get_expense_types()
+        for expense_type in expense_types:
+            columns.append(expense_type[0])
+
+        self.resume_table['columns'] = columns
+        self.resume_table.heading("0", text="", anchor=tk.W)
+        self.resume_table.column("#0", width=0, stretch=tk.NO)
+
+        for column in columns:
+            self.resume_table.column(column, anchor=tk.W, width=100)
+
+        for column in columns:
+            self.resume_table.heading(column, text=column, anchor=tk.W)
+        self.resume_table.pack()
+
+    def load_resume_data_to_table(self):
+        resume_data = self.serve.get_resume_data(('04',))
+
+        for data in resume_data:
+            print(data)
+
 
     def show_income_frame(self):
         return None

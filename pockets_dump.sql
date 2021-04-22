@@ -50,7 +50,11 @@ description text NOT NULL,
 FOREIGN KEY(expense_type) REFERENCES expense_type(id));
 
 INSERT INTO  expense_event VALUES(1,50,1,'2021-04-15','Tigo');
-INSERT INTO  expense_event VALUES(2,50,2,'2021-04-15','Movistar');
+INSERT INTO  expense_event VALUES(2,100,1,'2021-04-15','Movistar');
+INSERT INTO  expense_event VALUES(3,200,2,'2021-04-15','Mercado');
+INSERT INTO  expense_event VALUES(4,60,2,'2021-04-15','Cena');
+INSERT INTO  expense_event VALUES(5,80,3,'2021-04-15','Mamá');
+INSERT INTO  expense_event VALUES(6,20,3,'2021-04-15','Papá');
 
 CREATE TABLE income_event(
 id integer PRIMARY KEY,
