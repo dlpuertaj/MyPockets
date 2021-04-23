@@ -32,3 +32,5 @@ INNER JOIN expense_type t
 ON e.expense_type = t.id
 WHERE strftime('%m', e.expense_date) = ?
 GROUP BY t.expense_name;"""
+
+GET_PAYROLL_BY_MONTH = "SELECT income_amount FROM income_event WHERE income_type = 1 AND strftime('%m', income_date) = ?"

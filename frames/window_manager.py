@@ -120,7 +120,6 @@ class WindowManager:
         self.resume_frame.pack(side="right", fill=tk.BOTH, expand=1)
 
     def build_resume_table(self):
-        resume_table = ttk.Treeview(self.resume_frame)
         columns = []
 
         expense_types = self.serve.get_expense_types()
@@ -140,10 +139,26 @@ class WindowManager:
 
     def load_resume_data_to_table(self):
         resume_data = self.serve.get_resume_data(('04',))
+        payroll = self.serve.get_payroll_by_month(('04',))
 
+        amount_for_table = []
+        percent_for_table = []
+        sum_percent = 0
         for data in resume_data:
-            print(data)
+            percent = data[1]/payroll[0]
+            amount_for_table.append(data[1])
+            percent_for_table.append(str(percent*100)+"%")
+            sum_percent += percent
 
+        print(amount_for_table)
+        print(percent_for_table)
+        print(sum_percent)
+
+        self.resume_table.insert(parent='', index='end', iid=0, text="Parent", values=amount_for_table)
+
+        self.resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
+
+        self.resume_table.pack()
 
     def show_income_frame(self):
         return None

@@ -63,3 +63,12 @@ class Services:
             return result
         else:
             return None
+
+    def get_payroll_by_month(self,month):
+
+        result = self.connect_and_execute(db_constants.GET_PAYROLL_BY_MONTH,month,False)
+
+        if result is not None:
+            return result
+        else:
+            return None
