@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import Toplevel
 from services import Services as serve
+from resume_frame import ResumeFrame as resume_frame, ResumeFrame
+from pocket_frame import PocketFrame
 import global_constants as glob_const
 
 
@@ -18,11 +20,11 @@ class WindowManager:
         self.login_message = glob_const.NEED_LOGIN
         self.menu_bar = tk.Menu(self.root)
         self.customize_menu()
-        self.pocket_frame = tk.Frame(self.root)
-        self.resume_frame = tk.Frame(self.root)
+        self.resume_notebook = ttk.Notebook(self.root)
+        self.pocket_frame = PocketFrame() #tk.Frame(self.root)
+        self.resume_frame = ResumeFrame()  # tk.Frame(self.resume_notebook)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
         self.resume_table = ttk.Treeview(self.resume_frame)
-        #self.build_main_frame()
 
     def customize_menu(self):
         self.root.config(menu=self.menu_bar)
@@ -45,7 +47,6 @@ class WindowManager:
         cards_menu.add_command(label="View Movements")
 
     def verify_login(self, username, password):
-
         self.serve.verify_user_for_login(username, password)
         if self.serve.is_logged_in:
             popup.grab_release()
@@ -80,85 +81,11 @@ class WindowManager:
         cancel_login_button.pack()
 
     def build_main_frame(self):
-        self.customize_pocket_frame()
-        self.build_pocket_table()
-        self.load_pockets_to_table()
-        self.customize_resume_frame()
-        self.build_resume_table()
-        self.load_resume_data_to_table()
-
-    def customize_pocket_frame(self):
-        new_income_button = tk.Button(self.pocket_frame, text="New Income",
-                                      command="")
-        new_expense_button = tk.Button(self.pocket_frame, text="New Expense",
-                                       command="")
-        new_income_button.pack()
-        new_expense_button.pack()
-        self.pocket_frame.pack(side="left", fill=tk.BOTH, expand=1)
-
-    def build_pocket_table(self):
-
-        self.pockets_table['columns'] = ("Name", "Amount")
-        self.pockets_table.heading("0", text="", anchor=tk.W)
-        self.pockets_table.column("#0", width=0, stretch=tk.NO)
-
-        self.pockets_table.column("Name", anchor=tk.W, width=100)
-        self.pockets_table.column("Amount", anchor=tk.W, width=100)
-
-        self.pockets_table.heading("Name", text="Name", anchor=tk.W)
-        self.pockets_table.heading("Amount", text="Amount", anchor=tk.W)
-
-    def load_pockets_to_table(self):
-        iid = 0
-        pockets_data = self.serve.get_pockets()
-        for pocket in pockets_data:
-            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent", values=(pocket[1], pocket[2]))
-            iid = iid + 1
-        self.pockets_table.pack()
-
-    def customize_resume_frame(self):
-        self.resume_frame.pack(side="right", fill=tk.BOTH, expand=1)
-
-    def build_resume_table(self):
-        columns = []
-
-        expense_types = self.serve.get_expense_types()
-        for expense_type in expense_types:
-            columns.append(expense_type[0])
-
-        self.resume_table['columns'] = columns
-        self.resume_table.heading("0", text="", anchor=tk.W)
-        self.resume_table.column("#0", width=0, stretch=tk.NO)
-
-        for column in columns:
-            self.resume_table.column(column, anchor=tk.W, width=100)
-
-        for column in columns:
-            self.resume_table.heading(column, text=column, anchor=tk.W)
-        self.resume_table.pack()
-
-    def load_resume_data_to_table(self):
-        resume_data = self.serve.get_resume_data(('04',))
-        payroll = self.serve.get_payroll_by_month(('04',))
-
-        amount_for_table = []
-        percent_for_table = []
-        sum_percent = 0
-        for data in resume_data:
-            percent = data[1]/payroll[0]
-            amount_for_table.append(data[1])
-            percent_for_table.append(str(percent*100)+"%")
-            sum_percent += percent
-
-        print(amount_for_table)
-        print(percent_for_table)
-        print(sum_percent)
-
-        self.resume_table.insert(parent='', index='end', iid=0, text="Parent", values=amount_for_table)
-
-        self.resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
-
-        self.resume_table.pack()
+        self.pocket_frame.build_pocket_frame()
+        self.resume_frame.create_resume_frame()
+        self.resume_notebook.pack()
+        self.resume_notebook.add(self.resume_frame, text="Expense Resume")
+        self.resume_notebook.add(tk.Frame(), text="Monthly Transactions")
 
     def show_income_frame(self):
         return None
