@@ -1,5 +1,5 @@
-from database_manager import DatabaseManager as db
-import database_constants as db_constants
+from database.database_manager import DatabaseManager as db
+from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
 

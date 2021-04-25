@@ -1,6 +1,6 @@
 import mysql.connector
 import sqlite3 as sql
-import database_constants as const_db
+from database import database_constants as const_db
 from sqlite3 import Error as error_sqlite
 
 
