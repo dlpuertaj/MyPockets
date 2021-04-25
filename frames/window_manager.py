@@ -21,8 +21,8 @@ class WindowManager:
         self.menu_bar = tk.Menu(self.root)
         self.customize_menu()
         self.resume_notebook = ttk.Notebook(self.root)
-        self.pocket_frame = PocketFrame() #tk.Frame(self.root)
-        self.resume_frame = ResumeFrame()  # tk.Frame(self.resume_notebook)
+        self.pocket_frame = PocketFrame(self.root) #tk.Frame(self.root)
+        self.resume_frame = ResumeFrame(self.resume_notebook)  # tk.Frame(self.resume_notebook)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
         self.resume_table = ttk.Treeview(self.resume_frame)
 

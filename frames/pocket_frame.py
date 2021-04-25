@@ -1,10 +1,12 @@
-from tkinter import Frame, Button, BOTH, ttk,W,NO
+from tkinter import *
+from tkinter import ttk
+
 from services import Services as serve
 
 class PocketFrame(Frame):
 
-    def __init__(self):
-        super(PocketFrame,self).__init__()
+    def __init__(self,root):
+        Frame.__init__(self)
         self.serve = serve()
         self.pockets_table = ttk.Treeview(self)
 

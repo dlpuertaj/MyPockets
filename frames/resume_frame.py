@@ -1,10 +1,12 @@
-from tkinter import Frame, BOTH, ttk,W,NO
+from tkinter import *
+from tkinter import ttk
+
 from services import Services as serve
 
 class ResumeFrame(Frame):
 
-    def __init__(self):
-        super(ResumeFrame,self).__init__()
+    def __init__(self,root):
+        Frame.__init__(self)
         self.serve = serve()
         self.resume_table = ttk.Treeview(self)
 
