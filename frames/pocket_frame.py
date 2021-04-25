@@ -3,12 +3,12 @@ from services import Services as serve
 
 class PocketFrame(Frame):
 
-    def __init__(self,root):
-        super.__init__(root)
+    def __init__(self):
+        super(PocketFrame,self).__init__()
         self.serve = serve()
         self.pockets_table = ttk.Treeview(self)
 
-    def build_pocket_frame(self):
+    def create_pocket_frame(self):
         self.customize_pocket_frame()
         self.build_pocket_table()
         self.load_pockets_to_table()

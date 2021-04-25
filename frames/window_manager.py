@@ -2,11 +2,11 @@ import tkinter as tk
 
 from tkinter import ttk
 from tkinter import Toplevel
-from services import Services as serve
-from resume_frame import ResumeFrame as resume_frame, ResumeFrame
-from pocket_frame import PocketFrame
-import global_constants as glob_const
 
+from frames.pocket_frame import PocketFrame
+from frames.resume_frame import ResumeFrame
+from services import Services as serve
+import global_constants as glob_const
 
 class WindowManager:
     LARGE_FONT = ("Verdana", 12)
@@ -81,7 +81,7 @@ class WindowManager:
         cancel_login_button.pack()
 
     def build_main_frame(self):
-        self.pocket_frame.build_pocket_frame()
+        self.pocket_frame.create_pocket_frame()
         self.resume_frame.create_resume_frame()
         self.resume_notebook.pack()
         self.resume_notebook.add(self.resume_frame, text="Expense Resume")

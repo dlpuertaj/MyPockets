@@ -3,8 +3,8 @@ from services import Services as serve
 
 class ResumeFrame(Frame):
 
-    def __init__(self,root):
-        super.__init__(root)
+    def __init__(self):
+        super(ResumeFrame,self).__init__()
         self.serve = serve()
         self.resume_table = ttk.Treeview(self)
 
