@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Frame, W, NO, BOTH
 from tkinter import ttk
 
 from services import Services as serve

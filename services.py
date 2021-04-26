@@ -72,3 +72,13 @@ class Services:
             return result
         else:
             return None
+
+    def get_incomes_by_month(self, month):
+        result = self.connect_and_execute(db_constants.GET_INCOME_EVENTS_BY_MONTH,month,True)
+        if result is not None:
+            return result
+        else:
+            return None
+
+    def get_expenses_by_month(self, month):
+        pass

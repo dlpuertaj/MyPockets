@@ -5,6 +5,7 @@ from tkinter import Toplevel
 
 from frames.pocket_frame import PocketFrame
 from frames.resume_frame import ResumeFrame
+from frames.transactions_frame import TransactionsFrame
 from services import Services as serve
 import global_constants as glob_const
 
@@ -23,6 +24,7 @@ class WindowManager:
         self.resume_notebook = ttk.Notebook(self.root)
         self.pocket_frame = PocketFrame(self.root) #tk.Frame(self.root)
         self.resume_frame = ResumeFrame(self.resume_notebook)  # tk.Frame(self.resume_notebook)
+        self.transactions_frame = TransactionsFrame(self.resume_notebook)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
         self.resume_table = ttk.Treeview(self.resume_frame)
 
@@ -83,9 +85,10 @@ class WindowManager:
     def build_main_frame(self):
         self.pocket_frame.create_pocket_frame()
         self.resume_frame.create_resume_frame()
+        self.transactions_frame.create_transaction_frame('04')
         self.resume_notebook.pack()
         self.resume_notebook.add(self.resume_frame, text="Expense Resume")
-        self.resume_notebook.add(tk.Frame(), text="Monthly Transactions")
+        self.resume_notebook.add(self.transactions_frame, text="Monthly Transactions")
 
     def show_income_frame(self):
         return None
