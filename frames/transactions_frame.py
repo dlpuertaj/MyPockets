@@ -13,11 +13,14 @@ class TransactionsFrame(Frame):
     def create_transaction_frame(self,month):
         self.build_transactions_table()
         self.data_to_transactions_table_by_month(month)
-        self.pack()
+        self.pack(side="right", fill=BOTH, expand=1)
+        self.transactions_table.pack()
 
     def build_transactions_table(self):
         columns = []
-
+        columns.append("Income")
+        columns.append("Note")
+        columns.append("Day")
         expense_types = self.serve.get_expense_types()
         for expense_type in expense_types:
             columns.append(expense_type[0])
@@ -26,12 +29,6 @@ class TransactionsFrame(Frame):
         self.transactions_table.heading("0", text="", anchor=W)
         self.transactions_table.column("#0", width=0, stretch=NO)
 
-        self.transactions_table.column("Income", anchor=W, width=100)
-        self.transactions_table.column("Note", anchor=W, width=100)
-        self.transactions_table.column("Day", anchor=W, width=100)
-        self.transactions_table.heading("Income", text="Income", anchor=W)
-        self.transactions_table.heading("Note", text="Note", anchor=W)
-        self.transactions_table.heading("Day", text="Day", anchor=W)
         for column in columns:
             self.transactions_table.column(column, anchor=W, width=100)
 
@@ -43,8 +40,12 @@ class TransactionsFrame(Frame):
         expenses_by_month = self.serve.get_expenses_by_month(month)
         data_for_table = []
         days = 30
-  #      for day in range(1,days+1):
-   #         transaction = ()
+        for income in incomes_by_month:
+            print(income)
+        for expense in expenses_by_month:
+            print(expense)
+        #for day in range(1,days+1):
+        #transaction = ()
 
 
 """
