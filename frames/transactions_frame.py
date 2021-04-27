@@ -36,17 +36,33 @@ class TransactionsFrame(Frame):
             self.transactions_table.heading(column, text=column, anchor=W)
 
     def data_to_transactions_table_by_month(self, month):
-        incomes_by_month = self.serve.get_incomes_by_month(month)
-        expenses_by_month = self.serve.get_expenses_by_month(month)
+        incomes_by_month = self.serve.get_incomes_by_month((month,))
+        expenses_by_month = self.serve.get_expenses_by_month((month,))
         data_for_table = []
         days = 30
         for income in incomes_by_month:
             print(income)
         for expense in expenses_by_month:
             print(expense)
+
+        data = self.build_data_for_table(incomes_by_month,expenses_by_month)
+        print(data)
+        iid = 0
+        for day in range(1,days):
+            data_for_table = (0,'',day,0,0,0)
+            self.transactions_table.insert(parent='', index='end', iid=iid,
+                                 text="Parent", values=data_for_table)
+            iid = iid + 1
+
         #for day in range(1,days+1):
         #transaction = ()
 
+    @staticmethod
+    def get_day_from_date(date):
+        return date.split('-')[1]
+
+    def build_data_for_table(self, incomes, expenses):
+        return []
 
 """
             self.resume_table.insert(parent='', index='end', iid=0,

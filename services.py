@@ -81,4 +81,8 @@ class Services:
             return None
 
     def get_expenses_by_month(self, month):
-        pass
+        result = self.connect_and_execute(db_constants.GET_EXPENSE_EVENTS_BY_MONTH,month,True)
+        if result is not None:
+            return result
+        else:
+            return None
