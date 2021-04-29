@@ -3,14 +3,15 @@ from tkinter import ttk
 
 from services import Services as serve
 
+
 class TransactionsFrame(Frame):
 
-    def __init__(self,root_notebook):
-        Frame.__init__(self,root_notebook)
+    def __init__(self, root_notebook):
+        Frame.__init__(self, root_notebook)
         self.serve = serve()
         self.transactions_table = ttk.Treeview(self)
 
-    def create_transaction_frame(self,month):
+    def create_transaction_frame(self, month):
         self.build_transactions_table()
         self.data_to_transactions_table_by_month(month)
         self.pack(side="right", fill=BOTH, expand=1)
@@ -45,24 +46,29 @@ class TransactionsFrame(Frame):
         for expense in expenses_by_month:
             print(expense)
 
-        data = self.build_data_for_table(incomes_by_month,expenses_by_month)
-        print(data)
+        data = self.build_data_for_table(incomes_by_month, expenses_by_month)
         iid = 0
-        for day in range(1,days):
-            data_for_table = (0,'',day,0,0,0)
+        for day in range(1, days+1):
+            data_for_table = (0, '', day, 0, 0, 0)
             self.transactions_table.insert(parent='', index='end', iid=iid,
-                                 text="Parent", values=data_for_table)
+                                           text="Parent", values=data_for_table)
             iid = iid + 1
 
-        #for day in range(1,days+1):
-        #transaction = ()
+        for income in incomes_by_month:
+            for row in range(len(self.transactions_table.get_children())):
+                values = self.transactions_table.item(row)['values']
+                if self.get_day_from_date(income[2]) == values[2]:
+                    #self.transactions_table.item(row,text="",values=(income[1],"",values[2],0,0,0))
+                    print("income" + income)
+
 
     @staticmethod
     def get_day_from_date(date):
-        return date.split('-')[1]
+        return date.split('-')[2]
 
     def build_data_for_table(self, incomes, expenses):
         return []
+
 
 """
             self.resume_table.insert(parent='', index='end', iid=0,
@@ -74,5 +80,3 @@ class TransactionsFrame(Frame):
         for income in incomes_by_month:
             self.transactions_table.heading(, text=column, anchor=W)
 """
-
-
