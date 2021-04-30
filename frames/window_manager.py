@@ -28,6 +28,11 @@ class WindowManager:
         self.pockets_table = ttk.Treeview(self.pocket_frame)
         self.resume_table = ttk.Treeview(self.resume_frame)
 
+        if glob_const.PROP_REQUIRE_LOGIN:
+            self.create_popup_login()
+        else:
+            self.build_main_frame()
+
     def customize_menu(self):
         self.root.config(menu=self.menu_bar)
         file_menu = tk.Menu(self.menu_bar, tearoff=0)

@@ -54,12 +54,18 @@ class TransactionsFrame(Frame):
                                            text="Parent", values=data_for_table)
             iid = iid + 1
 
+        # TODO: update income without changing expense
+        # TODO: update specific expense and without changing income
         for income in incomes_by_month:
             for row in range(len(self.transactions_table.get_children())):
                 values = self.transactions_table.item(row)['values']
-                if self.get_day_from_date(income[2]) == values[2]:
-                    #self.transactions_table.item(row,text="",values=(income[1],"",values[2],0,0,0))
-                    print("income" + income)
+                if self.get_day_from_date(income[2]) == str(values[2]):
+                    self.transactions_table.item(row,text="",values=(income[1],"",values[2],0,0,0))
+        for expense in expenses_by_month:
+            for row in range(len(self.transactions_table.get_children())):
+                values = self.transactions_table.item(row)['values']
+                if self.get_day_from_date(expense[2]) == str(values[2]):
+                    self.transactions_table.item(row,text="",values=(expense[1],"",values[2],0,0,0))
 
 
     @staticmethod
