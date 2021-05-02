@@ -55,6 +55,16 @@ class Services:
         else:
             return None
 
+
+    def get_expense_type_names(self):
+
+        result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES,None,True)
+
+        if result is not None:
+            return result
+        else:
+            return None
+
     def get_resume_data(self,month):
 
         result = self.connect_and_execute(db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH,month,True)

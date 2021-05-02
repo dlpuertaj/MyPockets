@@ -18,7 +18,7 @@ class ResumeFrame(Frame):
     def build_resume_table(self):
         columns = []
 
-        expense_types = self.serve.get_expense_types()
+        expense_types = self.serve.get_expense_type_names()
         for expense_type in expense_types:
             columns.append(expense_type[0])
 

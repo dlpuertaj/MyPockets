@@ -9,6 +9,7 @@ class TransactionsFrame(Frame):
     def __init__(self, root_notebook):
         Frame.__init__(self, root_notebook)
         self.serve = serve()
+        self.expense_columns = {}
         self.transactions_table = ttk.Treeview(self)
 
     def create_transaction_frame(self, month):
@@ -22,9 +23,12 @@ class TransactionsFrame(Frame):
         columns.append("Income")
         columns.append("Note")
         columns.append("Day")
-        expense_types = self.serve.get_expense_types()
+        expense_types = self.serve.get_expense_type_names()
+        index = 3
         for expense_type in expense_types:
+            self.expense_columns[expense_type[0]] = index
             columns.append(expense_type[0])
+            index += 1
 
         self.transactions_table['columns'] = columns
         self.transactions_table.heading("0", text="", anchor=W)
@@ -39,34 +43,44 @@ class TransactionsFrame(Frame):
     def data_to_transactions_table_by_month(self, month):
         incomes_by_month = self.serve.get_incomes_by_month((month,))
         expenses_by_month = self.serve.get_expenses_by_month((month,))
-        data_for_table = []
+        expense_type_names = self.serve.get_expense_type_names()
         days = 30
-        for income in incomes_by_month:
-            print(income)
-        for expense in expenses_by_month:
-            print(expense)
 
-        data = self.build_data_for_table(incomes_by_month, expenses_by_month)
         iid = 0
+
         for day in range(1, days+1):
-            data_for_table = (0, '', day, 0, 0, 0)
+            data_for_table = [0, '', day]
+            for expense in expense_type_names:
+                data_for_table.append(0)
             self.transactions_table.insert(parent='', index='end', iid=iid,
                                            text="Parent", values=data_for_table)
             iid = iid + 1
 
-        # TODO: update income without changing expense
+        self.add_income_to_table(incomes_by_month)
         # TODO: update specific expense and without changing income
+        self.add_expenses_to_table(expenses_by_month)
+
+    def add_income_to_table(self,incomes_by_month):
         for income in incomes_by_month:
             for row in range(len(self.transactions_table.get_children())):
-                values = self.transactions_table.item(row)['values']
-                if self.get_day_from_date(income[2]) == str(values[2]):
-                    self.transactions_table.item(row,text="",values=(income[1],"",values[2],0,0,0))
+                row_values = self.transactions_table.item(row)['values']
+                if self.get_day_from_date(income[2]) == str(row_values[2]):
+                    row_with_new_income = row_values
+                    row_with_new_income[0] += income[1]
+                    self.transactions_table.item(row, text="", values=row_with_new_income)
+
+    def add_expenses_to_table(self,expenses_by_month):
         for expense in expenses_by_month:
             for row in range(len(self.transactions_table.get_children())):
-                values = self.transactions_table.item(row)['values']
-                if self.get_day_from_date(expense[2]) == str(values[2]):
-                    self.transactions_table.item(row,text="",values=(expense[1],"",values[2],0,0,0))
+                row_values = self.transactions_table.item(row)['values']
+                if self.get_day_from_date(expense[2]) == str(row_values[2]):
+                    row_with_new_expense = row_values
+                    print(self.expense_columns.keys())
+                    index = self.expense_columns[expense[0]]
 
+                    row_with_new_expense[index] += expense[1]
+
+                    self.transactions_table.item(row, text="", values=row_with_new_expense)
 
     @staticmethod
     def get_day_from_date(date):

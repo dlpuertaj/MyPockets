@@ -24,7 +24,9 @@ GET_ACCOUNT_DATA_BY_ID = "SELECT * FROM account WHERE id = ?"
 
 SELECT_POCKETS = "SELECT * FROM pocket"
 
-GET_EXPENSE_TYPES = "SELECT expense_name FROM expense_type"
+GET_EXPENSE_TYPES = "SELECT expense_id, expense_name FROM expense_type"
+
+GET_EXPENSE_TYPE_NAMES = "SELECT expense_name FROM expense_type"
 
 GET_EXPENSE_SUM_BY_TYPE_AND_MONTH = """SELECT t.expense_name as type, SUM(e.expense_amount) as amount 
 FROM expense_event e
