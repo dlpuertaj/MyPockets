@@ -1,4 +1,4 @@
-from tkinter import Frame, W, NO, BOTH
+from tkinter import Frame, W, NO, BOTH, Button
 from tkinter import ttk
 
 from services import Services as serve
@@ -17,6 +17,7 @@ class TransactionsFrame(Frame):
         self.data_to_transactions_table_by_month(month)
         self.pack(side="right", fill=BOTH, expand=1)
         self.transactions_table.pack()
+        self.create_and_pack_buttons()
 
     def build_transactions_table(self):
         columns = []
@@ -57,7 +58,6 @@ class TransactionsFrame(Frame):
             iid = iid + 1
 
         self.add_income_to_table(incomes_by_month)
-        # TODO: update specific expense and without changing income
         self.add_expenses_to_table(expenses_by_month)
 
     def add_income_to_table(self,incomes_by_month):
@@ -75,12 +75,17 @@ class TransactionsFrame(Frame):
                 row_values = self.transactions_table.item(row)['values']
                 if self.get_day_from_date(expense[2]) == str(row_values[2]):
                     row_with_new_expense = row_values
-                    print(self.expense_columns.keys())
                     index = self.expense_columns[expense[0]]
 
                     row_with_new_expense[index] += expense[1]
 
                     self.transactions_table.item(row, text="", values=row_with_new_expense)
+
+    def create_and_pack_buttons(self):
+        new_income_button = Button(self, text="New Income", command="")
+        new_expense_button = Button(self, text="New Expense", command="")
+        new_income_button.pack()
+        new_expense_button.pack()
 
     @staticmethod
     def get_day_from_date(date):

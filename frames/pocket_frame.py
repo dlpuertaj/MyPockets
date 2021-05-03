@@ -11,17 +11,15 @@ class PocketFrame(Frame):
         self.pockets_table = ttk.Treeview(self)
 
     def create_pocket_frame(self):
-        self.customize_pocket_frame()
         self.build_pocket_table()
         self.load_pockets_to_table()
         self.pack(side="left", fill=BOTH, expand=1)
         self.pockets_table.pack()
+        self.add_transfer_button()
 
-    def customize_pocket_frame(self):
-        new_income_button = Button(self, text="New Income",command="")
-        new_expense_button = Button(self, text="New Expense",command="")
-        new_income_button.pack()
-        new_expense_button.pack()
+    def add_transfer_button(self):
+        add_to_pocket_button = Button(self, text="Transfer to Pocket",command="")
+        add_to_pocket_button.pack()
 
     def build_pocket_table(self):
         self.pockets_table['columns'] = ("Name", "Amount")
