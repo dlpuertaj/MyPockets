@@ -64,9 +64,9 @@ class TransactionsFrame(Frame):
         for income in incomes_by_month:
             for row in range(len(self.transactions_table.get_children())):
                 row_values = self.transactions_table.item(row)['values']
-                if self.get_day_from_date(income[2]) == str(row_values[2]):
+                if self.get_day_from_date(income.income_date) == str(row_values[2]):
                     row_with_new_income = row_values
-                    row_with_new_income[0] += income[1]
+                    row_with_new_income[0] += income.income_amount
                     self.transactions_table.item(row, text="", values=row_with_new_income)
 
     def add_expenses_to_table(self,expenses_by_month):

@@ -2,6 +2,10 @@ from database.database_manager import DatabaseManager as db
 from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
+from entities.expense_event import ExpenseEvent
+from entities.income_event import IncomeEvent
+from entities.pocket import Pocket
+
 
 class Services:
 
@@ -39,10 +43,13 @@ class Services:
             return None
 
     def get_pockets(self):
-        result = self.connect_and_execute(db_constants.SELECT_POCKETS,None,True)
-
-        if result is not None:
-            return result
+        result_set = self.connect_and_execute(db_constants.SELECT_POCKETS,None,True)
+        pockets = []
+        if result_set is not None:
+            for result in result_set:
+                pocket = Pocket(pocket_id=result[0],name=result[1], amount=result[2])
+                pockets.append(pocket)
+            return pockets
         else:
             return None
 
@@ -84,15 +91,22 @@ class Services:
             return None
 
     def get_incomes_by_month(self, month):
-        result = self.connect_and_execute(db_constants.GET_INCOME_EVENTS_BY_MONTH,month,True)
-        if result is not None:
-            return result
+        results = self.connect_and_execute(db_constants.GET_INCOME_EVENTS_BY_MONTH,month,True)
+        income_events = []
+        if results is not None:
+            for rs in results:
+                event = IncomeEvent(rs[0],rs[1],rs[2],rs[3],rs[4])
+                income_events.append(event)
+            return income_events
         else:
             return None
 
     def get_expenses_by_month(self, month):
-        result = self.connect_and_execute(db_constants.GET_EXPENSE_EVENTS_BY_MONTH,month,True)
-        if result is not None:
+        result_set = self.connect_and_execute(db_constants.GET_EXPENSE_EVENTS_BY_MONTH,month,True)
+        expense_events = []
+        if result_set is not None:
+            for result in result_set:
+                expense = ExpenseEvent(result[0],result[1],result[2],result[3],result[4])
             return result
         else:
             return None

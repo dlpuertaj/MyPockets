@@ -34,7 +34,7 @@ class PocketFrame(Frame):
 
     def load_pockets_to_table(self):
         iid = 0
-        pockets_data = self.serve.get_pockets()
-        for pocket in pockets_data:
-            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent", values=(pocket[1], pocket[2]))
+        pockets = self.serve.get_pockets()
+        for pocket in pockets:
+            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent", values=(pocket.name, pocket.amount))
             iid = iid + 1
