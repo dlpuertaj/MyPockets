@@ -107,6 +107,14 @@ class Services:
         if result_set is not None:
             for result in result_set:
                 expense = ExpenseEvent(result[0],result[1],result[2],result[3],result[4])
-            return result
+                expense_events.append(expense)
+            return expense_events
+        else:
+            return None
+
+    def get_expense_type_by_id(self, id):
+        result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_BY_ID,id,False)
+        if result is not None:
+            return result[0]
         else:
             return None

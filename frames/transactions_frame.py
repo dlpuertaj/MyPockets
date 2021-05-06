@@ -10,6 +10,7 @@ class TransactionsFrame(Frame):
         Frame.__init__(self, root_notebook)
         self.serve = serve()
         self.expense_columns = {}
+        self.expense_types = self.serve.get_expense_types()
         self.transactions_table = ttk.Treeview(self)
 
     def create_transaction_frame(self, month):
@@ -73,11 +74,11 @@ class TransactionsFrame(Frame):
         for expense in expenses_by_month:
             for row in range(len(self.transactions_table.get_children())):
                 row_values = self.transactions_table.item(row)['values']
-                if self.get_day_from_date(expense[2]) == str(row_values[2]):
+                if self.get_day_from_date(expense.expense_date) == str(row_values[2]):
                     row_with_new_expense = row_values
-                    index = self.expense_columns[expense[0]]
+                    index = self.expense_columns[self.get_expense_name_by_id(expense.expense_type)]
 
-                    row_with_new_expense[index] += expense[1]
+                    row_with_new_expense[index] += expense.expense_amount
 
                     self.transactions_table.item(row, text="", values=row_with_new_expense)
 
@@ -91,8 +92,11 @@ class TransactionsFrame(Frame):
     def get_day_from_date(date):
         return date.split('-')[2]
 
-    def build_data_for_table(self, incomes, expenses):
-        return []
+    def get_expense_name_by_id(self,expense_id):
+        for expense_type in self.expense_types:
+            if expense_type[0] == expense_id:
+                return expense_type[1]
+        return None
 
 
 """

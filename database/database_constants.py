@@ -24,7 +24,7 @@ GET_ACCOUNT_DATA_BY_ID = "SELECT * FROM account WHERE id = ?"
 
 SELECT_POCKETS = "SELECT * FROM pocket"
 
-GET_EXPENSE_TYPES = "SELECT expense_id, expense_name FROM expense_type"
+GET_EXPENSE_TYPES = "SELECT * FROM expense_type"
 
 GET_EXPENSE_TYPE_NAMES = "SELECT expense_name FROM expense_type"
 
@@ -51,3 +51,6 @@ WHERE strftime('%m', e.expense_date) = ?
 """
 
 GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',expense_date) = ?"
+
+
+GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
