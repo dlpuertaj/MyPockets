@@ -54,3 +54,6 @@ GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',e
 
 
 GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
+
+
+GET_ACCOUNTS = "SELECT * FROM account"

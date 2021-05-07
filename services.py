@@ -2,6 +2,7 @@ from database.database_manager import DatabaseManager as db
 from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
+from entities.account import Account
 from entities.expense_event import ExpenseEvent
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
@@ -39,6 +40,18 @@ class Services:
 
         if result is not None:
             return result
+        else:
+            return None
+
+    def get_accounts(self,):
+        result = self.connect_and_execute(db_constants.GET_ACCOUNTS,True)
+
+        if result is not None:
+            accounts = []
+            for account in result:
+                new_account = Account(account[0],account[1],account[2])
+                accounts.append(new_account)
+            return accounts
         else:
             return None
 

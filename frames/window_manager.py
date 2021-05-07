@@ -10,9 +10,6 @@ from services import Services as serve
 import global_constants as glob_const
 
 class WindowManager:
-    LARGE_FONT = ("Verdana", 12)
-    NORM_FONT = ("Helvetica", 10)
-    SMALL_FONT = ("Helvetica", 8)
 
     def __init__(self):
         self.root = tk.Tk()
@@ -61,31 +58,6 @@ class WindowManager:
             self.build_main_frame()
         else:
             message_label.config(text=glob_const.WRONG_USER_OR_PASSWORD)
-
-    def create_popup_login(self):
-        global popup
-        popup = Toplevel(self.root)
-        popup.grab_set()
-        popup.title("Log in")
-        global message_label
-        message_label = tk.Label(popup, text=self.login_message, font=self.NORM_FONT)
-        username_label = tk.Label(popup, text="Username: ", font=self.NORM_FONT)
-        username_label.pack(side="top", fill="x", pady=10)
-        username_entry = tk.Entry(popup)
-        username_entry.pack()
-        password_label = tk.Label(popup, text="Password: ", font=self.NORM_FONT)
-        password_label.pack(side="top", fill="x", pady=10)
-        password_entry = tk.Entry(popup)
-        password_entry.pack()
-        message_label.pack(side="top", fill="x", pady=10)
-
-        # TODO: Add empty entry error
-        log_in_button = tk.Button(popup, text="Log in",
-                                  command=lambda: self.verify_login(username_entry.get(), password_entry.get()))
-        cancel_login_button = tk.Button(popup, text="Cancel",
-                                        command=self.root.quit)
-        log_in_button.pack()
-        cancel_login_button.pack()
 
     def build_main_frame(self):
         self.pocket_frame.create_pocket_frame()
