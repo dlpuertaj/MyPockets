@@ -1,9 +1,9 @@
 import tkinter as tk
 
 from tkinter import ttk
-from tkinter import Toplevel
 
 from frames.pocket_frame import PocketFrame
+from frames.popup.pop_login import PopLogin
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
 from services import Services as serve
@@ -26,7 +26,7 @@ class WindowManager:
         self.resume_table = ttk.Treeview(self.resume_frame)
 
         if glob_const.PROP_REQUIRE_LOGIN:
-            self.create_popup_login()
+            self.login()
         else:
             self.build_main_frame()
 
@@ -50,14 +50,9 @@ class WindowManager:
         cards_menu.add_command(label="New Credit Card")
         cards_menu.add_command(label="View Movements")
 
-    def verify_login(self, username, password):
-        self.serve.verify_user_for_login(username, password)
-        if self.serve.is_logged_in:
-            popup.grab_release()
-            popup.destroy()
-            self.build_main_frame()
-        else:
-            message_label.config(text=glob_const.WRONG_USER_OR_PASSWORD)
+    def login(self):
+        pop_login = PopLogin(self.root,self.serve)
+        self.build_main_frame()
 
     def build_main_frame(self):
         self.pocket_frame.create_pocket_frame()
