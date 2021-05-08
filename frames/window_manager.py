@@ -52,6 +52,7 @@ class WindowManager:
 
     def login(self):
         pop_login = PopLogin(self.root,self.serve)
+        self.root.wait_window(pop_login)
         self.build_main_frame()
 
     def build_main_frame(self):
