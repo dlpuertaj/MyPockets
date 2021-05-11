@@ -1,7 +1,5 @@
 from tkinter import Toplevel, Label, Entry, Button
 import global_constants as glob_const
-from services import Services as serve
-
 
 class PopLogin(Toplevel):
     LARGE_FONT = ("Verdana", 12)

@@ -3,11 +3,13 @@ import tkinter as tk
 from tkinter import ttk
 
 from frames.pocket_frame import PocketFrame
+from frames.popup.pop_expense_event import PopExpense
 from frames.popup.pop_login import PopLogin
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
 from services import Services as serve
 import global_constants as glob_const
+
 
 class WindowManager:
 
@@ -19,7 +21,7 @@ class WindowManager:
         self.menu_bar = tk.Menu(self.root)
         self.customize_menu()
         self.resume_notebook = ttk.Notebook(self.root)
-        self.pocket_frame = PocketFrame(self.root) #tk.Frame(self.root)
+        self.pocket_frame = PocketFrame(self.root)  # tk.Frame(self.root)
         self.resume_frame = ResumeFrame(self.resume_notebook)  # tk.Frame(self.resume_notebook)
         self.transactions_frame = TransactionsFrame(self.resume_notebook)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
@@ -41,6 +43,7 @@ class WindowManager:
         self.menu_bar.add_cascade(label="Credit Cards", menu=cards_menu)
 
         file_menu.add_command(label="New Account")
+        file_menu.add_command(label="New Expense", command=self.new_expense_event)
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
 
@@ -51,7 +54,7 @@ class WindowManager:
         cards_menu.add_command(label="View Movements")
 
     def login(self):
-        pop_login = PopLogin(self.root,self.serve)
+        pop_login = PopLogin(self.root, self.serve)
         self.root.wait_window(pop_login)
         self.build_main_frame()
 
@@ -63,8 +66,11 @@ class WindowManager:
         self.resume_notebook.add(self.resume_frame, text="Expense Resume")
         self.resume_notebook.add(self.transactions_frame, text="Monthly Transactions")
 
-    def show_income_frame(self):
-        return None
+    def new_expense_event(self):
+        pop_expense_event = PopExpense(self.root,None)
+        pop_expense_event.create_and_show_popup()
+        self.root.wait_window(pop_expense_event)
+        # TODO: update everything
 
     def show_expense_frame(self):
         return None
