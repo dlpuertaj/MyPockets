@@ -75,6 +75,14 @@ class Services:
         else:
             return None
 
+    def get_income_types(self):
+
+        result = self.connect_and_execute(db_constants.GET_INCOME_TYPES,None,True)
+
+        if result is not None:
+            return result
+        else:
+            return None
 
     def get_expense_type_names(self):
 

@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from frames.pocket_frame import PocketFrame
-from frames.popup.pop_expense_event import PopExpense
+from frames.popup.pop_event import PopEvent
 from frames.popup.pop_login import PopLogin
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
@@ -43,6 +43,7 @@ class WindowManager:
         self.menu_bar.add_cascade(label="Credit Cards", menu=cards_menu)
 
         file_menu.add_command(label="New Account")
+        file_menu.add_command(label="New Income", command=self.new_income_event)
         file_menu.add_command(label="New Expense", command=self.new_expense_event)
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
@@ -67,9 +68,15 @@ class WindowManager:
         self.resume_notebook.add(self.transactions_frame, text="Monthly Transactions")
 
     def new_expense_event(self):
-        pop_expense_event = PopExpense(self.root,None)
-        pop_expense_event.create_and_show_popup()
-        self.root.wait_window(pop_expense_event)
+        pop_event = PopEvent(self.root,False,None)
+        pop_event.create_and_show_popup()
+        self.root.wait_window(pop_event)
+        # TODO: update everything
+
+    def new_income_event(self):
+        pop_event = PopEvent(self.root,True,None)
+        pop_event.create_and_show_popup()
+        self.root.wait_window(pop_event)
         # TODO: update everything
 
     def show_expense_frame(self):
