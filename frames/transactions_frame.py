@@ -6,6 +6,7 @@ from services import Services as serve
 
 class TransactionsFrame(Frame):
 
+    """ Initializer method for the transactions frame"""
     def __init__(self, root_notebook):
         Frame.__init__(self, root_notebook)
         self.serve = serve()
@@ -13,6 +14,7 @@ class TransactionsFrame(Frame):
         self.expense_types = self.serve.get_expense_types()
         self.transactions_table = ttk.Treeview(self)
 
+    """ Method that creates de transactions frame"""
     def create_transaction_frame(self, month):
         self.build_transactions_table()
         self.data_to_transactions_table_by_month(month)
@@ -20,11 +22,9 @@ class TransactionsFrame(Frame):
         self.transactions_table.pack()
         self.create_and_pack_buttons()
 
+    """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
-        columns = []
-        columns.append("Income")
-        columns.append("Note")
-        columns.append("Day")
+        columns = ["Income", "Note", "Day"]
         expense_types = self.serve.get_expense_type_names()
         index = 3
         for expense_type in expense_types:
@@ -42,6 +42,7 @@ class TransactionsFrame(Frame):
         for column in columns:
             self.transactions_table.heading(column, text=column, anchor=W)
 
+    """ Method that adds the database data to the table"""
     def data_to_transactions_table_by_month(self, month):
         incomes_by_month = self.serve.get_incomes_by_month((month,))
         expenses_by_month = self.serve.get_expenses_by_month((month,))
@@ -61,6 +62,7 @@ class TransactionsFrame(Frame):
         self.add_income_to_table(incomes_by_month)
         self.add_expenses_to_table(expenses_by_month)
 
+    """ Method that adds the income data to the transactions table"""
     def add_income_to_table(self,incomes_by_month):
         for income in incomes_by_month:
             for row in range(len(self.transactions_table.get_children())):
@@ -70,6 +72,7 @@ class TransactionsFrame(Frame):
                     row_with_new_income[0] += income.income_amount
                     self.transactions_table.item(row, text="", values=row_with_new_income)
 
+    """ Method that adds the expense data to the transactions table"""
     def add_expenses_to_table(self,expenses_by_month):
         for expense in expenses_by_month:
             for row in range(len(self.transactions_table.get_children())):
@@ -82,6 +85,7 @@ class TransactionsFrame(Frame):
 
                     self.transactions_table.item(row, text="", values=row_with_new_expense)
 
+    """ Method that adds the buttons to the transactions table"""
     def create_and_pack_buttons(self):
         new_income_button = Button(self, text="New Income", command="")
         new_expense_button = Button(self, text="New Expense", command="")

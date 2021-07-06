@@ -13,6 +13,13 @@ import global_constants as glob_const
 
 class WindowManager:
 
+    """  Method that initializes  the window manager
+         It calls the method that builds the menu bar.
+         It initializes the Notebook.
+         It initializes the pocket frame, the resume frame and the transactions frame.
+         It also initializes the tables for the pocket info and the resume of the month.
+         Lastly depending on a global property, it shows the popup for the login.
+         """
     def __init__(self):
         self.root = tk.Tk()
         self.serve = serve()
@@ -32,6 +39,7 @@ class WindowManager:
         else:
             self.build_main_frame()
 
+    """ Method that builds the menu bar. """
     def customize_menu(self):
         self.root.config(menu=self.menu_bar)
         file_menu = tk.Menu(self.menu_bar, tearoff=0)
@@ -54,11 +62,14 @@ class WindowManager:
         cards_menu.add_command(label="New Credit Card")
         cards_menu.add_command(label="View Movements")
 
+    """ Method that creates and shows the popup for the user login."""
     def login(self):
         pop_login = PopLogin(self.root, self.serve)
         self.root.wait_window(pop_login)
         self.build_main_frame()
 
+    """ Method that calls the creation of the pocket frame and the resume frame.
+        It also adds the resume frame and the transactions frame to the Notebook """
     def build_main_frame(self):
         self.pocket_frame.create_pocket_frame()
         self.resume_frame.create_resume_frame()
@@ -67,12 +78,14 @@ class WindowManager:
         self.resume_notebook.add(self.resume_frame, text="Expense Resume")
         self.resume_notebook.add(self.transactions_frame, text="Monthly Transactions")
 
+    """ Method that shows a popup for the creation of a new expense event"""
     def new_expense_event(self):
         pop_event = PopEvent(self.root,False,None)
         pop_event.create_and_show_popup()
         self.root.wait_window(pop_event)
         # TODO: update everything
 
+    """ Method that shows the popup for the creation of a income event"""
     def new_income_event(self):
         pop_event = PopEvent(self.root,True,None)
         pop_event.create_and_show_popup()
