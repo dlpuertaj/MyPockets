@@ -140,3 +140,11 @@ class Services:
             return result[0]
         else:
             return None
+
+    def insert_expense_event(self, expense_type, amount, date, note):
+        result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
+                                          expense_type, amount,date,note)
+        if result is not None:
+            return result
+        else:
+            return None

@@ -1,4 +1,4 @@
-DATABASE = "database/pockets.bd"
+DATABASE = "database/pockets.db"
 USER_DB = "root"
 PASSWORD_DB = "root"
 HOST_DB = "localhost"
@@ -59,3 +59,6 @@ GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
 
 
 GET_ACCOUNTS = "SELECT * FROM account"
+
+
+INSERT_EXPENSE_EVENT = "INSERT INTO expense_event VALUES ()"
