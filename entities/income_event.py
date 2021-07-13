@@ -6,4 +6,4 @@ class IncomeEvent:
         self.income_type = income_type
         self.income_date = income_date
         self.description = description
-        self.account = account
+        self.account_name = account

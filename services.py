@@ -117,7 +117,7 @@ class Services:
         income_events = []
         if results is not None:
             for rs in results:
-                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
+                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[4], rs[5])
                 income_events.append(event)
             return income_events
         else:
@@ -127,8 +127,8 @@ class Services:
         result_set = self.connect_and_execute(db_constants.GET_EXPENSE_EVENTS_BY_MONTH, month, True)
         expense_events = []
         if result_set is not None:
-            for result in result_set:
-                expense = ExpenseEvent(result[0], result[1], result[2], result[3], result[4])
+            for rs in result_set:
+                expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4], rs[5])
                 expense_events.append(expense)
             return expense_events
         else:

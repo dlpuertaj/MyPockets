@@ -32,6 +32,8 @@ class TransactionsFrame(Frame):
             columns.append(expense_type[0])
             index += 1
 
+        columns.append("Account")
+
         self.transactions_table['columns'] = columns
         self.transactions_table.heading("0", text="", anchor=W)
         self.transactions_table.column("#0", width=0, stretch=NO)
