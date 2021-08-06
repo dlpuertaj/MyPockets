@@ -19,13 +19,13 @@ class WindowManager:
         self.is_logged_in = False
         self.login_message = glob_const.NEED_LOGIN
         self.menu_bar = tk.Menu(self.root)
-        self.customize_menu()
-        self.resume_notebook = ttk.Notebook(self.root)
+        self.customize_menu() # menú superior
         self.pocket_frame = PocketFrame(self.root)  # tk.Frame(self.root)
-        self.resume_frame = ResumeFrame(self.resume_notebook)  # tk.Frame(self.resume_notebook)
-        self.transactions_frame = TransactionsFrame(self.resume_notebook)
         self.pockets_table = ttk.Treeview(self.pocket_frame)
+        self.resume_notebook = ttk.Notebook(self.root)
+        self.resume_frame = ResumeFrame(self.resume_notebook)  # tk.Frame(self.resume_notebook)
         self.resume_table = ttk.Treeview(self.resume_frame)
+        self.transactions_frame = TransactionsFrame(self.resume_notebook)
 
         if glob_const.PROP_REQUIRE_LOGIN:
             self.login()
@@ -48,11 +48,11 @@ class WindowManager:
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
 
-        pocket_menu.add_command(label="New Pocket")
-        pocket_menu.add_command(label="Transfer to Pockets")
+        # pocket_menu.add_command(label="New Pocket")
+        # pocket_menu.add_command(label="Transfer to Pockets")
 
-        cards_menu.add_command(label="New Credit Card")
-        cards_menu.add_command(label="View Movements")
+        # cards_menu.add_command(label="New Credit Card")
+        # cards_menu.add_command(label="View Movements")
 
     def login(self):
         pop_login = PopLogin(self.root, self.serve)

@@ -3,12 +3,13 @@ from tkinter import ttk
 
 from services import Services as serve
 
+
 class PocketFrame(Frame):
 
-    def __init__(self,root):
-        Frame.__init__(self,root)
+    def __init__(self, root):
+        Frame.__init__(self, root)
         self.serve = serve()
-        self.pockets_table = ttk.Treeview(self)
+        self.pockets_table = ttk.Treeview(self)  # tabla
 
     def create_pocket_frame(self):
         self.build_pocket_table()
@@ -18,7 +19,7 @@ class PocketFrame(Frame):
         self.add_transfer_button()
 
     def add_transfer_button(self):
-        add_to_pocket_button = Button(self, text="Transfer to Pocket",command="")
+        add_to_pocket_button = Button(self, text="Transfer to Pocket", command="")
         add_to_pocket_button.pack()
 
     def build_pocket_table(self):
@@ -36,5 +37,6 @@ class PocketFrame(Frame):
         iid = 0
         pockets = self.serve.get_pockets()
         for pocket in pockets:
-            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent", values=(pocket.name, pocket.amount))
+            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent",
+                                      values=(pocket.name, pocket.amount))
             iid = iid + 1
