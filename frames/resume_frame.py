@@ -3,18 +3,22 @@ from tkinter import ttk
 
 from services import Services as serve
 
+
 class ResumeFrame(Frame):
 
+    """ Iit method that instantiates service and resume table"""
     def __init__(self,root):
         Frame.__init__(self,root)
         self.serve = serve()
         self.resume_table = ttk.Treeview(self)
 
+    """ Method that creates the resume frame and loads the data from the database"""
     def create_resume_frame(self):
         self.build_resume_table()
         self.load_resume_data_to_table()
         self.pack(side="right", fill=BOTH, expand=1)
 
+    """ Method that builds the resume table adding the columns and the headers"""
     def build_resume_table(self):
         columns = []
 
@@ -32,6 +36,7 @@ class ResumeFrame(Frame):
         for column in columns:
             self.resume_table.heading(column, text=column, anchor=W)
 
+    """ Method that adds the database data to the resume table"""
     def load_resume_data_to_table(self):
         resume_data = self.serve.get_resume_data(('04',))
         payroll = self.serve.get_payroll_by_month(('04',))

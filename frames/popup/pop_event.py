@@ -1,5 +1,7 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
 from services import Services as srv
+
+
 class PopEvent(Toplevel):
 
     LARGE_FONT = ("Verdana", 12)
@@ -44,13 +46,14 @@ class PopEvent(Toplevel):
             options.append(t[1])
 
         clicked = StringVar()
-        clicked.set(options)
+        clicked.set("Select type")
 
         type_label = Label(self,text=(self.expense_or_income + " Type"))
         type_label.pack()
         expense_type_menu = OptionMenu(self,clicked,*options)
         expense_type_menu.pack()
         # TODO: create account option menu
+        # TODO: create relation between account and events in database
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -61,7 +64,8 @@ class PopEvent(Toplevel):
         note_label = Label(self,text="Note: ")
         note_entry = Entry(self)
 
-        save_button = Button(self, text="Cancel", command=self.save_expense_event)
+        save_button = Button(self, text="Cancel", command=lambda:self.save_expense_event(
+            clicked, amount_entry,date_entry,note_entry))
         cancel_login_button = Button(self, text="Save", command=self.destroy)
 
         amount_label.pack()
@@ -74,5 +78,5 @@ class PopEvent(Toplevel):
         save_button.pack()
         cancel_login_button.pack()
 
-    def save_expense_event(self):
-       return None
+    def save_expense_event(self, expense_type,amount, date, note):
+        self.serve.insert_expense_event(expense_type,amount,date,note)
