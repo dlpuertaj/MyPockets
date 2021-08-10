@@ -117,7 +117,7 @@ class Services:
         income_events = []
         if results is not None:
             for rs in results:
-                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[4], rs[5])
+                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
                 income_events.append(event)
             return income_events
         else:
@@ -128,7 +128,7 @@ class Services:
         expense_events = []
         if result_set is not None:
             for rs in result_set:
-                expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4], rs[5])
+                expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
                 expense_events.append(expense)
             return expense_events
         else:
