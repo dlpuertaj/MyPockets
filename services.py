@@ -45,7 +45,7 @@ class Services:
             return None
 
     def get_accounts(self, ):
-        result = self.connect_and_execute(db_constants.GET_ACCOUNTS, True)
+        result = self.connect_and_execute(db_constants.GET_ACCOUNTS,None, True)
 
         if result is not None:
             accounts = []

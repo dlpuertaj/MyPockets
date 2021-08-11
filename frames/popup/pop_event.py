@@ -1,7 +1,7 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
 from services import Services as srv
 
-
+""" Class that creates the popup for a new event"""
 class PopEvent(Toplevel):
 
     LARGE_FONT = ("Verdana", 12)
@@ -36,19 +36,17 @@ class PopEvent(Toplevel):
             self.new_or_edit = self.EDIT
 
     def create_and_show_popup(self):
-        if self.event_type:  # TODO: Retrieve names only
-            types = self.serve.get_income_types()
-        else:
-            types = self.serve.get_expense_types()
+        type_options = self.get_type_options_for_dropdown(False)
+        account_options = self.get_type_options_for_dropdown(True)
 
-        options = []
-
-        for t in types:
-            options.append(t[1])
         type_label = self.expense_or_income + " Type"
+        accounts_label = "Account"
 
         clicked_type = StringVar()
-        self.add_select_dropdown(options, clicked_type, type_label)
+        self.add_select_dropdown(type_options, clicked_type, type_label)
+
+        clicked_account = StringVar()
+        self.add_select_dropdown(account_options, clicked_account, accounts_label)
 
         # TODO: create account option menu
         # TODO: create relation between account and events in database
@@ -62,9 +60,9 @@ class PopEvent(Toplevel):
         note_label = Label(self,text="Note: ")
         note_entry = Entry(self)
 
-        save_button = Button(self, text="Cancel", command=lambda: self.save_expense_event(
-            clicked_type, amount_entry, date_entry, note_entry))
-        cancel_login_button = Button(self, text="Save", command=self.destroy)
+        save_button = Button(self, text="Save", command=lambda: self.save_expense_event(
+            clicked_type.get(), amount_entry.get(), date_entry.get(), note_entry.get(), clicked_account.get()))
+        cancel_login_button = Button(self, text="Cancel", command=self.destroy)
 
         amount_label.pack()
         amount_entry.pack()
@@ -75,6 +73,25 @@ class PopEvent(Toplevel):
 
         save_button.pack()
         cancel_login_button.pack()
+
+    def get_type_options_for_dropdown(self, get_accounts):
+
+        if get_accounts:
+            items = self.serve.get_accounts()
+        elif self.event_type:  # TODO: Retrieve names only
+            items = self.serve.get_income_types()
+        else:
+            items = self.serve.get_expense_types()
+
+        options = []
+
+        for t in items:
+            if get_accounts:
+                options.append(t.get_name())
+            else:
+                options.append(t[1])
+
+        return options
 
     def add_select_dropdown(self, options, clicked, label):
         clicked = StringVar()
