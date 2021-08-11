@@ -36,22 +36,20 @@ class PopEvent(Toplevel):
             self.new_or_edit = self.EDIT
 
     def create_and_show_popup(self):
-        if self.event_type: # TODO: Retrieve names only
+        if self.event_type:  # TODO: Retrieve names only
             types = self.serve.get_income_types()
         else:
             types = self.serve.get_expense_types()
+
         options = []
 
         for t in types:
             options.append(t[1])
+        type_label = self.expense_or_income + " Type"
 
-        clicked = StringVar()
-        clicked.set("Select type")
+        clicked_type = StringVar()
+        self.add_select_dropdown(options, clicked_type, type_label)
 
-        type_label = Label(self,text=(self.expense_or_income + " Type"))
-        type_label.pack()
-        expense_type_menu = OptionMenu(self,clicked,*options)
-        expense_type_menu.pack()
         # TODO: create account option menu
         # TODO: create relation between account and events in database
 
@@ -64,8 +62,8 @@ class PopEvent(Toplevel):
         note_label = Label(self,text="Note: ")
         note_entry = Entry(self)
 
-        save_button = Button(self, text="Cancel", command=lambda:self.save_expense_event(
-            clicked, amount_entry,date_entry,note_entry))
+        save_button = Button(self, text="Cancel", command=lambda: self.save_expense_event(
+            clicked_type, amount_entry, date_entry, note_entry))
         cancel_login_button = Button(self, text="Save", command=self.destroy)
 
         amount_label.pack()
@@ -78,5 +76,13 @@ class PopEvent(Toplevel):
         save_button.pack()
         cancel_login_button.pack()
 
-    def save_expense_event(self, expense_type,amount, date, note):
-        self.serve.insert_expense_event(expense_type,amount,date,note)
+    def add_select_dropdown(self, options, clicked, label):
+        clicked = StringVar()
+        clicked.set("Select type")
+        type_label = Label(self, text=label)
+        type_label.pack()
+        expense_type_menu = OptionMenu(self, clicked, *options)
+        expense_type_menu.pack()
+
+    def save_expense_event(self, expense_type, amount, date, note, account):
+        self.serve.insert_expense_event(expense_type, amount, date, note, account)

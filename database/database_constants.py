@@ -48,6 +48,7 @@ INNER JOIN income_type t ON e.income_type = t.id
 INNER JOIN account a ON e.account = a.id 
 WHERE strftime('%m', e.income_date) = ?;
 """
+
 GET_EXPENSE_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.expense_name, e.expense_amount, e.expense_date, e.description, 
 a.name FROM expense_event e 
 INNER JOIN expense_type t ON e.expense_type = t.id
@@ -57,11 +58,11 @@ WHERE strftime('%m', e.expense_date) = ?
 
 GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',expense_date) = ?"
 
-
 GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
-
 
 GET_ACCOUNTS = "SELECT * FROM account"
 
+INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, account)
+VALUES (?, ?, ?, ?, ?)"""
 
-INSERT_EXPENSE_EVENT = "INSERT INTO expense_event VALUES ()"
+EDIT_ACCOUNT_AMMOUNT = """UPDATE account SET amount = ? WHERE id = ?"""
