@@ -157,3 +157,10 @@ class Services:
             return result
         else:
             return None
+
+    def update_account_amount(self, account_id, new_amount):
+        result = self.connect_and_execute(db_constants.UPDATE_ACCOUNT_AMOUNT,(new_amount, account_id), False)
+        if result is not None:
+            return result
+        else:
+            return None

@@ -1,4 +1,7 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
+
+import global_constants
+from frames.popup.popup_message import PopupGenericMessage
 from services import Services as srv
 
 """ Class that creates the popup for a new event"""
@@ -87,7 +90,7 @@ class PopEvent(Toplevel):
 
         if get_accounts:
             items = self.serve.get_accounts()
-        elif self.event_type:  # TODO: Retrieve names only
+        elif self.event_type:
             items = self.serve.get_income_types()
         else:
             items = self.serve.get_expense_types()
@@ -102,6 +105,7 @@ class PopEvent(Toplevel):
         return expense_type_menu
 
     def save_expense_event(self, types, accounts, expense_type, amount, date, note, account):
+        used_account = None
         for t in types:
             if t.get_name() == expense_type:
                 expense_type = t.get_id()
@@ -109,8 +113,16 @@ class PopEvent(Toplevel):
 
         for a in accounts:
             if a.get_name() == account:
+                used_account = a
                 account = a.get_id()
                 break
-        self.serve.insert_expense_event(expense_type, amount, date, note, account)
-        #TODO: Update account table (DB)
-        #TODO: Update expense table in GUI
+
+        # TODO: add error message if new amount is grater than current account amount
+        if used_account.get_amount() < int(amount):
+            error_popup = PopupGenericMessage(self,global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
+            self.wait_window(error_popup)
+        else:
+            self.serve.insert_expense_event(expense_type, amount, date, note, account)
+            self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
+            # TODO: success message and close button when updating everything
+

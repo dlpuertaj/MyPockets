@@ -1,6 +1,7 @@
 # System Messages
 NEED_LOGIN = "Login to use de application"
 WRONG_USER_OR_PASSWORD = "Wrong user or password"
+AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT = "The amount is greater than what you have in the account!"
 
 # System Properties
 PROP_REQUIRE_LOGIN = False
