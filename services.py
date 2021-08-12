@@ -4,6 +4,7 @@ from sqlite3 import Error as error_sqlite
 
 from entities.account import Account
 from entities.expense_event import ExpenseEvent
+from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
 
@@ -70,18 +71,24 @@ class Services:
     def get_expense_types(self):
 
         result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPES, None, True)
-
+        types = []
         if result is not None:
-            return result
+            for r in result:
+                expense_type = GenericType(r[0],r[1],r[2])
+                types.append(expense_type)
+            return types
         else:
             return None
 
     def get_income_types(self):
 
         result = self.connect_and_execute(db_constants.GET_INCOME_TYPES, None, True)
-
+        types = []
         if result is not None:
-            return result
+            for r in result:
+                income_type = GenericType(r[0],r[1],r[2])
+                types.append(income_type)
+            return types
         else:
             return None
 
@@ -145,7 +152,7 @@ class Services:
 
         # TODO: change expense type and account type to respective id in DB
         result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
-                                          expense_type, amount, date, note, account)
+                                          (expense_type, amount, date, note, account), False)
         if result is not None:
             return result
         else:

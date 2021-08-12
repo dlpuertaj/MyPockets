@@ -42,10 +42,10 @@ class PopEvent(Toplevel):
         type_options = []
         account_options = []
         for t in types:
-            type_options.append(t[1])
+            type_options.append(t.get_name())
 
         for account in accounts:
-            account_options.append(account[1])
+            account_options.append(account.get_name())
 
         type_label = self.expense_or_income + " Type"
         accounts_label = "Account"
@@ -101,5 +101,16 @@ class PopEvent(Toplevel):
         expense_type_menu = OptionMenu(self, clicked, *options)
         return expense_type_menu
 
-    def save_expense_event(self, expense_type, amount, date, note, account):
+    def save_expense_event(self, types, accounts, expense_type, amount, date, note, account):
+        for t in types:
+            if t.get_name() == expense_type:
+                expense_type = t.get_id()
+                break
+
+        for a in accounts:
+            if a.get_name() == account:
+                account = a.get_id()
+                break
         self.serve.insert_expense_event(expense_type, amount, date, note, account)
+        #TODO: Update account table (DB)
+        #TODO: Update expense table in GUI
