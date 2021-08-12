@@ -142,6 +142,8 @@ class Services:
             return None
 
     def insert_expense_event(self, expense_type, amount, date, note, account):
+
+        # TODO: change expense type and account type to respective id in DB
         result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
                                           expense_type, amount, date, note, account)
         if result is not None:

@@ -36,20 +36,25 @@ class PopEvent(Toplevel):
             self.new_or_edit = self.EDIT
 
     def create_and_show_popup(self):
-        type_options = self.get_type_options_for_dropdown(False)
-        account_options = self.get_type_options_for_dropdown(True)
+        types = self.get_type_options_for_dropdown(False)
+        accounts = self.get_type_options_for_dropdown(True)
+
+        type_options = []
+        account_options = []
+        for t in types:
+            type_options.append(t[1])
+
+        for account in accounts:
+            account_options.append(account[1])
 
         type_label = self.expense_or_income + " Type"
         accounts_label = "Account"
 
         clicked_type = StringVar()
-        self.add_select_dropdown(type_options, clicked_type, type_label)
+        type_dropdown = self.add_select_dropdown(type_options, clicked_type, type_label)
 
         clicked_account = StringVar()
-        self.add_select_dropdown(account_options, clicked_account, accounts_label)
-
-        # TODO: create account option menu
-        # TODO: create relation between account and events in database
+        account_dropdown = self.add_select_dropdown(account_options, clicked_account, accounts_label)
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -61,8 +66,12 @@ class PopEvent(Toplevel):
         note_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_expense_event(
+            types, accounts,
             clicked_type.get(), amount_entry.get(), date_entry.get(), note_entry.get(), clicked_account.get()))
         cancel_login_button = Button(self, text="Cancel", command=self.destroy)
+
+        type_dropdown.pack()
+        account_dropdown.pack()
 
         amount_label.pack()
         amount_entry.pack()
@@ -83,23 +92,14 @@ class PopEvent(Toplevel):
         else:
             items = self.serve.get_expense_types()
 
-        options = []
-
-        for t in items:
-            if get_accounts:
-                options.append(t.get_name())
-            else:
-                options.append(t[1])
-
-        return options
+        return items
 
     def add_select_dropdown(self, options, clicked, label):
-        clicked = StringVar()
-        clicked.set("Select type")
+        clicked.set(options[0])
         type_label = Label(self, text=label)
         type_label.pack()
         expense_type_menu = OptionMenu(self, clicked, *options)
-        expense_type_menu.pack()
+        return expense_type_menu
 
     def save_expense_event(self, expense_type, amount, date, note, account):
         self.serve.insert_expense_event(expense_type, amount, date, note, account)
