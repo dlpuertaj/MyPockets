@@ -6,10 +6,6 @@ from services import Services as srv
 
 """ Class that creates the popup for a new event"""
 class PopEvent(Toplevel):
-
-    LARGE_FONT = ("Verdana", 12)
-    NORM_FONT = ("Helvetica", 10)
-    SMALL_FONT = ("Helvetica", 8)
     EXPENSE = "Expense"
     INCOME = "Income"
     NEW = "New"
@@ -68,7 +64,7 @@ class PopEvent(Toplevel):
         note_label = Label(self,text="Note: ")
         note_entry = Entry(self)
 
-        save_button = Button(self, text="Save", command=lambda: self.save_expense_event(
+        save_button = Button(self, text="Save", command=lambda: self.save_event(
             types, accounts,
             clicked_type.get(), amount_entry.get(), date_entry.get(), note_entry.get(), clicked_account.get()))
         cancel_login_button = Button(self, text="Cancel", command=self.destroy)
@@ -104,7 +100,7 @@ class PopEvent(Toplevel):
         expense_type_menu = OptionMenu(self, clicked, *options)
         return expense_type_menu
 
-    def save_expense_event(self, types, accounts, expense_type, amount, date, note, account):
+    def save_event(self, types, accounts, expense_type, amount, date, note, account):
         used_account = None
         for t in types:
             if t.get_name() == expense_type:
@@ -118,11 +114,13 @@ class PopEvent(Toplevel):
                 break
 
         if used_account.get_amount() < int(amount):
-            error_popup = PopupGenericMessage(self.root,global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
-            error_popup.grab_set()
-            self.wait_window(error_popup)
+            self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
         else:
             self.serve.insert_expense_event(expense_type, amount, date, note, account)
             self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
-            # TODO: success message and close button when updating everything
+            self.show_popup_message(global_constants.SUCCESS_OPERATION)
 
+    def show_popup_message(self,message):
+        error_popup = PopupGenericMessage(self.root, message)
+        error_popup.grab_set()
+        self.wait_window(error_popup)
