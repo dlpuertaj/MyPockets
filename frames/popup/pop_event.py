@@ -117,9 +117,9 @@ class PopEvent(Toplevel):
                 account = a.get_id()
                 break
 
-        # TODO: add error message if new amount is grater than current account amount
         if used_account.get_amount() < int(amount):
-            error_popup = PopupGenericMessage(self,global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
+            error_popup = PopupGenericMessage(self.root,global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
+            error_popup.grab_set()
             self.wait_window(error_popup)
         else:
             self.serve.insert_expense_event(expense_type, amount, date, note, account)
