@@ -111,14 +111,14 @@ class PopEvent(Toplevel):
                 break
 
         if self.event_type:
-            self.serve.insert_income_event(event_type, amount, date, note, account)
+            self.serve.insert_event(True,amount,event_type, date, note, account)
             self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() + int(amount)))
             self.show_popup_message(global_constants.SUCCESS_OPERATION)
         else:
             if used_account.get_amount() < int(amount):
                 self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
             else:
-                self.serve.insert_expense_event(event_type, amount, date, note, account)
+                self.serve.insert_event(False,amount,event_type, date, note, account)
                 self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
                 self.show_popup_message(global_constants.SUCCESS_OPERATION)
 

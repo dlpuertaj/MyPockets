@@ -65,4 +65,7 @@ GET_ACCOUNTS = "SELECT * FROM account"
 INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, account)
 VALUES (?, ?, ?, ?, ?)"""
 
+INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, income_date, description, account)
+VALUES (?, ?, ?, ?, ?)"""
+
 UPDATE_ACCOUNT_AMOUNT = """UPDATE account SET amount = ? WHERE id = ?"""

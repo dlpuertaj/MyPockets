@@ -46,7 +46,7 @@ class Services:
             return None
 
     def get_accounts(self, ):
-        result = self.connect_and_execute(db_constants.GET_ACCOUNTS,None, True)
+        result = self.connect_and_execute(db_constants.GET_ACCOUNTS, None, True)
 
         if result is not None:
             accounts = []
@@ -74,7 +74,7 @@ class Services:
         types = []
         if result is not None:
             for r in result:
-                expense_type = GenericType(r[0],r[1],r[2])
+                expense_type = GenericType(r[0], r[1], r[2])
                 types.append(expense_type)
             return types
         else:
@@ -86,7 +86,7 @@ class Services:
         types = []
         if result is not None:
             for r in result:
-                income_type = GenericType(r[0],r[1],r[2])
+                income_type = GenericType(r[0], r[1], r[2])
                 types.append(income_type)
             return types
         else:
@@ -148,18 +148,20 @@ class Services:
         else:
             return None
 
-    def insert_expense_event(self, expense_type, amount, date, note, account):
-
-        # TODO: change expense type and account type to respective id in DB
-        result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
-                                          (expense_type, amount, date, note, account), False)
+    def insert_event(self, income_or_expense, amount,event_type, date, note, account):
+        if income_or_expense:
+            result = self.connect_and_execute(db_constants.INSERT_INCOME_EVENT,
+                                              (amount,event_type, date, note, account), False)
+        else:
+            result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
+                                              (amount,event_type, date, note, account), False)
         if result is not None:
             return result
         else:
             return None
 
     def update_account_amount(self, account_id, new_amount):
-        result = self.connect_and_execute(db_constants.UPDATE_ACCOUNT_AMOUNT,(new_amount, account_id), False)
+        result = self.connect_and_execute(db_constants.UPDATE_ACCOUNT_AMOUNT, (new_amount, account_id), False)
         if result is not None:
             return result
         else:

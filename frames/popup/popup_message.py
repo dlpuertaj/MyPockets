@@ -13,6 +13,6 @@ class PopupGenericMessage(Toplevel):
 
     def show_popup(self):
         message_label = Label(self, text=self.message)
-        close_button = Button(self, text="Cancel", command=self.destroy)
+        close_button = Button(self, text="Ok", command=self.destroy)
         message_label.pack()
         close_button.pack()
