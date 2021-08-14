@@ -50,9 +50,9 @@ class WindowManager:
         self.menu_bar.add_cascade(label="Pockets", menu=pocket_menu)
         self.menu_bar.add_cascade(label="Credit Cards", menu=cards_menu)
 
-        file_menu.add_command(label="New Account")
-        file_menu.add_command(label="New Income", command=self.new_income_event)
-        file_menu.add_command(label="New Expense", command=self.new_expense_event)
+        file_menu.add_command(label="New Account") #TODO: create command method
+        file_menu.add_command(label="New Income", command=lambda: self.new_event(True))
+        file_menu.add_command(label="New Expense", command=lambda: self.new_event(False))
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
 
@@ -79,18 +79,11 @@ class WindowManager:
         self.resume_notebook.add(self.transactions_frame, text="Monthly Transactions")
 
     """ Method that shows a popup for the creation of a new expense event"""
-    def new_expense_event(self):
-        pop_event = PopEvent(self.root,False,None)
+    def new_event(self, event_type):
+        pop_event = PopEvent(self.root,event_type,None)
         pop_event.create_and_show_popup()
         self.root.wait_window(pop_event)
         # TODO: update everything
 
-    """ Method that shows the popup for the creation of a income event"""
-    def new_income_event(self):
-        pop_event = PopEvent(self.root,True,None)
-        pop_event.create_and_show_popup()
-        self.root.wait_window(pop_event)
-        # TODO: update everything
-
-    def show_expense_frame(self):
-        return None
+    def update_tables(self):
+        pass

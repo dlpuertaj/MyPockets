@@ -50,10 +50,10 @@ class PopEvent(Toplevel):
         accounts_label = "Account"
 
         clicked_type = StringVar()
-        type_dropdown = self.add_select_dropdown(type_options, clicked_type, type_label)
+        self.add_select_dropdown(type_options, clicked_type, type_label)
 
         clicked_account = StringVar()
-        account_dropdown = self.add_select_dropdown(account_options, clicked_account, accounts_label)
+        self.add_select_dropdown(account_options, clicked_account, accounts_label)
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -65,12 +65,10 @@ class PopEvent(Toplevel):
         note_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_event(
-            types, accounts,
-            clicked_type.get(), amount_entry.get(), date_entry.get(), note_entry.get(), clicked_account.get()))
-        cancel_login_button = Button(self, text="Cancel", command=self.destroy)
+            types, accounts, clicked_type.get(), amount_entry.get(), date_entry.get(),
+            note_entry.get(), clicked_account.get()))
 
-        type_dropdown.pack()
-        account_dropdown.pack()
+        close_button = Button(self, text="Close", command=self.destroy)
 
         amount_label.pack()
         amount_entry.pack()
@@ -80,10 +78,9 @@ class PopEvent(Toplevel):
         note_entry.pack()
 
         save_button.pack()
-        cancel_login_button.pack()
+        close_button.pack()
 
     def get_type_options_for_dropdown(self, get_accounts):
-
         if get_accounts:
             items = self.serve.get_accounts()
         elif self.event_type:
@@ -97,14 +94,14 @@ class PopEvent(Toplevel):
         clicked.set(options[0])
         type_label = Label(self, text=label)
         type_label.pack()
-        expense_type_menu = OptionMenu(self, clicked, *options)
-        return expense_type_menu
+        dropdown = OptionMenu(self, clicked, *options)
+        dropdown.pack()
 
-    def save_event(self, types, accounts, expense_type, amount, date, note, account):
+    def save_event(self, types, accounts, event_type, amount, date, note, account):
         used_account = None
         for t in types:
-            if t.get_name() == expense_type:
-                expense_type = t.get_id()
+            if t.get_name() == event_type:
+                event_type = t.get_id()
                 break
 
         for a in accounts:
@@ -113,12 +110,17 @@ class PopEvent(Toplevel):
                 account = a.get_id()
                 break
 
-        if used_account.get_amount() < int(amount):
-            self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
-        else:
-            self.serve.insert_expense_event(expense_type, amount, date, note, account)
-            self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
+        if self.event_type:
+            self.serve.insert_income_event(event_type, amount, date, note, account)
+            self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() + int(amount)))
             self.show_popup_message(global_constants.SUCCESS_OPERATION)
+        else:
+            if used_account.get_amount() < int(amount):
+                self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
+            else:
+                self.serve.insert_expense_event(event_type, amount, date, note, account)
+                self.serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
+                self.show_popup_message(global_constants.SUCCESS_OPERATION)
 
     def show_popup_message(self,message):
         error_popup = PopupGenericMessage(self.root, message)

@@ -37,7 +37,7 @@ class DatabaseManager:
                 cursor.execute(query,values)
             else:
                 cursor.execute(query)
-            print("Query executed!")
+            print("Executed: " + query + " with values: " + str(values))
         except error_sqlite as e:
             print(e)
 
