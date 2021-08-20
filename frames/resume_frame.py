@@ -1,4 +1,4 @@
-from tkinter import Frame, W, NO, BOTH
+from tkinter import Frame, W, NO, BOTH, StringVar, Label, OptionMenu
 from tkinter import ttk
 
 from services import Services as serve
@@ -36,10 +36,21 @@ class ResumeFrame(Frame):
         for column in columns:
             self.resume_table.heading(column, text=column, anchor=W)
 
+    def create_select_month_option_menu(self, clicked):
+        months = ['01','02','03','04','05','06','07','08','09','10','11','12']
+        clicked.set(months[0])
+        type_label = Label(self, text="Month")
+        type_label.pack()
+        dropdown = OptionMenu(self, clicked, *months)
+        dropdown.pack()
+
     """ Method that adds the database data to the resume table"""
     def load_resume_data_to_table(self):
-        resume_data = self.serve.get_resume_data(('04',))
-        payroll = self.serve.get_payroll_by_month(('04',))
+        clicked_month = StringVar()
+        self.create_select_month_option_menu(clicked_month)
+        clicked_month.trace("w",self.callback)
+        resume_data = self.serve.get_resume_data((clicked_month.get(),))
+        payroll = self.serve.get_payroll_by_month((clicked_month.get(),))
 
         amount_for_table = []
         percent_for_table = []
@@ -55,3 +66,6 @@ class ResumeFrame(Frame):
         self.resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
 
         self.resume_table.pack()
+
+    def callback(self,*clicked):
+        print(f"the variable has changed to '{clicked}'")
