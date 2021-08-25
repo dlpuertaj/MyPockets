@@ -115,9 +115,11 @@ class Services:
         result = self.connect_and_execute(db_constants.GET_PAYROLL_BY_MONTH, month, False)
 
         if result is not None:
+            if len(result) == 0:
+                return 0
             return result
         else:
-            return None
+            return 0
 
     def get_incomes_by_month(self, month):
         results = self.connect_and_execute(db_constants.GET_INCOME_EVENTS_BY_MONTH, month, True)

@@ -50,17 +50,32 @@ class ResumeFrame(Frame):
 
     """ Method that adds the database data to the resume table"""
     def load_resume_data_to_table(self):
+        expense_types = self.serve.get_expense_type_names()
         resume_data = self.serve.get_resume_data((self.clicked_month.get(),))
         payroll = self.serve.get_payroll_by_month((self.clicked_month.get(),))
+
+        # TODO: add condition when payroll is None
 
         amount_for_table = []
         percent_for_table = []
         sum_percent = 0
+
         for data in resume_data:
-            percent = data[1]/payroll[0]
-            amount_for_table.append(data[1])
-            percent_for_table.append(str(percent*100)+"%")
-            sum_percent += percent
+
+            for column_index in range(len(expense_types)):
+                column = self.resume_table.column(column_index,option='id')
+                if data[0] == column:
+                    if payroll == 0:
+                        percent = 0
+                    else:
+                        percent = data[1]/payroll[0]
+                    amount_for_table.append(data[1])
+                    percent_for_table.append(str(percent*100)+"%")
+                    sum_percent += percent
+                else:
+                    amount_for_table.append(0)
+                    percent_for_table.append("0%")
+                    sum_percent += 0
 
         self.resume_table.insert(parent='', index='end', iid=0, text="Parent", values=amount_for_table)
 
@@ -70,7 +85,7 @@ class ResumeFrame(Frame):
 
     def callback(self,*clicked):
         print(f"the variable has changed to '{self.clicked_month.get()}'")
-        self.resume_table = ttk.Treeview(self)
         self.resume_table.destroy()
+        self.resume_table = ttk.Treeview(self)
         self.build_resume_table()
         self.load_resume_data_to_table()
