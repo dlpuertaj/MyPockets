@@ -54,8 +54,6 @@ class ResumeFrame(Frame):
         resume_data = self.serve.get_resume_data((self.clicked_month.get(),))
         payroll = self.serve.get_payroll_by_month((self.clicked_month.get(),))
 
-        # TODO: add condition when payroll is None
-
         amount_for_table = []
         percent_for_table = []
         sum_percent = 0
