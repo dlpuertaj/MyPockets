@@ -106,6 +106,8 @@ class Services:
         result = self.connect_and_execute(db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH, month, True)
 
         if result is not None:
+            if len(result) == 0:
+                return [(None,0)]
             return result
         else:
             return None

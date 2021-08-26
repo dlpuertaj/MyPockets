@@ -58,6 +58,8 @@ class ResumeFrame(Frame):
         percent_for_table = []
         sum_percent = 0
 
+        if len(resume_data) == 0:
+            resume_data = ('None',0)
         for data in resume_data:
 
             for column_index in range(len(expense_types)):
@@ -83,6 +85,9 @@ class ResumeFrame(Frame):
 
     def callback(self,*clicked):
         print(f"the variable has changed to '{self.clicked_month.get()}'")
+        self.update_resume_table()
+
+    def update_resume_table(self):
         self.resume_table.destroy()
         self.resume_table = ttk.Treeview(self)
         self.build_resume_table()

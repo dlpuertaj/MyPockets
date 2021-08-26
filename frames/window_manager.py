@@ -83,7 +83,7 @@ class WindowManager:
         pop_event = PopEvent(self.root,event_type,None)
         pop_event.create_and_show_popup()
         self.root.wait_window(pop_event)
-        # TODO: update everything
+        self.update_tables()
 
     def update_tables(self):
-        pass
+        self.resume_frame.update_resume_table()
