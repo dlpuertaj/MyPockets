@@ -11,11 +11,11 @@ class ResumeFrame(Frame):
         Frame.__init__(self,root)
         self.resume_table = ttk.Treeview(self)
         self.serve = serve()
-        self.clicked_month = None
+        # self.clicked_month = None
 
     """ Method that creates the resume frame and loads the data from the database"""
     def create_resume_frame(self):
-        self.create_select_month_option_menu()
+        # self.create_select_month_option_menu()
         self.build_resume_table()
         self.load_resume_data_to_table()
         self.pack(side="right", fill=BOTH, expand=1)
@@ -38,21 +38,11 @@ class ResumeFrame(Frame):
         for column in columns:
             self.resume_table.heading(column, text=column, anchor=W)
 
-    def create_select_month_option_menu(self):
-        months = ['01','02','03','04','05','06','07','08','09','10','11','12']
-        self.clicked_month = StringVar()
-        self.clicked_month.set(months[0])
-        self.clicked_month.trace("w",self.callback)
-        type_label = Label(self, text="Month")
-        type_label.pack()
-        dropdown = OptionMenu(self, self.clicked_month, *months)
-        dropdown.pack()
-
     """ Method that adds the database data to the resume table"""
     def load_resume_data_to_table(self):
         expense_types = self.serve.get_expense_type_names()
-        resume_data = self.serve.get_resume_data((self.clicked_month.get(),))
-        payroll = self.serve.get_payroll_by_month((self.clicked_month.get(),))
+        resume_data = self.serve.get_resume_data(('01',))
+        payroll = self.serve.get_payroll_by_month(('01',))
 
         amount_for_table = []
         percent_for_table = []
@@ -83,9 +73,6 @@ class ResumeFrame(Frame):
 
         self.resume_table.pack()
 
-    def callback(self,*clicked):
-        print(f"the variable has changed to '{self.clicked_month.get()}'")
-        self.update_resume_table()
 
     def update_resume_table(self):
         self.resume_table.destroy()

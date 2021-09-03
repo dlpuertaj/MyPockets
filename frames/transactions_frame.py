@@ -1,4 +1,4 @@
-from tkinter import Frame, W, NO, BOTH, Button
+from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
 from tkinter import ttk
 
 from services import Services as serve
@@ -9,6 +9,7 @@ class TransactionsFrame(Frame):
     """ Initializer method for the transactions frame"""
     def __init__(self, root_notebook):
         Frame.__init__(self, root_notebook)
+        self.clicked_month = StringVar()
         self.serve = serve()
         self.expense_columns = {}
         self.expense_types = self.serve.get_expense_types()
@@ -16,11 +17,12 @@ class TransactionsFrame(Frame):
 
     """ Method that creates de transactions frame"""
     def create_transaction_frame(self, month):
+        self.create_select_month_option_menu()
         self.build_transactions_table()
         self.data_to_transactions_table_by_month(month)
         self.pack(side="right", fill=BOTH, expand=1)
         self.transactions_table.pack()
-        self.create_and_pack_buttons()
+        # self.create_and_pack_buttons()
 
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
@@ -96,22 +98,34 @@ class TransactionsFrame(Frame):
 
     @staticmethod
     def get_day_from_date(date):
-        return date.split('-')[2]
+        split = date.split('-')[2]
+        if split[0] == '0':
+            return split[1]
+
+        return split
 
     def get_expense_name_by_id(self,expense_id):
         for expense_type in self.expense_types:
-            if expense_type[0] == expense_id:
-                return expense_type[1]
+            if expense_type.get_id() == expense_id:
+                return expense_type.get_name()
         return None
 
+    def create_select_month_option_menu(self):
+        months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        self.clicked_month.set(months[0])
+        self.clicked_month.trace("w", self.callback)
+        type_label = Label(self, text="Month")
+        type_label.pack()
+        dropdown = OptionMenu(self, self.clicked_month, *months)
+        dropdown.pack()
 
-"""
-            self.resume_table.insert(parent='', index='end', iid=0,
-                                     text="Parent", values=amount_for_table)
+    def callback(self,*clicked):
+        print(f"the variable has changed to '{self.clicked_month.get()}'")
+        self.update_transactions_table()
 
-            self.resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
-            self.transactions_table.column(income, anchor=W, width=100)
-
-        for income in incomes_by_month:
-            self.transactions_table.heading(, text=column, anchor=W)
-"""
+    def update_transactions_table(self):
+        self.transactions_table.destroy()
+        self.transactions_table = ttk.Treeview(self)
+        self.build_transactions_table()
+        self.data_to_transactions_table_by_month(self.clicked_month.get())
+        self.transactions_table.pack()
