@@ -31,11 +31,11 @@ GET_INCOME_TYPES = "SELECT * FROM income_type"
 GET_EXPENSE_TYPE_NAMES = "SELECT expense_name FROM expense_type"
 
 GET_EXPENSE_SUM_BY_TYPE_AND_MONTH = """SELECT t.expense_name as type, SUM(e.expense_amount) as amount 
-FROM expense_event e
-INNER JOIN expense_type t
-ON e.expense_type = t.id
-WHERE strftime('%m', e.expense_date) = ?
-GROUP BY t.expense_name;"""
+    FROM expense_event e
+    INNER JOIN expense_type t
+    ON e.expense_type = t.id
+    WHERE strftime('%m', e.expense_date) = ?
+    GROUP BY t.expense_name;"""
 
 GET_PAYROLL_BY_MONTH = """SELECT income_amount FROM income_event WHERE income_type = 1 
 AND strftime('%m', income_date) = ?"""
@@ -43,18 +43,18 @@ AND strftime('%m', income_date) = ?"""
 GET_INCOME_EVENTS_BY_MONTH = "SELECT * FROM income_event WHERE strftime('%m', income_date) = ?"
 
 GET_INCOME_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.income_name, e.income_amount, e.income_date, e.description, 
-a.name FROM income_event e 
-INNER JOIN income_type t ON e.income_type = t.id
-INNER JOIN account a ON e.account = a.id 
-WHERE strftime('%m', e.income_date) = ?;
-"""
+    a.name FROM income_event e 
+    INNER JOIN income_type t ON e.income_type = t.id
+    INNER JOIN account a ON e.account = a.id 
+    WHERE strftime('%m', e.income_date) = ?;
+    """
 
 GET_EXPENSE_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.expense_name, e.expense_amount, e.expense_date, e.description, 
-a.name FROM expense_event e 
-INNER JOIN expense_type t ON e.expense_type = t.id
-INNER JOIN account a ON e.account = a.id 
-WHERE strftime('%m', e.expense_date) = ?
-"""
+    a.name FROM expense_event e 
+    INNER JOIN expense_type t ON e.expense_type = t.id
+    INNER JOIN account a ON e.account = a.id 
+    WHERE strftime('%m', e.expense_date) = ?
+    """
 
 GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',expense_date) = ?"
 
