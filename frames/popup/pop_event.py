@@ -3,14 +3,15 @@ from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
 import global_constants
 from frames.popup.popup_message import PopupGenericMessage
 
+
 class PopEvent(Toplevel):
     """ Class that creates the popup for a new event"""
 
-    EXPENSE = "Expense"
-    INCOME = "Income"
-    ACCOUNT = 'Account'
-    NEW = "New"
-    EDIT = "Edit"
+    EXPENSE_LABEL = "Expense"
+    INCOME_LABEL = "Income"
+    ACCOUNT_LABEL = 'Account'
+    NEW_LABEL = "New"
+    EDIT_LABEL = "Edit"
 
     def __init__(self, root, event_type):
         Toplevel.__init__(self,root)
@@ -23,13 +24,13 @@ class PopEvent(Toplevel):
 
     def set_create_or_update_title(self):
         if self.event_type.has_id():
-            self.create_or_update_title = self.NEW
+            self.create_or_update_title = self.NEW_LABEL
         else:
-            self.create_or_update_title = self.EDIT
+            self.create_or_update_title = self.EDIT_LABEL
 
     def create_and_show_popup(self,serve):
-        types = self.get_type_options_for_dropdown(False) # TODO: Get type from object
-        accounts = self.get_type_options_for_dropdown(True)
+        types = self.get_type_options_for_dropdown(serve, False) # TODO: Get type from object
+        accounts = self.get_type_options_for_dropdown(serve, True)
 
         type_options = []
         account_options = []
@@ -45,7 +46,7 @@ class PopEvent(Toplevel):
         self.add_select_dropdown(type_options, clicked_type, type_label)
 
         clicked_account = StringVar()
-        self.add_select_dropdown(account_options, clicked_account, self.ACCOUNT)
+        self.add_select_dropdown(account_options, clicked_account, self.ACCOUNT_LABEL)
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -72,7 +73,7 @@ class PopEvent(Toplevel):
         save_button.pack()
         close_button.pack()
 
-    def get_type_options_for_dropdown(self, serve, get_accounts):
+    def get_type_options_for_dropdown(self,serve,get_accounts):
         if get_accounts:
             items = serve.get_accounts()
         elif self.event_type:
