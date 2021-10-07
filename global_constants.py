@@ -16,7 +16,7 @@ CREDIT_CARDS_MENU = 'Credit Cards'
 INCOME_TYPE_SALARY = "Salary"
 INCOME_TYPE_OTHER = "Other"
 
-# # # Income Event
+# # # Expense Event
 EXPENSE_TYPE_SERVICES = "Service"
 EXPENSE_TYPE_FOOD = "Food"
 EXPENSE_TYPE_PEOPLE = "People"
@@ -27,4 +27,3 @@ NEW_EXPENSE_LABEL = 'New Expense'
 
 EXPENSE_RESUME_TEXT = 'Expense Resume'
 MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'
-

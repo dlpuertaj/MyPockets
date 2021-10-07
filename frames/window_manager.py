@@ -90,7 +90,7 @@ class WindowManager:
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
         pop_event = PopEvent(self.root,event_type,None)
-        pop_event.create_and_show_popup()
+        pop_event.create_and_show_popup(self.serve)
         self.root.wait_window(pop_event)
         self.update_tables()
 
