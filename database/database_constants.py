@@ -30,6 +30,8 @@ GET_INCOME_TYPES = "SELECT * FROM income_type"
 
 GET_EXPENSE_TYPE_NAMES = "SELECT expense_name FROM expense_type"
 
+GET_INCOME_TYPE_NAMES = "SELECT income_name FROM income_type"
+
 GET_EXPENSE_SUM_BY_TYPE_AND_MONTH = """SELECT t.expense_name as type, SUM(e.expense_amount) as amount 
     FROM expense_event e
     INNER JOIN expense_type t

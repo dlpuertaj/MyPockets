@@ -29,7 +29,7 @@ class PopEvent(Toplevel):
             self.create_or_update_title = self.EDIT_LABEL
 
     def create_and_show_popup(self,serve):
-        types = self.get_options_for_dropdown(serve, get_accounts=False) # TODO: Get type from object
+        options = self.get_options_for_dropdown(serve, get_accounts=False) # TODO: Get type from object
         accounts = self.get_options_for_dropdown(serve, get_accounts=True)
 
         type_options = []
@@ -58,8 +58,7 @@ class PopEvent(Toplevel):
         note_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_event(
-            serve, types, accounts, clicked_type.get(), amount_entry.get(), date_entry.get(),
-            note_entry.get(), clicked_account.get()))
+            serve,            note_entry.get(), clicked_account.get()))
 
         close_button = Button(self, text="Close", command=self.destroy)
 
@@ -75,13 +74,9 @@ class PopEvent(Toplevel):
 
     def get_options_for_dropdown(self,serve,get_accounts):
         if get_accounts:
-            options = serve.get_accounts()
-        elif self.event_type.show_type() == 'Income':
-            options = serve.get_income_types()
+            return serve.get_accounts()
         else:
-            options = serve.get_expense_types()
-
-        return options
+            return serve.get_names_by_event_type(self.event_type)
 
     def add_select_dropdown(self, options, clicked, label):
         clicked.set(options[0])

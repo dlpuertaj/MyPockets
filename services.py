@@ -101,6 +101,12 @@ class Services:
         else:
             return None
 
+    def get_names_by_event_type(self, event_type):
+        if type(ExpenseEvent) == type(event_type):
+            return self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
+        elif type(IncomeEvent) == type(event_type):
+            return self.connect_and_execute(db_constants.GET_INCOME_TYPE_NAMES, None, True)
+
     def get_resume_data(self, month):
 
         result = self.connect_and_execute(db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH, month, True)
