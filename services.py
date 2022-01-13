@@ -102,9 +102,10 @@ class Services:
             return None
 
     def get_names_by_event_type(self, event_type):
-        if type(ExpenseEvent) == type(event_type):
+        type_of_event = str(type(event_type))
+        if "expense" in type_of_event:
             return self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
-        elif type(IncomeEvent) == type(event_type):
+        elif "income" in type_of_event:
             return self.connect_and_execute(db_constants.GET_INCOME_TYPE_NAMES, None, True)
 
     def get_resume_data(self, month):
@@ -134,7 +135,7 @@ class Services:
         income_events = []
         if results is not None:
             for rs in results:
-                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
+                event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[5])
                 income_events.append(event)
             return income_events
         else:

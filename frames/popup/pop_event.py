@@ -34,13 +34,13 @@ class PopEvent(Toplevel):
 
         type_options = []
         account_options = []
-        for t in types:
-            type_options.append(t.get_name())
+        for option in options:
+            type_options.append(option)
 
         for account in accounts:
             account_options.append(account.get_name())
 
-        type_label = self.event_type.show_type + " Type"
+        type_label = self.event_type.show_type() + " Type"
 
         clicked_type = StringVar()
         self.add_select_dropdown(type_options, clicked_type, type_label)
@@ -58,7 +58,8 @@ class PopEvent(Toplevel):
         note_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_event(
-            serve,            note_entry.get(), clicked_account.get()))
+            serve, options, accounts, clicked_type.get(), amount_entry.get(), date_entry.get(),
+            note_entry.get(),clicked_account.get()))
 
         close_button = Button(self, text="Close", command=self.destroy)
 

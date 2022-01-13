@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 
 import global_constants
+from entities.expense_event import ExpenseEvent
+from entities.income_event import IncomeEvent
 from frames.pocket_frame import PocketFrame
 from frames.popup.pop_event import PopEvent
 from frames.popup.pop_login import PopLogin
@@ -76,8 +78,10 @@ class WindowManager:
         self.add_menu_to_menu_bar(cards_menu , global_constants.CREDIT_CARDS_MENU)
 
         file_menu.add_command(label=global_constants.NEW_ACCOUNT_LABEL) #TODO: create command method
-        file_menu.add_command(label=global_constants.NEW_INCOME_LABEL, command=lambda: self.new_event(True))
-        file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL, command=lambda: self.new_event(False))
+        file_menu.add_command(label=global_constants.NEW_INCOME_LABEL,
+                              command=lambda: self.new_event(IncomeEvent(None,None,None,"","")))
+        file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,
+                              command=lambda: self.new_event(ExpenseEvent(None,None,None,"","")))
         file_menu.add_separator()
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
@@ -89,7 +93,7 @@ class WindowManager:
 
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
-        pop_event = PopEvent(self.root,event_type,None)
+        pop_event = PopEvent(self.root,event_type)
         pop_event.create_and_show_popup(self.serve)
         self.root.wait_window(pop_event)
         self.update_tables()
