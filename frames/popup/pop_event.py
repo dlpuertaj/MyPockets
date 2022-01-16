@@ -1,5 +1,5 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
-
+from datetime import date
 import global_constants
 from frames.popup.popup_message import PopupGenericMessage
 
@@ -35,7 +35,7 @@ class PopEvent(Toplevel):
         type_options = []
         account_options = []
         for option in options:
-            type_options.append(option)
+            type_options.append(option.get_name())
 
         for account in accounts:
             account_options.append(account.get_name())
@@ -53,6 +53,7 @@ class PopEvent(Toplevel):
 
         date_label = Label(self,text="Date: ")
         date_entry = Entry(self)
+        date_entry.insert(0,date.today())
 
         note_label = Label(self,text="Note: ")
         note_entry = Entry(self)
@@ -77,7 +78,7 @@ class PopEvent(Toplevel):
         if get_accounts:
             return serve.get_accounts()
         else:
-            return serve.get_names_by_event_type(self.event_type)
+            return serve.get_events_by_type(self.event_type)
 
     def add_select_dropdown(self, options, clicked, label):
         clicked.set(options[0])

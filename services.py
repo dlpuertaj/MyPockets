@@ -92,6 +92,19 @@ class Services:
         else:
             return None
 
+    def get_events_by_type(self, event_type):
+
+        type_of_event = str(type(event_type))
+        if "expense" in type_of_event:
+            result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPES, None, True)
+        elif "income" in type_of_event:
+            result = self.connect_and_execute(db_constants.GET_INCOME_TYPES, None, True)
+        types = []
+        for r in result:
+            generic_type = GenericType(r[0], r[1], r[2])
+            types.append(generic_type)
+        return types
+
     def get_expense_type_names(self):
 
         result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
