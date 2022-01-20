@@ -87,7 +87,7 @@ class PopEvent(Toplevel):
         dropdown = OptionMenu(self, clicked, *options)
         dropdown.pack()
 
-    def save_event(self, serve, types, accounts, event_type, amount, date, note, account):
+    def save_event(self, serve, types, accounts, event_type, amount, current_date, note, account):
         used_account = None
         for t in types:
             if t.get_name() == event_type:
@@ -101,14 +101,14 @@ class PopEvent(Toplevel):
                 break
 
         if self.event_type:
-            serve.insert_event(True,amount,event_type, date, note, account)
+            serve.insert_event(True,amount,event_type, current_date, note, account)
             serve.update_account_amount(used_account.get_id(), (used_account.get_amount() + int(amount)))
             self.show_popup_message(global_constants.SUCCESS_OPERATION)
         else:
             if used_account.get_amount() < int(amount):
                 self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT)
             else:
-                serve.insert_event(False,amount,event_type, date, note, account)
+                serve.insert_event(False,amount,event_type, current_date, note, account)
                 serve.update_account_amount(used_account.get_id(), (used_account.get_amount() - int(amount)))
                 self.show_popup_message(global_constants.SUCCESS_OPERATION)
 
