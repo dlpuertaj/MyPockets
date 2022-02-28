@@ -8,6 +8,7 @@ from entities.income_event import IncomeEvent
 from frames.pocket_frame import PocketFrame
 from frames.popup.pop_event import PopEvent
 from frames.popup.pop_login import PopLogin
+from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
 from services import Services as serve
@@ -85,7 +86,7 @@ class WindowManager:
         file_menu.add_separator()
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
-        # pocket_menu.add_command(label="New Pocket")
+        pocket_menu.add_command(label=global_constants.NEW_POCKET,command=self.new_pocket)
         # pocket_menu.add_command(label="Transfer to Pockets")
 
         # cards_menu.add_command(label="New Credit Card")
@@ -101,3 +102,9 @@ class WindowManager:
     def update_tables(self):
         self.resume_frame.update_resume_table()
         self.transactions_frame.update_transactions_table()
+
+    def new_pocket(self):
+        pop_new_pocket = PopPocket(self.root)
+        pop_new_pocket.create_and_show_popup(self.serve)
+        self.root.wait_window(pop_new_pocket)
+        self.update_tables()

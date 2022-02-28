@@ -27,3 +27,6 @@ NEW_EXPENSE_LABEL = 'New Expense'
 
 EXPENSE_RESUME_TEXT = 'Expense Resume'
 MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'
+
+
+NEW_POCKET = 'New Pocket '

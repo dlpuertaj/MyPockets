@@ -100,7 +100,8 @@ class PopEvent(Toplevel):
                 account = a.get_id()
                 break
 
-        if self.event_type:
+        type_of_event = str(type(self.event_type))
+        if "income" in type_of_event:
             serve.insert_event(True,amount,event_type, current_date, note, account)
             serve.update_account_amount(used_account.get_id(), (used_account.get_amount() + int(amount)))
             self.show_popup_message(global_constants.SUCCESS_OPERATION)

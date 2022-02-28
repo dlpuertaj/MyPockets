@@ -73,7 +73,6 @@ class ResumeFrame(Frame):
 
         self.resume_table.pack()
 
-
     def update_resume_table(self):
         self.resume_table.destroy()
         self.resume_table = ttk.Treeview(self)
