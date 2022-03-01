@@ -1,5 +1,4 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
-from services import Services as srv
 
 """ Generic popup for error, alert or any message"""
 class PopupGenericMessage(Toplevel):
@@ -7,7 +6,6 @@ class PopupGenericMessage(Toplevel):
     def __init__(self, root,message):
         Toplevel.__init__(self,root)
         self.root = root
-        self.serve = srv()
         self.message = message
         self.show_popup()
 

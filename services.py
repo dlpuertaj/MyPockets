@@ -7,6 +7,7 @@ from entities.expense_event import ExpenseEvent
 from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
+from frames.popup.popup_message import PopupGenericMessage
 
 
 class Services:
@@ -67,6 +68,7 @@ class Services:
             return pockets
         else:
             return None
+
 
     def get_expense_types(self):
 
@@ -184,9 +186,22 @@ class Services:
         else:
             return None
 
+    def insert_pocket(self,pocket_name,amount):
+        result = self.connect_and_execute(db_constants.INSERT_POCKET,(pocket_name,amount),False)
+        if result is not None:
+            return result
+        else:
+            return None
+
     def update_account_amount(self, account_id, new_amount):
         result = self.connect_and_execute(db_constants.UPDATE_ACCOUNT_AMOUNT, (new_amount, account_id), False)
         if result is not None:
             return result
         else:
             return None
+
+    @staticmethod
+    def show_popup_message(root, message):
+        error_popup = PopupGenericMessage(root, message)
+        error_popup.grab_set()
+        root.wait_window(error_popup)

@@ -71,3 +71,5 @@ INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, i
 VALUES (?, ?, ?, ?, ?)"""
 
 UPDATE_ACCOUNT_AMOUNT = """UPDATE account SET amount = ? WHERE id = ?"""
+
+INSERT_POCKET = """INSERT INTO pocket (name,amount) VALUES (?,?)"""
