@@ -211,3 +211,6 @@ class Services:
         error_popup = PopupGenericMessage(root, message)
         error_popup.grab_set()
         root.wait_window(error_popup)
+
+    def pocket_name_in_database(self,pocket_name):
+        return self.get_pocket_by_name(pocket_name) is not None

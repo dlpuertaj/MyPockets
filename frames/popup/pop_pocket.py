@@ -41,20 +41,19 @@ class PopPocket(Toplevel):
                 if int(pocket_amount) < 0:
                     serve.show_popup_message(self.root, "Amount entered is invalid")
                 elif pocket_name is not "":
-                    if not self.pocket_in_database(pocket_name):
+                    if not serve.pocket_name_in_database(pocket_name):
                         serve.insert_pocket(pocket_name, pocket_amount)
+                        serve.show_popup_message(self.root, "Success!")
                     else:
                         serve.show_popup_message(self.root, "Pocket exists!")
             else:
                 serve.show_popup_message(self.root, "Amount entered is invalid")
         elif pocket_amount == "":
             if pocket_name is not "":
-                if not self.pocket_in_database(serve, pocket_name):
+                if not serve.pocket_name_in_database(pocket_name):
                     serve.insert_pocket(pocket_name, 0)
+                    serve.show_popup_message(self.root, "Success!")
                 else:
                     serve.show_popup_message(self.root, "Pocket exists!")
             else:
                 serve.show_popup_message(self.root, "Name entered is invalid")
-
-    def pocket_in_database(self, serve,pocket_name):
-        return serve.get_pocket_by_name(pocket_name) is not None

@@ -103,8 +103,11 @@ class WindowManager:
         self.resume_frame.update_resume_table()
         self.transactions_frame.update_transactions_table()
 
+    def update_pockets_table(self):
+        self.pocket_frame.update_pockets_table()
+
     def new_pocket(self):
         pop_new_pocket = PopPocket(self.root)
         pop_new_pocket.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_pocket)
-        self.update_tables()
+        self.update_pockets_table()

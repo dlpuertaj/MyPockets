@@ -45,3 +45,11 @@ class PocketFrame(Frame):
             self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent",
                                       values=(pocket.name, pocket.amount))
             iid = iid + 1
+
+    def update_pockets_table(self):
+        self.pockets_table.destroy()
+        self.pockets_table = ttk.Treeview(self)
+        self.build_pocket_table()
+        self.load_pockets_to_table()
+        self.pockets_table.pack()
+
