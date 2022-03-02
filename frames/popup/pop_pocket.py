@@ -34,13 +34,27 @@ class PopPocket(Toplevel):
         save_button.pack()
         close_button.pack()
 
+    # TODO: optimize this code using try-except and much less if conditions
     def save_pocket(self, serve, pocket_name, pocket_amount):
-        if pocket_amount.isnumeric() or pocket_amount != "":
-            if int(pocket_amount) < 0:
+        if len(pocket_amount) > 0:
+            if pocket_amount.isnumeric():
+                if int(pocket_amount) < 0:
+                    serve.show_popup_message(self.root, "Amount entered is invalid")
+                elif pocket_name is not "":
+                    if not self.pocket_in_database(pocket_name):
+                        serve.insert_pocket(pocket_name, pocket_amount)
+                    else:
+                        serve.show_popup_message(self.root, "Pocket exists!")
+            else:
                 serve.show_popup_message(self.root, "Amount entered is invalid")
-            elif pocket_name is not "":
-                serve.insert_pocket(pocket_name, pocket_amount)
+        elif pocket_amount == "":
+            if pocket_name is not "":
+                if not self.pocket_in_database(serve, pocket_name):
+                    serve.insert_pocket(pocket_name, 0)
+                else:
+                    serve.show_popup_message(self.root, "Pocket exists!")
             else:
                 serve.show_popup_message(self.root, "Name entered is invalid")
-        else:
-            serve.show_popup_message(self.root, "Amount entered is invalid")
+
+    def pocket_in_database(self, serve,pocket_name):
+        return serve.get_pocket_by_name(pocket_name) is not None

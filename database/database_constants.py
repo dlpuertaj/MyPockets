@@ -73,3 +73,5 @@ VALUES (?, ?, ?, ?, ?)"""
 UPDATE_ACCOUNT_AMOUNT = """UPDATE account SET amount = ? WHERE id = ?"""
 
 INSERT_POCKET = """INSERT INTO pocket (name,amount) VALUES (?,?)"""
+
+SELECT_POCKET_BY_NAME = """SELECT name FROM pocket WHERE name = ?"""

@@ -69,6 +69,12 @@ class Services:
         else:
             return None
 
+    def get_pocket_by_name(self, pocket_name):
+        result = self.connect_and_execute(db_constants.SELECT_POCKET_BY_NAME, (pocket_name,),False)
+        if result is not None:
+            return result
+        else:
+            return None
 
     def get_expense_types(self):
 
