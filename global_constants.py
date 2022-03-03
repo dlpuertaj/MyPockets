@@ -1,7 +1,7 @@
 # System Messages
 NEED_LOGIN_MESSAGE = "Login to use de application"
 WRONG_USER_OR_PASSWORD = "Wrong user or password"
-AMOUNT_GRATER_THAN_ACCOUNT_AMOUNT = "The amount is greater than what you have in the account!"
+AMOUNT_GRATER_THAN_POCKET_AMOUNT = "The amount is greater than what you have in the pocket!"
 SUCCESS_OPERATION = "Success!"
 
 # System Properties
@@ -21,7 +21,6 @@ EXPENSE_TYPE_SERVICES = "Service"
 EXPENSE_TYPE_FOOD = "Food"
 EXPENSE_TYPE_PEOPLE = "People"
 
-NEW_ACCOUNT_LABEL = 'New Account'
 NEW_INCOME_LABEL = 'New Income'
 NEW_EXPENSE_LABEL = 'New Expense'
 

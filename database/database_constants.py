@@ -19,9 +19,6 @@ SEARCH_USER_BY_USERNAME = """ SELECT * FROM user WHERE username = ? """
 
 SEARCH_USER_BY_USERNAME_AND_PASSWORD = """ SELECT * FROM user WHERE username = ? AND password = ?"""
 
-
-GET_ACCOUNT_DATA_BY_ID = "SELECT * FROM account WHERE id = ?"
-
 SELECT_POCKETS = "SELECT * FROM pocket"
 
 GET_EXPENSE_TYPES = "SELECT * FROM expense_type"
@@ -47,14 +44,14 @@ GET_INCOME_EVENTS_BY_MONTH = "SELECT * FROM income_event WHERE strftime('%m', in
 GET_INCOME_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.income_name, e.income_amount, e.income_date, e.description, 
     a.name FROM income_event e 
     INNER JOIN income_type t ON e.income_type = t.id
-    INNER JOIN account a ON e.account = a.id 
+    INNER JOIN pocket a ON e.pocket = a.id 
     WHERE strftime('%m', e.income_date) = ?;
     """
 
 GET_EXPENSE_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.expense_name, e.expense_amount, e.expense_date, e.description, 
     a.name FROM expense_event e 
     INNER JOIN expense_type t ON e.expense_type = t.id
-    INNER JOIN account a ON e.account = a.id 
+    INNER JOIN pocket a ON e.pocket = a.id 
     WHERE strftime('%m', e.expense_date) = ?
     """
 
@@ -62,15 +59,11 @@ GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',e
 
 GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
 
-GET_ACCOUNTS = "SELECT * FROM account"
-
-INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, account)
+INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, pocket)
 VALUES (?, ?, ?, ?, ?)"""
 
-INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, income_date, description, account)
+INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, income_date, description, pocket)
 VALUES (?, ?, ?, ?, ?)"""
-
-UPDATE_ACCOUNT_AMOUNT = """UPDATE account SET amount = ? WHERE id = ?"""
 
 INSERT_POCKET = """INSERT INTO pocket (name,amount) VALUES (?,?)"""
 

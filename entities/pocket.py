@@ -4,3 +4,6 @@ class Pocket:
         self.pocket_id = pocket_id
         self.name = name
         self.amount = amount
+
+    def get_name(self):
+        return self.name

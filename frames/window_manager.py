@@ -78,7 +78,6 @@ class WindowManager:
         self.add_menu_to_menu_bar(pocket_menu, global_constants.POCKETS_MENU)
         self.add_menu_to_menu_bar(cards_menu , global_constants.CREDIT_CARDS_MENU)
 
-        file_menu.add_command(label=global_constants.NEW_ACCOUNT_LABEL) #TODO: create command method
         file_menu.add_command(label=global_constants.NEW_INCOME_LABEL,
                               command=lambda: self.new_event(IncomeEvent(None,None,None,"","")))
         file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,

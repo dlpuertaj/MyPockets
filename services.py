@@ -2,7 +2,6 @@ from database.database_manager import DatabaseManager as db
 from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
-from entities.account import Account
 from entities.expense_event import ExpenseEvent
 from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
@@ -37,26 +36,6 @@ class Services:
                                           False)
         if result is not None:
             self.is_logged_in = True
-
-    def get_account_data_by_id(self, id):
-        result = self.connect_and_execute(db_constants.GET_ACCOUNT_DATA_BY_ID, id, False)
-
-        if result is not None:
-            return result
-        else:
-            return None
-
-    def get_accounts(self):
-        result = self.connect_and_execute(db_constants.GET_ACCOUNTS, None, True)
-
-        if result is not None:
-            accounts = []
-            for account in result:
-                new_account = Account(account[0], account[1], account[2])
-                accounts.append(new_account)
-            return accounts
-        else:
-            return None
 
     def get_pockets(self):
         result_set = self.connect_and_execute(db_constants.SELECT_POCKETS, None, True)
@@ -180,13 +159,13 @@ class Services:
         else:
             return None
 
-    def insert_event(self, income_or_expense, amount,event_type, date, note, account):
+    def insert_event(self, income_or_expense, amount,event_type, date, note, pocket):
         if income_or_expense:
             result = self.connect_and_execute(db_constants.INSERT_INCOME_EVENT,
-                                              (amount,event_type, date, note, account), False)
+                                              (amount,event_type, date, note, pocket), False)
         else:
             result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
-                                              (amount,event_type, date, note, account), False)
+                                              (amount,event_type, date, note, pocket), False)
         if result is not None:
             return result
         else:
@@ -194,13 +173,6 @@ class Services:
 
     def insert_pocket(self,pocket_name,amount):
         result = self.connect_and_execute(db_constants.INSERT_POCKET,(pocket_name,amount),False)
-        if result is not None:
-            return result
-        else:
-            return None
-
-    def update_account_amount(self, account_id, new_amount):
-        result = self.connect_and_execute(db_constants.UPDATE_ACCOUNT_AMOUNT, (new_amount, account_id), False)
         if result is not None:
             return result
         else:

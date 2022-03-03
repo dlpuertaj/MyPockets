@@ -17,11 +17,11 @@ class PocketFrame(Frame):
 
     """ Method that creates and shows the pocket frame with the database data"""
     def create_pocket_frame(self):
+        self.add_transfer_button()
         self.build_pocket_table()
         self.load_pockets_to_table()
         self.pack(side="left", fill=BOTH, expand=1)
         self.pockets_table.pack()
-        self.add_transfer_button()
 
     """ Method that creates the button that creates a new money transfer to a pocket"""
     def add_transfer_button(self):
@@ -63,4 +63,5 @@ class PocketFrame(Frame):
         self.build_pocket_table()
         self.load_pockets_to_table()
         self.pockets_table.pack()
+
 
