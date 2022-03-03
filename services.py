@@ -214,3 +214,10 @@ class Services:
 
     def pocket_name_in_database(self,pocket_name):
         return self.get_pocket_by_name(pocket_name) is not None
+
+    def update_pocket_amount(self,pocket,amount):
+        result = self.connect_and_execute(db_constants.UPDATE_POCKET_AMOUNT_BY_NAME,(amount,pocket),False)
+        if result is not None:
+            return result
+        else:
+            return None
