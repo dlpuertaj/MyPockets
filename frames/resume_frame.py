@@ -1,4 +1,4 @@
-from tkinter import Frame, W, NO, BOTH, StringVar, Label, OptionMenu
+from tkinter import Frame, W, NO, BOTH, Button, Label
 from tkinter import ttk
 
 from services import Services as serve
@@ -16,15 +16,25 @@ class ResumeFrame(Frame):
     """ Method that creates the resume frame and loads the data from the database"""
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
-        self.build_resume_table()
-        self.load_resume_data_to_table()
+        expense_types = self.serve.get_expense_type_names()
+        if len(expense_types) > 0:
+            self.build_resume_table()
+            self.load_resume_data_to_table()
+        else:
+            no_expense_types_label = Label(self,text="No expense type created")
+            no_expense_types_label.pack()
+            new_expense_type_button = Button(self,text="Create Expense Type",
+                                             command=self.create_expense_type)
+            new_expense_type_button.pack()
         self.pack(side="right", fill=BOTH, expand=1)
 
+    def create_expense_type(self):
+        pass
+
     """ Method that builds the resume table adding the columns and the headers"""
-    def build_resume_table(self):
+    def build_resume_table(self,expense_types):
         columns = []
 
-        expense_types = self.serve.get_expense_type_names()
         for expense_type in expense_types:
             columns.append(expense_type[0])
 
