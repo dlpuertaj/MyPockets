@@ -1,1 +1,1 @@
-# Desktop app in python using tkinter
+# Desktop app using python and tkinter
