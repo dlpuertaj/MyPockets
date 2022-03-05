@@ -59,6 +59,8 @@ GET_EXPENSE_EVENTS_BY_MONTH = "SELECT * FROM expense_event WHERE strftime('%m',e
 
 GET_EXPENSE_TYPE_BY_ID = "SELECT * FROM expense_type WHERE expense_id = ?"
 
+INSERT_EXPENSE_TYPE = "INSERT INTO expense_type (expense_name,note) VALUES (?,?)"
+
 INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, pocket)
 VALUES (?, ?, ?, ?, ?)"""
 

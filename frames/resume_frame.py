@@ -1,38 +1,45 @@
 from tkinter import Frame, W, NO, BOTH, Button, Label
 from tkinter import ttk
 
+from frames.popup.pop_new_type import PopNewType
 from services import Services as serve
 
 
 class ResumeFrame(Frame):
-
     """ Iit method that instantiates service and resume table"""
-    def __init__(self,root):
-        Frame.__init__(self,root)
+
+    def __init__(self, root):
+        Frame.__init__(self, root)
         self.resume_table = ttk.Treeview(self)
         self.serve = serve()
-        # self.clicked_month = None
+        self.root = root
+        self.clicked_month = None
+        self.no_expense_types_label = Label(self, text="No expense type created")
+        self.new_expense_type_button = Button(self, text="Create Expense Type",
+                                              command=self.create_expense_type)
 
     """ Method that creates the resume frame and loads the data from the database"""
+
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
         expense_types = self.serve.get_expense_type_names()
         if len(expense_types) > 0:
-            self.build_resume_table()
+            self.build_resume_table(expense_types)
             self.load_resume_data_to_table()
         else:
-            no_expense_types_label = Label(self,text="No expense type created")
-            no_expense_types_label.pack()
-            new_expense_type_button = Button(self,text="Create Expense Type",
-                                             command=self.create_expense_type)
-            new_expense_type_button.pack()
+            self.no_expense_types_label.pack()
+            self.new_expense_type_button.pack()
         self.pack(side="right", fill=BOTH, expand=1)
 
     def create_expense_type(self):
-        pass
+        pop_new_type = PopNewType(self.root)
+        pop_new_type.create_and_show_popup(self.serve)
+        self.root.wait_window(pop_new_type)
+        self.update_resume_table()
 
     """ Method that builds the resume table adding the columns and the headers"""
-    def build_resume_table(self,expense_types):
+
+    def build_resume_table(self, expense_types):
         columns = []
 
         for expense_type in expense_types:
@@ -49,6 +56,7 @@ class ResumeFrame(Frame):
             self.resume_table.heading(column, text=column, anchor=W)
 
     """ Method that adds the database data to the resume table"""
+
     def load_resume_data_to_table(self):
         expense_types = self.serve.get_expense_type_names()
         resume_data = self.serve.get_resume_data(('01',))
@@ -59,18 +67,17 @@ class ResumeFrame(Frame):
         sum_percent = 0
 
         if len(resume_data) == 0:
-            resume_data = ('None',0)
+            resume_data = ('None', 0)
         for data in resume_data:
-
             for column_index in range(len(expense_types)):
-                column = self.resume_table.column(column_index,option='id')
+                column = self.resume_table.column(column_index, option='id')
                 if data[0] == column:
                     if payroll == 0:
                         percent = 0
                     else:
-                        percent = data[1]/payroll[0]
+                        percent = data[1] / payroll[0]
                     amount_for_table.append(data[1])
-                    percent_for_table.append(str(percent*100)+"%")
+                    percent_for_table.append(str(percent * 100) + "%")
                     sum_percent += percent
                 else:
                     amount_for_table.append(0)
@@ -84,7 +91,13 @@ class ResumeFrame(Frame):
         self.resume_table.pack()
 
     def update_resume_table(self):
+        expense_types = self.serve.get_expense_type_names()
+        if len(expense_types) > 0:
+            self.no_expense_types_label.destroy()
+            self.new_expense_type_button.destroy()
         self.resume_table.destroy()
         self.resume_table = ttk.Treeview(self)
-        self.build_resume_table()
+        self.build_resume_table(expense_types)
         self.load_resume_data_to_table()
+        self.resume_table.pack()
+
