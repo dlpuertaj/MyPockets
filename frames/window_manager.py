@@ -82,8 +82,12 @@ class WindowManager:
                               command=lambda: self.new_event(IncomeEvent(None,None,None,"","")))
         file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,
                               command=lambda: self.new_event(ExpenseEvent(None,None,None,"","")))
+        file_menu.add_separator()
+
         file_menu.add_command(label=global_constants.NEW_EXPENSE_TYPE_LABEL,
-                              command=lambda: self.resume_frame.create_expense_type())
+                              command=lambda: self.resume_frame.create_type(True))
+        file_menu.add_command(label=global_constants.NEW_INCOME_TYPE_LABEL,
+                              command=lambda: self.resume_frame.create_type(False))
 
         file_menu.add_separator()
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)

@@ -16,7 +16,7 @@ class ResumeFrame(Frame):
         self.clicked_month = None
         self.no_expense_types_label = Label(self, text="No expense type created")
         self.new_expense_type_button = Button(self, text="Create Expense Type",
-                                              command=self.create_expense_type)
+                                              command=lambda: self.create_type(True))
 
     """ Method that creates the resume frame and loads the data from the database"""
 
@@ -31,8 +31,8 @@ class ResumeFrame(Frame):
             self.new_expense_type_button.pack()
         self.pack(side="right", fill=BOTH, expand=1)
 
-    def create_expense_type(self):
-        pop_new_type = PopNewType(self.root)
+    def create_type(self,expense_or_income):
+        pop_new_type = PopNewType(self.root,expense_or_income)
         pop_new_type.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_type)
         self.update_resume_table()

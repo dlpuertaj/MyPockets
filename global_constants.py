@@ -25,6 +25,7 @@ NEW_INCOME_LABEL = 'New Income Event'
 NEW_EXPENSE_LABEL = 'New Expense Event'
 
 NEW_EXPENSE_TYPE_LABEL = 'New Expense Type'
+NEW_INCOME_TYPE_LABEL = 'New Income Type'
 
 EXPENSE_RESUME_TEXT = 'Expense Resume'
 MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'

@@ -166,6 +166,13 @@ class Services:
         else:
             return None
 
+    def insert_income_type(self,name,note):
+        result = self.connect_and_execute(db_constants.INSERT_INCOME_TYPE,(name,note),False)
+        if result is not None:
+            return result[0]
+        else:
+            return None
+
     def insert_event(self, income_or_expense, amount,event_type, date, note, pocket):
         if income_or_expense:
             result = self.connect_and_execute(db_constants.INSERT_INCOME_EVENT,

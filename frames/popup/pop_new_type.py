@@ -3,10 +3,11 @@ from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
 class PopNewType(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
 
-    def __init__(self, root):
+    def __init__(self, root, type):
         Toplevel.__init__(self, root)
         self.root = root
         self.grab_set()
+        self.type = type
 
     def create_and_show_popup(self,serve):
 
@@ -30,5 +31,8 @@ class PopNewType(Toplevel):
         cancel_button.pack()
 
     def save(self,serve,name, note):
-        serve.insert_expense_type(name,note)
+        if self.type:
+            serve.insert_expense_type(name,note)
+        else:
+            serve.insert_income_type(name,note)
         serve.show_popup_message(self.root, "Success!")
