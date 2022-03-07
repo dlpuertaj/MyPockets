@@ -21,8 +21,10 @@ EXPENSE_TYPE_SERVICES = "Service"
 EXPENSE_TYPE_FOOD = "Food"
 EXPENSE_TYPE_PEOPLE = "People"
 
-NEW_INCOME_LABEL = 'New Income'
-NEW_EXPENSE_LABEL = 'New Expense'
+NEW_INCOME_LABEL = 'New Income Event'
+NEW_EXPENSE_LABEL = 'New Expense Event'
+
+NEW_EXPENSE_TYPE_LABEL = 'New Expense Type'
 
 EXPENSE_RESUME_TEXT = 'Expense Resume'
 MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'
