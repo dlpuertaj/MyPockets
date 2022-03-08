@@ -116,6 +116,7 @@ class WindowManager:
     def update_tables(self):
         self.resume_frame.update_resume_table()
         self.transactions_frame.update_transactions_table()
+        self.update_pockets_table()
 
     def update_pockets_table(self):
         self.pocket_frame.update_pockets_table()
