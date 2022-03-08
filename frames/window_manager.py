@@ -30,6 +30,7 @@ class WindowManager:
         self.root = tk.Tk()
         self.serve = serve()
         self.menu_bar = tk.Menu(self.root)
+        self.pockets = None
         self.pocket_frame    = PocketFrame(self.root)
         self.pockets_table   = ttk.Treeview(self.pocket_frame)
         self.resume_notebook = ttk.Notebook(self.root)
@@ -56,12 +57,16 @@ class WindowManager:
         """ Method that calls the creation of the pocket frame and the resume frame.
             It also adds the resume frame and the transactions frame to the Notebook """
         initial_month = '01' # TODO: get current month
+        self.pockets = self.load_pockets()
         self.pocket_frame.create_pocket_frame()
         self.resume_frame.create_resume_frame()
         self.transactions_frame.create_transaction_frame(initial_month)
         self.resume_notebook.add(self.resume_frame, text=global_constants.EXPENSE_RESUME_TEXT)
         self.resume_notebook.add(self.transactions_frame, text=global_constants.MONTHLY_TRANSACTIONS_TEXT)
         self.resume_notebook.pack()
+
+    def load_pockets(self):
+        return self.serve.get_pockets()
 
     def add_menu_to_menu_bar(self, new_menu, label_for_new_menu):
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
@@ -100,10 +105,13 @@ class WindowManager:
 
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
-        pop_event = PopEvent(self.root,event_type)
-        pop_event.create_and_show_popup(self.serve)
-        self.root.wait_window(pop_event)
-        self.update_tables()
+        if len(self.pockets) == 0:
+            serve.show_popup_message(self.root, "No pockets created")
+        else:
+            pop_event = PopEvent(self.root,event_type)
+            pop_event.create_and_show_popup(self.serve)
+            self.root.wait_window(pop_event)
+            self.update_tables()
 
     def update_tables(self):
         self.resume_frame.update_resume_table()
@@ -111,6 +119,7 @@ class WindowManager:
 
     def update_pockets_table(self):
         self.pocket_frame.update_pockets_table()
+        self.load_pockets()
 
     def new_pocket(self):
         pop_new_pocket = PopPocket(self.root)
