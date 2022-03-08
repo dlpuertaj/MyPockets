@@ -7,3 +7,9 @@ class Pocket:
 
     def get_name(self):
         return self.name
+
+    def get_id(self):
+        return self.pocket_id
+
+    def get_amount(self):
+        return self.amount
