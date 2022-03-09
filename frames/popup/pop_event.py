@@ -27,9 +27,8 @@ class PopEvent(Toplevel):
         else:
             self.create_or_update_title = self.EDIT_LABEL
 
-    def create_and_show_popup(self,serve):
+    def create_and_show_popup(self,serve, pockets):
         options = self.get_options_for_dropdown(serve, False) # TODO: Get type from object
-        pockets = self.get_options_for_dropdown(serve, True)
 
         type_options = []
         pockets_options = []

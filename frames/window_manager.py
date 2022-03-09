@@ -8,6 +8,7 @@ from entities.income_event import IncomeEvent
 from frames.pocket_frame import PocketFrame
 from frames.popup.pop_event import PopEvent
 from frames.popup.pop_login import PopLogin
+from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
@@ -31,6 +32,8 @@ class WindowManager:
         self.serve = serve()
         self.menu_bar = tk.Menu(self.root)
         self.pockets = None
+        self.expense_types = None
+        self.income_types = None
         self.pocket_frame    = PocketFrame(self.root)
         self.pockets_table   = ttk.Treeview(self.pocket_frame)
         self.resume_notebook = ttk.Notebook(self.root)
@@ -58,6 +61,7 @@ class WindowManager:
             It also adds the resume frame and the transactions frame to the Notebook """
         initial_month = '01' # TODO: get current month
         self.pockets = self.load_pockets()
+        self.load_types()
         self.pocket_frame.create_pocket_frame()
         self.resume_frame.create_resume_frame()
         self.transactions_frame.create_transaction_frame(initial_month)
@@ -67,6 +71,10 @@ class WindowManager:
 
     def load_pockets(self):
         return self.serve.get_pockets()
+
+    def load_types(self):
+        self.income_types = self.serve.get_income_types()
+        self.expense_types = self.serve.get_expense_types()
 
     def add_menu_to_menu_bar(self, new_menu, label_for_new_menu):
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
@@ -103,15 +111,26 @@ class WindowManager:
         # cards_menu.add_command(label="New Credit Card")
         # cards_menu.add_command(label="View Movements")
 
+    def create_type(self, expense_or_income):
+        pop_new_type = PopNewType(self.root, expense_or_income)
+        pop_new_type.create_and_show_popup(self.serve)
+        self.root.wait_window(pop_new_type)
+        self.update_tables()
+        self.load_types()
+
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
         if len(self.pockets) == 0:
             serve.show_popup_message(self.root, "No pockets created")
         else:
-            pop_event = PopEvent(self.root,event_type)
-            pop_event.create_and_show_popup(self.serve)
-            self.root.wait_window(pop_event)
-            self.update_tables()
+            if self.event_options_in_database(event_type):
+                pop_event = PopEvent(self.root,event_type)
+                pop_event.create_and_show_popup(self.serve,self.pockets)
+                self.root.wait_window(pop_event)
+                self.update_tables()
+                self.load_types()
+            else:
+                serve.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
         self.resume_frame.update_resume_table()
@@ -127,3 +146,10 @@ class WindowManager:
         pop_new_pocket.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_pocket)
         self.update_pockets_table()
+
+    def event_options_in_database(self, event_type):
+        type_of_event = str(type(event_type))
+        if "income" in type_of_event:
+            return len(self.income_types) > 0
+        else:
+            return len(self.expense_types) > 0
