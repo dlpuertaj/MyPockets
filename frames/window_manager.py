@@ -130,7 +130,15 @@ class WindowManager:
                 self.update_tables()
                 self.load_types()
             else:
-                serve.show_popup_message(self.root, "No type created")
+                self.load_types()
+                if self.event_options_in_database(event_type):
+                    pop_event = PopEvent(self.root, event_type)
+                    pop_event.create_and_show_popup(self.serve, self.pockets)
+                    self.root.wait_window(pop_event)
+                    self.update_tables()
+                    self.load_types()
+                else:
+                    serve.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
         self.resume_frame.update_resume_table()
