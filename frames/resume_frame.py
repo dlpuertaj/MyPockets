@@ -10,6 +10,7 @@ class ResumeFrame(Frame):
 
     months = ("01","02","03","04","05","06",
               "07","08","09","10","11","12")
+
     def __init__(self, root):
         Frame.__init__(self, root)
         self.resume_table = ttk.Treeview(self)
@@ -61,6 +62,10 @@ class ResumeFrame(Frame):
         expense_types = serve.get_expense_type_names()
         for month in self.months:
             moth_resume_data = self.serve.get_resume_data((month,))
+            payroll = self.serve.get_payroll_by_month((month,))
+            amount_for_table = []
+            percent_for_table = []
+            sum_percent = 0
             if len(moth_resume_data) == 0:
                 resume_data = ('None', 0)
             else:
