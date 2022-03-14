@@ -66,8 +66,10 @@ class ResumeFrame(Frame):
         percent_for_table = []
         sum_percent = 0
 
-        if len(resume_data) == 0:
-            resume_data = ('None', 0)
+        it_has_data = False
+        if resume_data[0][0] is not 'None':
+            it_has_data = True
+
         for data in resume_data:
             for column_index in range(len(expense_types)):
                 column = resume_table.column(column_index, option='id')
@@ -88,7 +90,8 @@ class ResumeFrame(Frame):
 
         resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
 
-        resume_table.pack()
+        if it_has_data:
+            resume_table.pack()
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)

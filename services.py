@@ -114,7 +114,7 @@ class Services:
 
         if result is not None:
             if len(result) == 0:
-                return [(None,0)]
+                return [('None',0)]
             return result
         else:
             return None
