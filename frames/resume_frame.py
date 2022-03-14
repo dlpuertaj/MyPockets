@@ -40,7 +40,7 @@ class ResumeFrame(Frame):
 
     def build_resume_table(self, expense_types):
         columns = []
-        resume_table = ttk.Treeview(self)
+        resume_table = ttk.Treeview(self,height=2)
         for expense_type in expense_types:
             columns.append(expense_type[0])
 
@@ -67,7 +67,7 @@ class ResumeFrame(Frame):
         sum_percent = 0
 
         it_has_data = False
-        if resume_data[0][0] is not 'None':
+        if resume_data[0][0] != 'None':
             it_has_data = True
 
         for data in resume_data:
