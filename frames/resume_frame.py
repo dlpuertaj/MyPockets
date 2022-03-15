@@ -81,6 +81,7 @@ class ResumeFrame(Frame):
                         percent = 0
                     else:
                         percent = data[1] / payroll[0]
+                        percent = round(percent,4)
                     amount_for_table.append(data[1])
                     percent_for_table.append(str(percent * 100) + "%")
                     sum_percent += percent
