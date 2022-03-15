@@ -24,6 +24,15 @@ class TransactionsFrame(Frame):
         self.transactions_table.pack()
         # self.create_and_pack_buttons()
 
+    def create_select_month_option_menu(self):
+        months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        self.clicked_month.set(months[0])
+        self.clicked_month.trace("w", self.callback)
+        type_label = Label(self, text="Month")
+        type_label.pack()
+        dropdown = OptionMenu(self, self.clicked_month, *months)
+        dropdown.pack()
+
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
         columns = ["Income", "Note", "Day"]
@@ -109,15 +118,6 @@ class TransactionsFrame(Frame):
             if expense_type.get_id() == expense_id:
                 return expense_type.get_name()
         return None
-
-    def create_select_month_option_menu(self):
-        months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-        self.clicked_month.set(months[0])
-        self.clicked_month.trace("w", self.callback)
-        type_label = Label(self, text="Month")
-        type_label.pack()
-        dropdown = OptionMenu(self, self.clicked_month, *months)
-        dropdown.pack()
 
     def callback(self,*clicked):
         print(f"the variable has changed to '{self.clicked_month.get()}'")

@@ -4,6 +4,7 @@ from tkinter import ttk
 from frames.popup.pop_new_type import PopNewType
 from services import Services as serve
 
+import calendar as calendar
 
 class ResumeFrame(Frame):
     """ Iit method that instantiates service and resume table"""
@@ -29,7 +30,9 @@ class ResumeFrame(Frame):
         for month in self.months:
             if len(expense_types) > 0:
                 resume_table = self.build_resume_table(expense_types)
-                self.load_resume_data_to_table(resume_table,month)
+
+                month_label = Label(self,text=calendar.month_name[int(month)])
+                self.load_resume_data_to_table(resume_table,month,month_label)
                 self.resume_tables.append(resume_table)
             else:
                 self.no_expense_types_label.pack()
@@ -57,7 +60,7 @@ class ResumeFrame(Frame):
         return resume_table
 
     """ Method that adds the database data to the resume table"""
-    def load_resume_data_to_table(self,resume_table,month):
+    def load_resume_data_to_table(self,resume_table,month,month_label):
         expense_types = self.serve.get_expense_type_names()
         resume_data = self.serve.get_resume_data((month,))
         payroll = self.serve.get_payroll_by_month((month,))
@@ -91,6 +94,7 @@ class ResumeFrame(Frame):
         resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
 
         if it_has_data:
+            month_label.pack()
             resume_table.pack()
 
     def create_type(self, expense_or_income):
