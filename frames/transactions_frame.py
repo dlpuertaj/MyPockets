@@ -36,9 +36,9 @@ class TransactionsFrame(Frame):
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
         columns = ["Income", "Note", "Day"]
-        expense_types = self.serve.get_expense_type_names()
+        #expense_types = self.serve.get_expense_type_names()
         index = 3
-        for expense_type in expense_types:
+        for expense_type in self.expense_types:
             self.expense_columns[expense_type[0]] = index
             columns.append(expense_type[0])
             index += 1
