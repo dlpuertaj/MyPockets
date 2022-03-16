@@ -7,12 +7,12 @@ from services import Services as serve
 class TransactionsFrame(Frame):
 
     """ Initializer method for the transactions frame"""
-    def __init__(self, root_notebook):
+    def __init__(self, root_notebook,expense_types):
         Frame.__init__(self, root_notebook)
         self.clicked_month = StringVar()
         self.serve = serve()
         self.expense_columns = {}
-        self.expense_types = self.serve.get_expense_types()
+        self.expense_types = expense_types # self.serve.get_expense_types()
         self.transactions_table = ttk.Treeview(self)
 
     """ Method that creates de transactions frame"""

@@ -8,12 +8,12 @@ from services import Services as serve
 class PocketFrame(Frame):
 
     """ Initialization method that instantiates the services class and the pocket table"""
-    def __init__(self, root):
+    def __init__(self, root,pockets):
         Frame.__init__(self, root)
         self.root = root
         self.serve = serve()
         self.pockets_table = ttk.Treeview(self)  # tabla
-        self.pockets = None
+        self.pockets = pockets
 
     """ Method that creates and shows the pocket frame with the database data"""
     def create_pocket_frame(self):
@@ -45,7 +45,7 @@ class PocketFrame(Frame):
     """ Method that query the data of all the pockets from the database and inserts them in the table"""
     def load_pockets_to_table(self):
         iid = 0
-        self.pockets = self.serve.get_pockets()
+        #self.pockets = self.serve.get_pockets()
         for pocket in self.pockets:
             self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent",
                                       values=(pocket.name, pocket.amount))
@@ -63,5 +63,8 @@ class PocketFrame(Frame):
         self.build_pocket_table()
         self.load_pockets_to_table()
         self.pockets_table.pack()
+
+    def set_pockets(self,pockets):
+        self.pockets = pockets
 
 

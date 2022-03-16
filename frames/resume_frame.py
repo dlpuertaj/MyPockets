@@ -12,12 +12,13 @@ class ResumeFrame(Frame):
     months = ("01","02","03","04","05","06",
               "07","08","09","10","11","12")
 
-    def __init__(self, root):
+    def __init__(self, root, expense_types):
         Frame.__init__(self, root)
         self.serve = serve()
         self.root = root
         self.clicked_month = None
         self.resume_tables = []
+        self.expense_types = expense_types
         self.no_expense_types_label = Label(self, text="No expense type created")
         self.new_expense_type_button = Button(self, text="Create Expense Type",
                                               command=lambda: self.create_type(True))
@@ -26,10 +27,10 @@ class ResumeFrame(Frame):
 
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
-        expense_types = self.serve.get_expense_type_names()
+        #expense_types = self.serve.get_expense_type_names()
         for month in self.months:
-            if len(expense_types) > 0:
-                resume_table = self.build_resume_table(expense_types)
+            if len(self.expense_types) > 0:
+                resume_table = self.build_resume_table(self.expense_types)
 
                 month_label = Label(self,text=calendar.month_name[int(month)])
                 self.load_resume_data_to_table(resume_table,month,month_label)
@@ -61,7 +62,7 @@ class ResumeFrame(Frame):
 
     """ Method that adds the database data to the resume table"""
     def load_resume_data_to_table(self,resume_table,month,month_label):
-        expense_types = self.serve.get_expense_type_names()
+        #expense_types = self.serve.get_expense_type_names()
         resume_data = self.serve.get_resume_data((month,))
         payroll = self.serve.get_payroll_by_month((month,))
 
@@ -74,7 +75,7 @@ class ResumeFrame(Frame):
             it_has_data = True
 
         for data in resume_data:
-            for column_index in range(len(expense_types)):
+            for column_index in range(len(self.expense_types)):
                 column = resume_table.column(column_index, option='id')
                 if data[0] == column:
                     if payroll == 0:
@@ -105,11 +106,11 @@ class ResumeFrame(Frame):
         self.update_resume_table()
 
     def update_resume_table(self):
-        expense_types = self.serve.get_expense_type_names()
-        if len(expense_types) > 0:
+        self.expense_types = self.serve.get_expense_type_names()
+        if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
             self.new_expense_type_button.destroy()
-        resume_table = self.build_resume_table(expense_types)
+        resume_table = self.build_resume_table(self.expense_types)
         self.load_resume_data_to_table(resume_table)
         resume_table.pack()
 

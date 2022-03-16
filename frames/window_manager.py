@@ -27,19 +27,24 @@ class WindowManager:
     login_message = global_constants.NEED_LOGIN_MESSAGE
     __QUIT = 'Quit'
 
+    pockets = None
+    expense_types = None
+    income_types = None
+
     def __init__(self):
         self.root = tk.Tk()
         self.serve = serve()
-        self.menu_bar = tk.Menu(self.root)
-        self.pockets = None
-        self.expense_types = None
-        self.income_types = None
-        self.pocket_frame    = PocketFrame(self.root)
-        self.pockets_table   = ttk.Treeview(self.pocket_frame)
-        self.resume_notebook = ttk.Notebook(self.root)
-        self.resume_frame    = ResumeFrame(self.resume_notebook)
-        self.resume_table    = ttk.Treeview(self.resume_frame)
-        self.transactions_frame = TransactionsFrame(self.resume_notebook)
+        self.load_pockets_and_types()
+
+        self.resume_notebook    = ttk.Notebook(self.root)
+        self.transactions_frame = TransactionsFrame(self.resume_notebook,self.expense_types)
+        self.resume_frame       = ResumeFrame(self.resume_notebook,self.expense_types)
+        self.resume_table       = ttk.Treeview(self.resume_frame)
+
+        self.pocket_frame       = PocketFrame(self.root)
+        self.pockets_table      = ttk.Treeview(self.pocket_frame)
+
+        self.menu_bar           = tk.Menu(self.root)
         self.create_menu_bar()
 
         self.ask_for_login()
@@ -56,25 +61,21 @@ class WindowManager:
         self.root.wait_window(pop_login)
         self.build_main_frame()
 
+    def load_pockets_and_types(self):
+        self.pockets = self.serve.get_pockets()
+        self.income_types = self.serve.get_income_types()
+        self.expense_types = self.serve.get_expense_types()
+
     def build_main_frame(self):
         """ Method that calls the creation of the pocket frame and the resume frame.
             It also adds the resume frame and the transactions frame to the Notebook """
         initial_month = '01' # TODO: get current month
-        self.pockets = self.load_pockets()
-        self.load_types()
         self.pocket_frame.create_pocket_frame()
-        self.resume_frame.create_resume_frame()
+        self.resume_frame.create_resume_frame(self.expense_types)
         self.transactions_frame.create_transaction_frame(initial_month)
         self.resume_notebook.add(self.resume_frame, text=global_constants.EXPENSE_RESUME_TEXT)
         self.resume_notebook.add(self.transactions_frame, text=global_constants.MONTHLY_TRANSACTIONS_TEXT)
         self.resume_notebook.pack()
-
-    def load_pockets(self):
-        return self.serve.get_pockets()
-
-    def load_types(self):
-        self.income_types = self.serve.get_income_types()
-        self.expense_types = self.serve.get_expense_types()
 
     def add_menu_to_menu_bar(self, new_menu, label_for_new_menu):
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
