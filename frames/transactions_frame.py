@@ -39,8 +39,8 @@ class TransactionsFrame(Frame):
         #expense_types = self.serve.get_expense_type_names()
         index = 3
         for expense_type in self.expense_types:
-            self.expense_columns[expense_type[0]] = index
-            columns.append(expense_type[0])
+            self.expense_columns[expense_type.get_name()] = index
+            columns.append(expense_type.get_name)
             index += 1
 
         columns.append("Pocket")
@@ -59,7 +59,7 @@ class TransactionsFrame(Frame):
     def data_to_transactions_table_by_month(self, month):
         incomes_by_month = self.serve.get_incomes_by_month((month,))
         expenses_by_month = self.serve.get_expenses_by_month((month,))
-        expense_type_names = self.serve.get_expense_type_names()
+        expense_type_names = self.get_expense_type_names()
         days = 30
 
         iid = 0
@@ -118,6 +118,12 @@ class TransactionsFrame(Frame):
             if expense_type.get_id() == expense_id:
                 return expense_type.get_name()
         return None
+
+    def get_expense_type_names(self):
+        names = []
+        for expense in self.expense_types:
+            names.append(expense.get_name())
+        return names
 
     def callback(self,*clicked):
         print(f"the variable has changed to '{self.clicked_month.get()}'")

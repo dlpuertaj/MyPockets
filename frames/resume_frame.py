@@ -46,7 +46,7 @@ class ResumeFrame(Frame):
         columns = []
         resume_table = ttk.Treeview(self,height=2)
         for expense_type in expense_types:
-            columns.append(expense_type[0])
+            columns.append(expense_type.get_name())
 
         resume_table['columns'] = columns
         resume_table.heading("0", text="", anchor=W)
