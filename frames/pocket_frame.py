@@ -58,6 +58,7 @@ class PocketFrame(Frame):
         self.update_pockets_table()
 
     def update_pockets_table(self):
+        self.set_pockets(self.serve.get_pockets())
         self.pockets_table.destroy()
         self.pockets_table = ttk.Treeview(self)
         self.build_pocket_table()

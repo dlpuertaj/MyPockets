@@ -147,8 +147,9 @@ class WindowManager:
         self.update_pockets_table()
 
     def update_pockets_table(self):
+        self.pockets = self.serve.get_pockets()
+        self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table()
-        self.load_pockets()
 
     def new_pocket(self):
         pop_new_pocket = PopPocket(self.root)
