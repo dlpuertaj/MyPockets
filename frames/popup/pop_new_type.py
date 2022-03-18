@@ -19,7 +19,7 @@ class PopNewType(Toplevel):
 
         save_button = Button(self,text="Save",
                              command=lambda: self.save(serve,type_name_entry.get(),type_note_entry.get()))
-        cancel_button = Button(self,text="Cancel", command=self.destroy)
+        cancel_button = Button(self,text="Close", command=self.destroy)
 
         type_name_label.pack()
         type_name_entry.pack()

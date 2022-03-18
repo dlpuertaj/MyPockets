@@ -45,7 +45,7 @@ class ResumeFrame(Frame):
     def build_resume_table(self, expense_types):
         columns = []
         resume_table = ttk.Treeview(self,height=2)
-        for expense_type in expense_types:
+        for expense_type in self.expense_types:
             columns.append(expense_type.get_name())
 
         resume_table['columns'] = columns
@@ -106,7 +106,7 @@ class ResumeFrame(Frame):
         self.update_resume_table()
 
     def update_resume_table(self):
-        self.expense_types = self.serve.get_expense_type_names()
+        self.expense_types = self.serve.get_expense_types()
         if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
             self.new_expense_type_button.destroy()

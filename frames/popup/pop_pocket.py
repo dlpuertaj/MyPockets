@@ -1,7 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
-from datetime import date
-import global_constants
-from frames.popup.popup_message import PopupGenericMessage
+from tkinter import Toplevel, Button, Label, Entry
 
 
 class PopPocket(Toplevel):
