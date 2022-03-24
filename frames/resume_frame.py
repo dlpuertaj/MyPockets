@@ -118,7 +118,6 @@ class ResumeFrame(Frame):
             month_label = Label(self, text=calendar.month_name[int(month)])
             self.load_resume_data_to_table(resume_table,month,month_label)
             self.resume_tables.append(resume_table)
-            resume_table.pack()
 
     def set_expense_types(self, expense_types):
         self.expense_types = expense_types
