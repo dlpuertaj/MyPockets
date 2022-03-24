@@ -66,6 +66,10 @@ class WindowManager:
         self.income_types = self.serve.get_income_types()
         self.expense_types = self.serve.get_expense_types()
 
+    def load_types(self):
+        self.income_types = self.serve.get_income_types()
+        self.expense_types = self.serve.get_expense_types()
+
     def build_main_frame(self):
         """ Method that calls the creation of the pocket frame and the resume frame.
             It also adds the resume frame and the transactions frame to the Notebook """
@@ -107,17 +111,13 @@ class WindowManager:
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
         pocket_menu.add_command(label=global_constants.NEW_POCKET,command=self.new_pocket)
-        # pocket_menu.add_command(label="Transfer to Pockets")
-
-        # cards_menu.add_command(label="New Credit Card")
-        # cards_menu.add_command(label="View Movements")
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)
         pop_new_type.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_type)
-        self.update_tables()
         self.load_types()
+        self.update_tables()
 
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
@@ -142,6 +142,7 @@ class WindowManager:
                     serve.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
+        self.resume_frame.set_expense_types(self.expense_types)
         self.resume_frame.update_resume_table()
         self.transactions_frame.update_transactions_table()
         self.update_pockets_table()
