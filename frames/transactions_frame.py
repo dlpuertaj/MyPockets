@@ -40,7 +40,7 @@ class TransactionsFrame(Frame):
         index = 3
         for expense_type in self.expense_types:
             self.expense_columns[expense_type.get_name()] = index
-            columns.append(expense_type.get_name)
+            columns.append(expense_type.get_name())
             index += 1
 
         columns.append("Pocket")
