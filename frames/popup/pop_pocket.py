@@ -1,7 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
-from datetime import date
-import global_constants
-from frames.popup.popup_message import PopupGenericMessage
+from tkinter import Toplevel, Button, Label, Entry
 
 
 class PopPocket(Toplevel):
@@ -49,7 +46,7 @@ class PopPocket(Toplevel):
             else:
                 serve.show_popup_message(self.root, "Amount entered is invalid")
         elif pocket_amount == "":
-            if pocket_name is not "":
+            if pocket_name != "":
                 if not serve.pocket_name_in_database(pocket_name):
                     serve.insert_pocket(pocket_name, 0)
                     serve.show_popup_message(self.root, "Success!")
