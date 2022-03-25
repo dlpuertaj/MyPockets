@@ -8,12 +8,13 @@ import calendar as calendar
 
 class ResumeFrame(Frame):
     """ Iit method that instantiates service and resume table"""
-    months = {month: index for index, month in enumerate(calendar.month_name) if month}
 
     def __init__(self, root, expense_types):
         Frame.__init__(self, root)
+        self.months = None
         self.serve = serve()
         self.root = root
+        self.set_months()
         self.clicked_month = None
         self.resume_tables = []
         self.expense_types = expense_types
@@ -22,6 +23,9 @@ class ResumeFrame(Frame):
                                               command=lambda: self.create_type(True))
 
     """ Method that creates the resume frame and loads the data from the database"""
+
+    def set_months(self):
+        self.months = {month: str(index) for index, month in enumerate(calendar.month_name) if month}
 
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
