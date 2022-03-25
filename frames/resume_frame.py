@@ -8,9 +8,7 @@ import calendar as calendar
 
 class ResumeFrame(Frame):
     """ Iit method that instantiates service and resume table"""
-
-    months = ("01","02","03","04","05","06",
-              "07","08","09","10","11","12")
+    months = {month: index for index, month in enumerate(calendar.month_name) if month}
 
     def __init__(self, root, expense_types):
         Frame.__init__(self, root)
@@ -31,8 +29,9 @@ class ResumeFrame(Frame):
         for month in self.months:
             if len(self.expense_types) > 0:
                 resume_table = self.build_resume_table()
-                month_label = Label(self,text=calendar.month_name[int(month)])
-                self.load_resume_data_to_table(resume_table,month,month_label)
+                # month_name = calendar.month_name[month]
+                month_label = Label(self,text=month)
+                self.load_resume_data_to_table(resume_table,str(self.months[month]),month_label)
             else:
                 self.no_expense_types_label.pack()
                 self.new_expense_type_button.pack()
@@ -111,9 +110,9 @@ class ResumeFrame(Frame):
         if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
             self.new_expense_type_button.destroy()
-        for month in self.months:
+        for month in range(1,12):
             resume_table = self.build_resume_table()
-            month_label = Label(self, text=calendar.month_name[int(month)])
+            month_label = Label(self, text=calendar.month_name[month])
             self.load_resume_data_to_table(resume_table,month,month_label)
 
     def set_expense_types(self, expense_types):
