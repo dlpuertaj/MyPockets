@@ -22,14 +22,13 @@ class ResumeFrame(Frame):
         self.new_expense_type_button = Button(self, text="Create Expense Type",
                                               command=lambda: self.create_type(True))
 
-    """ Method that creates the resume frame and loads the data from the database"""
-
     def set_months(self):
         self.months = {month: str(index) for index, month in enumerate(calendar.month_name) if month}
         for month in self.months:
             if len(self.months[month]) == 1:
                 self.months[month] = '0'+self.months[month]
 
+    """ Method that creates the resume frame and loads the data from the database"""
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
         # expense_types = self.serve.get_expense_type_names()

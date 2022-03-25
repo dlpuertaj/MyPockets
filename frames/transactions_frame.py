@@ -3,17 +3,27 @@ from tkinter import ttk
 
 from services import Services as serve
 
+import calendar as calendar
 
 class TransactionsFrame(Frame):
+
+    months = {}
 
     """ Initializer method for the transactions frame"""
     def __init__(self, root_notebook,expense_types):
         Frame.__init__(self, root_notebook)
+        self.set_months()
         self.clicked_month = StringVar()
         self.serve = serve()
         self.expense_columns = {}
         self.expense_types = expense_types # self.serve.get_expense_types()
         self.transactions_table = ttk.Treeview(self)
+
+    def set_months(self):
+        self.months = {month: str(index) for index, month in enumerate(calendar.month_name) if month}
+        for month in self.months:
+            if len(self.months[month]) == 1:
+                self.months[month] = '0'+self.months[month]
 
     """ Method that creates de transactions frame"""
     def create_transaction_frame(self, month):
@@ -25,12 +35,12 @@ class TransactionsFrame(Frame):
         # self.create_and_pack_buttons()
 
     def create_select_month_option_menu(self):
-        months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-        self.clicked_month.set(months[0])
+        # months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        self.clicked_month.set('January')
         self.clicked_month.trace("w", self.callback)
         type_label = Label(self, text="Month")
         type_label.pack()
-        dropdown = OptionMenu(self, self.clicked_month, *months)
+        dropdown = OptionMenu(self, self.clicked_month, *self.months.keys())
         dropdown.pack()
 
     """ Method that builds the transactions table with de database data"""
@@ -126,12 +136,13 @@ class TransactionsFrame(Frame):
         return names
 
     def callback(self,*clicked):
-        print(f"the variable has changed to '{self.clicked_month.get()}'")
+        print(f"The variable has changed to '{self.clicked_month.get()}'")
         self.update_transactions_table()
 
     def update_transactions_table(self):
         self.transactions_table.destroy()
         self.transactions_table = ttk.Treeview(self)
         self.build_transactions_table()
-        self.data_to_transactions_table_by_month(self.clicked_month.get())
+        self.data_to_transactions_table_by_month(
+            self.months[self.clicked_month.get()])
         self.transactions_table.pack()
