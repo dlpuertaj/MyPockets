@@ -27,14 +27,12 @@ class ResumeFrame(Frame):
 
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
-        #expense_types = self.serve.get_expense_type_names()
+        # expense_types = self.serve.get_expense_type_names()
         for month in self.months:
             if len(self.expense_types) > 0:
                 resume_table = self.build_resume_table()
-
                 month_label = Label(self,text=calendar.month_name[int(month)])
                 self.load_resume_data_to_table(resume_table,month,month_label)
-                self.resume_tables.append(resume_table)
             else:
                 self.no_expense_types_label.pack()
                 self.new_expense_type_button.pack()
@@ -96,6 +94,7 @@ class ResumeFrame(Frame):
         resume_table.insert(parent='', index='end', iid=1, text="Parent", values=percent_for_table)
 
         if it_has_data:
+            self.resume_tables.append((month_label,resume_table))
             month_label.pack()
             resume_table.pack()
 
@@ -106,9 +105,8 @@ class ResumeFrame(Frame):
         self.update_resume_table()
 
     def update_resume_table(self):
-        for table in self.resume_tables:
-            table.destroy()
-        self.resume_tables = []
+
+        self.clear_tables_and_labels()
 
         if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
@@ -117,7 +115,12 @@ class ResumeFrame(Frame):
             resume_table = self.build_resume_table()
             month_label = Label(self, text=calendar.month_name[int(month)])
             self.load_resume_data_to_table(resume_table,month,month_label)
-            self.resume_tables.append(resume_table)
 
     def set_expense_types(self, expense_types):
         self.expense_types = expense_types
+
+    def clear_tables_and_labels(self):
+        for label_and_table in self.resume_tables:
+            label_and_table[0].destroy()
+            label_and_table[1].destroy()
+        self.resume_tables = []
