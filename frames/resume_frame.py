@@ -26,6 +26,9 @@ class ResumeFrame(Frame):
 
     def set_months(self):
         self.months = {month: str(index) for index, month in enumerate(calendar.month_name) if month}
+        for month in self.months:
+            if len(self.months[month]) == 1:
+                self.months[month] = '0'+self.months[month]
 
     def create_resume_frame(self):
         # self.create_select_month_option_menu()
