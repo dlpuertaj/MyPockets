@@ -118,8 +118,9 @@ class ResumeFrame(Frame):
             self.new_expense_type_button.destroy()
         for month in range(1,12):
             resume_table = self.build_resume_table()
-            month_label = Label(self, text=calendar.month_name[month])
-            self.load_resume_data_to_table(resume_table,month,month_label)
+            month_name = calendar.month_name[month]
+            month_label = Label(self, text=month_name)
+            self.load_resume_data_to_table(resume_table,self.months[month_name],month_label)
 
     def set_expense_types(self, expense_types):
         self.expense_types = expense_types

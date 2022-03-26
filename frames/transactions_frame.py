@@ -1,4 +1,4 @@
-from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
+from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu, Scrollbar
 from tkinter import ttk
 
 from services import Services as serve
@@ -17,7 +17,7 @@ class TransactionsFrame(Frame):
         self.serve = serve()
         self.expense_columns = {}
         self.expense_types = expense_types # self.serve.get_expense_types()
-        self.transactions_table = ttk.Treeview(self)
+        self.transactions_table = ttk.Treeview(self,height=31)
 
     def set_months(self):
         self.months = {month: str(index) for index, month in enumerate(calendar.month_name) if month}
@@ -57,10 +57,10 @@ class TransactionsFrame(Frame):
 
         self.transactions_table['columns'] = columns
         self.transactions_table.heading("0", text="", anchor=W)
-        self.transactions_table.column("#0", width=0, stretch=NO)
+        self.transactions_table.column("#0", width=20, stretch=NO)
 
         for column in columns:
-            self.transactions_table.column(column, anchor=W, width=100)
+            self.transactions_table.column(column, anchor=W, width=50)
 
         for column in columns:
             self.transactions_table.heading(column, text=column, anchor=W)
