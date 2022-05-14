@@ -52,10 +52,14 @@ class PocketFrame(Frame):
             iid = iid + 1
 
     def transfer_to_pocket(self):
-        pop_transfer = PopTransferToPocket(self.root, self.pockets)
-        pop_transfer.create_and_show_popup(self.serve)
-        self.root.wait_window(pop_transfer)
-        self.update_pockets_table()
+
+        if len(self.pockets) == 0:
+            serve.show_popup_message(self.root, "No pockets created")
+        else:
+            pop_transfer = PopTransferToPocket(self.root, self.pockets)
+            pop_transfer.create_and_show_popup(self.serve)
+            self.root.wait_window(pop_transfer)
+            self.update_pockets_table()
 
     def update_pockets_table(self):
         self.set_pockets(self.serve.get_pockets())

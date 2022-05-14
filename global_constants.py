@@ -6,7 +6,7 @@ SUCCESS_OPERATION = "Success!"
 
 # System Properties
 REQUIRES_LOGIN = False
-
+CURRENT_YEAR = 2022
 FILE_MENU = 'File'
 POCKETS_MENU = 'Pockets'
 CREDIT_CARDS_MENU = 'Credit Cards'

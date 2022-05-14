@@ -34,6 +34,8 @@ class WindowManager:
     def __init__(self):
         self.root = tk.Tk()
         self.serve = serve()
+
+        self.year = "2022"
         self.load_pockets_and_types()
 
         self.resume_notebook    = ttk.Notebook(self.root)

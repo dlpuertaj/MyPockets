@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
+from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
 import global_constants
 from frames.popup.popup_message import PopupGenericMessage
@@ -15,17 +15,19 @@ class PopEvent(Toplevel):
     def __init__(self, root, event_type):
         Toplevel.__init__(self,root)
         self.root = root
+        #self.geometry('250x200')
+        self.resizable(width=False,height=False)
         self.event_type = event_type
         self.create_or_update_title = ''
         self.grab_set()
         self.set_create_or_update_title()
-        self.title(self.create_or_update_title + " " + self.event_type.show_type())
+        self.event_title = "=== " + self.create_or_update_title + " " + self.event_type.show_type() + " ==="
 
     def set_create_or_update_title(self):
         if self.event_type.has_id():
-            self.create_or_update_title = self.NEW_LABEL
-        else:
             self.create_or_update_title = self.EDIT_LABEL
+        else:
+            self.create_or_update_title = self.NEW_LABEL
 
     def create_and_show_popup(self,serve, pockets):
         options = self.get_options_for_dropdown(serve, False) # TODO: Get type from object
@@ -38,13 +40,13 @@ class PopEvent(Toplevel):
         for pocket in pockets:
             pockets_options.append(pocket.get_name())
 
-        type_label = self.event_type.show_type() + " Type"
+        type_label = self.event_type.show_type() + " Type:"
 
         clicked_type = StringVar()
-        self.add_select_dropdown(type_options, clicked_type, type_label)
+        self.add_select_dropdown(type_options, clicked_type, type_label,1)
 
         clicked_pocket = StringVar()
-        self.add_select_dropdown(pockets_options, clicked_pocket, "Pocket")
+        self.add_select_dropdown(pockets_options, clicked_pocket, "Pocket:",2)
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -62,15 +64,17 @@ class PopEvent(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        amount_label.pack()
-        amount_entry.pack()
-        date_label.pack()
-        date_entry.pack()
-        note_label.pack()
-        note_entry.pack()
+        title_label = Label(self, text=self.event_title)
+        title_label.grid(column=0, row=0,columnspan=2)
+        amount_label.grid(column=0, row=3, sticky=W,padx=2)
+        amount_entry.grid(column=1,row=3, sticky=(E, W),padx=3)
+        date_label.grid(column=0,row=4, sticky=W,padx=2)
+        date_entry.grid(column=1,row=4, sticky=(E, W),padx=3)
+        note_label.grid(column=0,row=5, sticky=W,padx=2)
+        note_entry.grid(column=1,row=5, sticky=(E, W),padx=3)
 
-        save_button.pack()
-        close_button.pack()
+        save_button.grid(column=0,row=6,pady=7, padx=2,sticky=(E, W))
+        close_button.grid(column=1,row=6,pady=7, padx=2,sticky=(E, W))
 
     def get_options_for_dropdown(self,serve,get_pockets):
         if get_pockets:
@@ -78,12 +82,12 @@ class PopEvent(Toplevel):
         else:
             return serve.get_events_by_type(self.event_type)
 
-    def add_select_dropdown(self, options, clicked, label):
+    def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
-        type_label = Label(self, text=label)
-        type_label.pack()
+        type_label = Label(self, text=label,)
+        type_label.grid(column=0,row=grid_row,sticky=W,padx=2)
         dropdown = OptionMenu(self, clicked, *options)
-        dropdown.pack()
+        dropdown.grid(column=1,row=grid_row,sticky=W)
 
     def save_event(self, serve, types, pockets, event_type, amount, current_date,
                    note, pocket):
