@@ -41,10 +41,10 @@ class PopEvent(Toplevel):
         type_label = self.event_type.show_type() + " Type"
 
         clicked_type = StringVar()
-        self.add_select_dropdown(type_options, clicked_type, type_label)
+        self.add_select_dropdown(type_options, clicked_type, type_label,0)
 
         clicked_pocket = StringVar()
-        self.add_select_dropdown(pockets_options, clicked_pocket, "Pocket")
+        self.add_select_dropdown(pockets_options, clicked_pocket, "Pocket",1)
 
         amount_label = Label(self, text="Amount: ")
         amount_entry = Entry(self)
@@ -62,15 +62,17 @@ class PopEvent(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        amount_label.pack()
-        amount_entry.pack()
-        date_label.pack()
-        date_entry.pack()
-        note_label.pack()
-        note_entry.pack()
+        blank_label = Label(self, text="")
 
-        save_button.pack()
-        close_button.pack()
+        amount_label.grid(column=0,row=2)
+        amount_entry.grid(column=1,row=2)
+        date_label.grid(column=0,row=3)
+        date_entry.grid(column=1,row=3)
+        note_label.grid(column=0,row=4)
+        note_entry.grid(column=1,row=4)
+        blank_label.grid(column=0,row=5)
+        save_button.grid(column=0,row=6)
+        close_button.grid(column=1,row=6)
 
     def get_options_for_dropdown(self,serve,get_pockets):
         if get_pockets:
@@ -78,12 +80,12 @@ class PopEvent(Toplevel):
         else:
             return serve.get_events_by_type(self.event_type)
 
-    def add_select_dropdown(self, options, clicked, label):
+    def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
         type_label = Label(self, text=label)
-        type_label.pack()
+        type_label.grid(column=0,row=grid_row)
         dropdown = OptionMenu(self, clicked, *options)
-        dropdown.pack()
+        dropdown.grid(column=1,row=grid_row)
 
     def save_event(self, serve, types, pockets, event_type, amount, current_date,
                    note, pocket):
