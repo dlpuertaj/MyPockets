@@ -36,7 +36,7 @@ class PopPocket(Toplevel):
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
                 if not serve.pocket_name_in_database(pocket_name):
-                    serve.insert_pocket(pocket_name, 0)
+                    serve.insert_pocket(pocket_name, pocket_amount)
                     serve.show_popup_message(self.root, "Success!")
                 else:
                     serve.show_popup_message(self.root, "Pocket exists!")
