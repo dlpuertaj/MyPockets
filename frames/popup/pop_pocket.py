@@ -22,11 +22,11 @@ class PopPocket(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        pocket_name_label.grid(column=0,row=0)
-        pocket_name_entry.grid(column=1, row=0)
+        pocket_name_label.grid(column=0,row=0,sticky=E)
+        pocket_name_entry.grid(column=1, row=0,sticky=E)
 
-        pocket_amount_label.grid(column=0, row=1)
-        pocket_amount_entry.grid(column=1, row=1)
+        pocket_amount_label.grid(column=0, row=1,sticky=E)
+        pocket_amount_entry.grid(column=1, row=1,sticky=E)
 
         save_button.grid(column=0, row=2,sticky=(E,W))
         close_button.grid(column=1, row=2,sticky=(E,W))

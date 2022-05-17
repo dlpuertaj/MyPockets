@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
+from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
 import global_constants
 from frames.popup.popup_message import PopupGenericMessage
@@ -37,18 +37,18 @@ class PopTransferToPocket(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        transfer_amount_label.grid(column=0,row=2)
-        transfer_amount_entry.grid(column=1,row=2)
+        transfer_amount_label.grid(column=0,row=2,sticky=E)
+        transfer_amount_entry.grid(column=1,row=2,sticky=E)
 
-        transfer_button.grid(column=0,row=3)
-        close_button.grid(column=1,row=3)
+        transfer_button.grid(column=0,row=3,sticky=(E,W))
+        close_button.grid(column=1,row=3,sticky=(E,W))
 
     def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
         type_label = Label(self, text=label)
-        type_label.grid(column=0,row=grid_row)
+        type_label.grid(column=0,row=grid_row,sticky=(E,W))
         dropdown = OptionMenu(self, clicked, *options)
-        dropdown.grid(column=1,row=grid_row)
+        dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
     # TODO: optimize this code using try-except and much less if conditions
     def save_transfer(self, serve, source, target, amount):
