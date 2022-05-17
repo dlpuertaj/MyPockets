@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
+from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
 import global_constants
 from frames.popup.popup_message import PopupGenericMessage
@@ -20,10 +20,10 @@ class PopTransferToPocket(Toplevel):
             pocket_options.append(pocket.name)
 
         clicked_source_pocket = StringVar()
-        self.add_select_dropdown(pocket_options, clicked_source_pocket, "From: ")
+        self.add_select_dropdown(pocket_options, clicked_source_pocket, "From: ",0)
 
         clicked_target_pocket = StringVar()
-        self.add_select_dropdown(pocket_options[1:], clicked_target_pocket, "To: ")
+        self.add_select_dropdown(pocket_options[1:], clicked_target_pocket, "To: ",1)
 
         transfer_amount_label = Label(self, text="Amount: ")
         transfer_amount_entry = Entry(self)
@@ -37,18 +37,18 @@ class PopTransferToPocket(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        transfer_amount_label.pack()
-        transfer_amount_entry.pack()
+        transfer_amount_label.grid(column=0,row=2,sticky=E)
+        transfer_amount_entry.grid(column=1,row=2,sticky=E)
 
-        transfer_button.pack()
-        close_button.pack()
+        transfer_button.grid(column=0,row=3,sticky=(E,W))
+        close_button.grid(column=1,row=3,sticky=(E,W))
 
-    def add_select_dropdown(self, options, clicked, label):
+    def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
         type_label = Label(self, text=label)
-        type_label.pack()
+        type_label.grid(column=0,row=grid_row,sticky=(E,W))
         dropdown = OptionMenu(self, clicked, *options)
-        dropdown.pack()
+        dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
     # TODO: optimize this code using try-except and much less if conditions
     def save_transfer(self, serve, source, target, amount):

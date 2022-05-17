@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry
+from tkinter import Toplevel, Button, Label, Entry, E, W
 
 
 class PopPocket(Toplevel):
@@ -22,21 +22,21 @@ class PopPocket(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        pocket_name_label.pack()
-        pocket_name_entry.pack()
+        pocket_name_label.grid(column=0,row=0,sticky=E)
+        pocket_name_entry.grid(column=1, row=0,sticky=E)
 
-        pocket_amount_label.pack()
-        pocket_amount_entry.pack()
+        pocket_amount_label.grid(column=0, row=1,sticky=E)
+        pocket_amount_entry.grid(column=1, row=1,sticky=E)
 
-        save_button.pack()
-        close_button.pack()
+        save_button.grid(column=0, row=2,sticky=(E,W))
+        close_button.grid(column=1, row=2,sticky=(E,W))
 
     def save_pocket(self, serve, pocket_name, pocket_amount):
 
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
                 if not serve.pocket_name_in_database(pocket_name):
-                    serve.insert_pocket(pocket_name, 0)
+                    serve.insert_pocket(pocket_name, pocket_amount)
                     serve.show_popup_message(self.root, "Success!")
                 else:
                     serve.show_popup_message(self.root, "Pocket exists!")
