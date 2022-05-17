@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry
+from tkinter import Toplevel, Button, Label, Entry, E, W
 
 
 class PopPocket(Toplevel):
@@ -22,14 +22,14 @@ class PopPocket(Toplevel):
 
         close_button = Button(self, text="Close", command=self.destroy)
 
-        pocket_name_label.pack()
-        pocket_name_entry.pack()
+        pocket_name_label.grid(column=0,row=0)
+        pocket_name_entry.grid(column=1, row=0)
 
-        pocket_amount_label.pack()
-        pocket_amount_entry.pack()
+        pocket_amount_label.grid(column=0, row=1)
+        pocket_amount_entry.grid(column=1, row=1)
 
-        save_button.pack()
-        close_button.pack()
+        save_button.grid(column=0, row=2,sticky=(E,W))
+        close_button.grid(column=1, row=2,sticky=(E,W))
 
     def save_pocket(self, serve, pocket_name, pocket_amount):
 
