@@ -4,8 +4,9 @@ from tkinter import Toplevel, Button, Label, Entry, E, W
 class PopPocket(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
 
-    def __init__(self, root):
+    def __init__(self, root, new_or_edit):
         Toplevel.__init__(self, root)
+        self.new_or_edit = new_or_edit
         self.root = root
         self.grab_set()
 
@@ -43,7 +44,7 @@ class PopPocket(Toplevel):
             else:
                 serve.show_popup_message(self.root, "Name entered is invalid")
         else:
-            serve.show_popup_message(self.root, "Amount entered is invalid")
+            serve.show_popup_message(self.root, "Amount entered is invalid or empty")
 
     @staticmethod
     def validate_initial_amount(amount):

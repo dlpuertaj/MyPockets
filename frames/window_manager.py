@@ -112,7 +112,8 @@ class WindowManager:
         file_menu.add_separator()
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
-        pocket_menu.add_command(label=global_constants.NEW_POCKET,command=self.new_pocket)
+        pocket_menu.add_command(label=global_constants.NEW_POCKET,command=lambda: self.show_pocket_popup(True))
+        pocket_menu.add_command(label=global_constants.EDIT_POCKETS,command=lambda: self.show_pocket_popup(False))
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)
@@ -154,8 +155,8 @@ class WindowManager:
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table()
 
-    def new_pocket(self):
-        pop_new_pocket = PopPocket(self.root)
+    def show_pocket_popup(self, new_or_edit):
+        pop_new_pocket = PopPocket(self.root, new_or_edit)
         pop_new_pocket.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_pocket)
         self.update_pockets_table()

@@ -32,3 +32,4 @@ MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'
 
 
 NEW_POCKET = 'New Pocket '
+EDIT_POCKETS = 'Edit Pockets'
