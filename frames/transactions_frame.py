@@ -137,7 +137,6 @@ class TransactionsFrame(Frame):
         return names
 
     def callback(self,*clicked):
-        print(f"The variable has changed to '{self.clicked_month.get()}'")
         self.update_transactions_table()
 
     def update_transactions_table(self):

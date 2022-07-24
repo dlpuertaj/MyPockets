@@ -6,6 +6,7 @@ class PopPocket(Toplevel):
 
     def __init__(self, root, new_or_edit):
         Toplevel.__init__(self, root)
+        self.pockets = None
         self.clicked_pocket = StringVar()
         self.pocket_amount_entry = Entry(self)
         self.pocket_name_entry = Entry(self)
@@ -17,17 +18,17 @@ class PopPocket(Toplevel):
 
         if not self.new_or_edit:
             pocket_options = []
-            pockets = serve.get_pockets()
-            for pocket in pockets:
+            self.pockets = serve.get_pockets()
+            for pocket in self.pockets:
                 pocket_options.append(pocket.name)
-
             self.add_select_dropdown(pocket_options, "Pocket: ", 0)
-            self.pocket_amount_entry.config()
+            self.pocket_name_entry.insert(0,str(self.pockets[0].get_name()))
+            self.pocket_amount_entry.insert(0,str(self.pockets[0].get_amount()))
+            self.pocket_amount_entry.config(state="disabled")
+
         pocket_name_label = Label(self, text="Name: ")
-        self.pocket_name_entry = Entry(self)
 
         pocket_amount_label = Label(self, text="Initial Amount: ")
-        self.pocket_amount_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_pocket(
             serve, self.pocket_name_entry.get(), self.pocket_amount_entry.get()))
@@ -67,15 +68,23 @@ class PopPocket(Toplevel):
         else:
             return False
 
-    def add_select_dropdown(self, options, label,grid_row):
-        self.clicked_pocket.set(options[0])
+    def add_select_dropdown(self, pocket_options, label,grid_row):
+
+        self.clicked_pocket.set(pocket_options[0])
         self.clicked_pocket.trace("w", self.pocket_selection_callback)
+
         type_label = Label(self, text=label)
         type_label.grid(column=0,row=grid_row,sticky=(E,W))
-        dropdown = OptionMenu(self, self.clicked_pocket, *options)
+        dropdown = OptionMenu(self, self.clicked_pocket, *pocket_options)
         dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
     def pocket_selection_callback(self,*clicked_item):
 
         self.pocket_name_entry.insert(0,self.clicked_pocket.get())
-        self.pocket_amount_entry.insert(0,"")
+        pocket = self.get_pocket_from_callback(self.clicked_pocket.get())
+        self.pocket_amount_entry.insert(0,pocket.get_amount())
+
+    def get_pocket_from_callback(self,pocket_name):
+        for pocket in self.pockets:
+            if pocket_name == pocket.get_name():
+                return pocket
