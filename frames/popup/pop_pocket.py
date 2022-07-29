@@ -57,7 +57,7 @@ class PopPocket(Toplevel):
                     if self.is_new_pocket:
                         serve.insert_pocket(pocket_name, pocket_amount)
                     else:
-                        serve.update_pocket()
+                        serve.update_pocket(pocket_name,self.clicked_pocket_id)
                     serve.show_popup_message(self.root, "Success!")
 
                 else:

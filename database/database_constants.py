@@ -75,4 +75,6 @@ SELECT_POCKET_BY_NAME = """SELECT name FROM pocket WHERE name = ?"""
 
 UPDATE_POCKET_AMOUNT_BY_NAME = """UPDATE pocket SET amount = ? WHERE name = ?"""
 
-UPDATE_POCKET_AMOUNT_BY_ID = """UPDATE pocket SET amount = ? WHERE id = ?"""
+UPDATE_POCKET_NAME_BY_ID = """UPDATE pocket SET name = ? WHERE id = ?"""
+
+UPDATE_POCKET_BY_ID = """UPDATE pocket SET name = ?, amount = ? WHERE id = ?"""
