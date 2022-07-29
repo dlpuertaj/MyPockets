@@ -192,6 +192,13 @@ class Services:
         else:
             return None
 
+    def update_pocket(self, pocket_name,pocket_amount, pocket_id):
+        result = self.connect_and_execute(db_constants.UPDATE_POCKET,(pocket_name,pocket_amount, pocket_id),False)
+        if result is not None:
+            return result
+        else:
+            return None
+
     @staticmethod
     def show_popup_message(root, message):
         error_popup = PopupGenericMessage(root, message)

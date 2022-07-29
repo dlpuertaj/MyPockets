@@ -4,19 +4,20 @@ from tkinter import Toplevel, Button, Label, Entry, E, W, OptionMenu, StringVar
 class PopPocket(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
 
-    def __init__(self, root, new_or_edit):
+    def __init__(self, root, is_new_pocket):
         Toplevel.__init__(self, root)
         self.pockets = None
         self.clicked_pocket = StringVar()
+        self.clicked_pocket_id = None
         self.pocket_amount_entry = Entry(self)
         self.pocket_name_entry = Entry(self)
-        self.new_or_edit = new_or_edit
+        self.is_new_pocket = is_new_pocket
         self.root = root
         self.grab_set()
 
     def create_and_show_popup(self, serve):
 
-        if not self.new_or_edit:
+        if not self.is_new_pocket:
             pocket_options = []
             self.pockets = serve.get_pockets()
             for pocket in self.pockets:
@@ -36,7 +37,7 @@ class PopPocket(Toplevel):
         close_button = Button(self, text="Close", command=self.destroy)
 
         grid_row = 0
-        if not self.new_or_edit:
+        if not self.is_new_pocket:
             grid_row = 1
         pocket_name_label.grid(column=0,row=grid_row,sticky=E)
         self.pocket_name_entry.grid(column=1, row=grid_row,sticky=E)
@@ -52,8 +53,13 @@ class PopPocket(Toplevel):
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
                 if not serve.pocket_name_in_database(pocket_name):
-                    serve.insert_pocket(pocket_name, pocket_amount)
+
+                    if self.is_new_pocket:
+                        serve.insert_pocket(pocket_name, pocket_amount)
+                    else:
+                        serve.update_pocket()
                     serve.show_popup_message(self.root, "Success!")
+
                 else:
                     serve.show_popup_message(self.root, "Pocket exists!")
             else:
@@ -87,4 +93,5 @@ class PopPocket(Toplevel):
     def get_pocket_from_callback(self,pocket_name):
         for pocket in self.pockets:
             if pocket_name == pocket.get_name():
+                self.clicked_pocket_id = pocket.get_id()
                 return pocket
