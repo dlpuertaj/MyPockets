@@ -23,30 +23,30 @@ class PopPocket(Toplevel):
             for pocket in self.pockets:
                 pocket_options.append(pocket.name)
             self.add_select_dropdown(pocket_options, "Pocket: ", 0)
-            self.pocket_name_entry.insert(0,str(self.pockets[0].get_name()))
-            self.pocket_amount_entry.insert(0,str(self.pockets[0].get_amount()))
+            self.pocket_name_entry.insert(0, str(self.pockets[0].get_name()))
+            self.pocket_amount_entry.insert(0, str(self.pockets[0].get_amount()))
             self.pocket_amount_entry.config(state="disabled")
 
         pocket_name_label = Label(self, text="Name: ")
 
         pocket_amount_label = Label(self, text="Initial Amount: ")
 
-        save_button = Button(self, text="Save", command=lambda: self.save_pocket(
-            serve, self.pocket_name_entry.get(), self.pocket_amount_entry.get()))
+        save_button = Button(self, text="Save", command=lambda: self.save_pocket(serve, self.pocket_name_entry.get(),
+                                                                                 self.pocket_amount_entry.get()))
 
         close_button = Button(self, text="Close", command=self.destroy)
 
         grid_row = 0
         if not self.is_new_pocket:
             grid_row = 1
-        pocket_name_label.grid(column=0,row=grid_row,sticky=E)
-        self.pocket_name_entry.grid(column=1, row=grid_row,sticky=E)
+        pocket_name_label.grid(column=0, row=grid_row, sticky=E)
+        self.pocket_name_entry.grid(column=1, row=grid_row, sticky=E)
 
-        pocket_amount_label.grid(column=0, row=grid_row + 1,sticky=E)
-        self.pocket_amount_entry.grid(column=1, row=grid_row + 1,sticky=E)
+        pocket_amount_label.grid(column=0, row=grid_row + 1, sticky=E)
+        self.pocket_amount_entry.grid(column=1, row=grid_row + 1, sticky=E)
 
-        save_button.grid(column=0, row=grid_row + 2,sticky=(E,W))
-        close_button.grid(column=1, row=grid_row + 2,sticky=(E,W))
+        save_button.grid(column=0, row=grid_row + 2, sticky=(E, W))
+        close_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
 
     def save_pocket(self, serve, pocket_name, pocket_amount):
 
@@ -57,7 +57,9 @@ class PopPocket(Toplevel):
                     if self.is_new_pocket:
                         serve.insert_pocket(pocket_name, pocket_amount)
                     else:
-                        serve.update_pocket(pocket_name,self.clicked_pocket_id)
+                        if self.clicked_pocket_id is None:
+                            self.clicked_pocket_id = self.get_pocket_from_name(self.clicked_pocket.get()).get_id()
+                        serve.update_pocket(pocket_name, self.clicked_pocket_id)
                     serve.show_popup_message(self.root, "Success!")
 
                 else:
@@ -74,24 +76,28 @@ class PopPocket(Toplevel):
         else:
             return False
 
-    def add_select_dropdown(self, pocket_options, label,grid_row):
+    def add_select_dropdown(self, pocket_options, label, grid_row):
 
         self.clicked_pocket.set(pocket_options[0])
         self.clicked_pocket.trace("w", self.pocket_selection_callback)
 
         type_label = Label(self, text=label)
-        type_label.grid(column=0,row=grid_row,sticky=(E,W))
+        type_label.grid(column=0, row=grid_row, sticky=(E, W))
         dropdown = OptionMenu(self, self.clicked_pocket, *pocket_options)
-        dropdown.grid(column=1,row=grid_row,sticky=(E,W))
+        dropdown.grid(column=1, row=grid_row, sticky=(E, W))
 
-    def pocket_selection_callback(self,*clicked_item):
-
-        self.pocket_name_entry.insert(0,self.clicked_pocket.get())
+    def pocket_selection_callback(self, *clicked_item):
+        self.pocket_name_entry.insert(0, self.clicked_pocket.get())
         pocket = self.get_pocket_from_callback(self.clicked_pocket.get())
-        self.pocket_amount_entry.insert(0,pocket.get_amount())
+        self.pocket_amount_entry.insert(0, pocket.get_amount())
 
-    def get_pocket_from_callback(self,pocket_name):
+    def get_pocket_from_callback(self, pocket_name):
         for pocket in self.pockets:
             if pocket_name == pocket.get_name():
                 self.clicked_pocket_id = pocket.get_id()
+                return pocket
+
+    def get_pocket_from_name(self, pocket_name):
+        for pocket in self.pockets:
+            if pocket_name == pocket.get_name():
                 return pocket
