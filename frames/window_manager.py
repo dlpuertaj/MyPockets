@@ -26,8 +26,8 @@ class WindowManager:
     is_logged_in = False
     login_message = global_constants.NEED_LOGIN_MESSAGE
     __QUIT = 'Quit'
-
     pockets = None
+
     expense_types = None
     income_types = None
 
@@ -83,25 +83,28 @@ class WindowManager:
         self.resume_notebook.add(self.transactions_frame, text=global_constants.MONTHLY_TRANSACTIONS_TEXT)
         self.resume_notebook.pack()
 
-    def add_menu_to_menu_bar(self, new_menu, label_for_new_menu):
+    def add_menu_to_menu_bar(self, label_for_new_menu):
+        new_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
+        return new_menu
 
     def create_menu_bar(self):
         """ Method that creates the menu bar. """
         self.root.config(menu=self.menu_bar)
 
-        file_menu   = tk.Menu(self.menu_bar, tearoff=0)
-        pocket_menu = tk.Menu(self.menu_bar, tearoff=0)
-        cards_menu  = tk.Menu(self.menu_bar, tearoff=0)
+        file_menu = self.add_menu_to_menu_bar(global_constants.FILE_MENU)
+        pockets_menu = self.add_menu_to_menu_bar(global_constants.POCKETS_MENU)
 
-        self.add_menu_to_menu_bar(file_menu  , global_constants.FILE_MENU)
-        self.add_menu_to_menu_bar(pocket_menu, global_constants.POCKETS_MENU)
-        self.add_menu_to_menu_bar(cards_menu , global_constants.CREDIT_CARDS_MENU)
+        self.add_commands_to_file_menu(file_menu)
 
+        pockets_menu.add_command(label=global_constants.NEW_POCKET,command=lambda: self.show_pocket_popup(True))
+        pockets_menu.add_command(label=global_constants.EDIT_POCKETS,command=lambda: self.show_pocket_popup(False))
+
+    def add_commands_to_file_menu(self, file_menu):
         file_menu.add_command(label=global_constants.NEW_INCOME_LABEL,
-                              command=lambda: self.new_event(IncomeEvent(None,None,None,"","")))
+                              command=lambda: self.new_event(IncomeEvent(None, None, None, "", "")))
         file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,
-                              command=lambda: self.new_event(ExpenseEvent(None,None,None,"","")))
+                              command=lambda: self.new_event(ExpenseEvent(None, None, None, "", "")))
 
         file_menu.add_separator()
 
@@ -113,9 +116,6 @@ class WindowManager:
         file_menu.add_separator()
 
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
-
-        pocket_menu.add_command(label=global_constants.NEW_POCKET,command=lambda: self.show_pocket_popup(True))
-        pocket_menu.add_command(label=global_constants.EDIT_POCKETS,command=lambda: self.show_pocket_popup(False))
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)
@@ -162,7 +162,7 @@ class WindowManager:
         self.pockets = self.serve.get_pockets()
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table()
-        
+
     def event_options_in_database(self, event_type):
         type_of_event = str(type(event_type))
         if "income" in type_of_event:

@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, E, W, OptionMenu, StringVar
+from tkinter import Toplevel, Button, Label, Entry, E, W, OptionMenu, StringVar, END
 
 
 class PopPocket(Toplevel):
@@ -18,22 +18,13 @@ class PopPocket(Toplevel):
     def create_and_show_popup(self, serve):
 
         if not self.is_new_pocket:
-            pocket_options = []
-            self.pockets = serve.get_pockets()
-            for pocket in self.pockets:
-                pocket_options.append(pocket.name)
-            self.add_select_dropdown(pocket_options, "Pocket: ", 0)
-            self.pocket_name_entry.insert(0, str(self.pockets[0].get_name()))
-            self.pocket_amount_entry.insert(0, str(self.pockets[0].get_amount()))
-            self.pocket_amount_entry.config(state="disabled")
+            self.add_edit_pocket_components(serve)
 
         pocket_name_label = Label(self, text="Name: ")
-
         pocket_amount_label = Label(self, text="Initial Amount: ")
 
         save_button = Button(self, text="Save", command=lambda: self.save_pocket(serve, self.pocket_name_entry.get(),
                                                                                  self.pocket_amount_entry.get()))
-
         close_button = Button(self, text="Close", command=self.destroy)
 
         grid_row = 0
@@ -47,6 +38,16 @@ class PopPocket(Toplevel):
 
         save_button.grid(column=0, row=grid_row + 2, sticky=(E, W))
         close_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
+
+    def add_edit_pocket_components(self, serve):
+        pocket_options = []
+        self.pockets = serve.get_pockets()
+        for pocket in self.pockets:
+            pocket_options.append(pocket.name)
+        self.add_select_dropdown(pocket_options, "Pocket: ", 0)
+        self.pocket_name_entry.insert(0, str(self.pockets[0].get_name()))
+        self.pocket_amount_entry.insert(0, str(self.pockets[0].get_amount()))
+        self.pocket_amount_entry.config(state="disabled")
 
     def save_pocket(self, serve, pocket_name, pocket_amount):
 
@@ -67,7 +68,8 @@ class PopPocket(Toplevel):
             else:
                 serve.show_popup_message(self.root, "Name entered is invalid")
         else:
-            serve.show_popup_message(self.root, "Amount entered is invalid or empty")
+            serve.insert_pocket(pocket_name, "0")
+            serve.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
 
     @staticmethod
     def validate_initial_amount(amount):
@@ -87,6 +89,7 @@ class PopPocket(Toplevel):
         dropdown.grid(column=1, row=grid_row, sticky=(E, W))
 
     def pocket_selection_callback(self, *clicked_item):
+        self.pocket_name_entry.delete(0,END)
         self.pocket_name_entry.insert(0, self.clicked_pocket.get())
         pocket = self.get_pocket_from_callback(self.clicked_pocket.get())
         self.pocket_amount_entry.insert(0, pocket.get_amount())
