@@ -52,25 +52,42 @@ class PopTransferToPocket(Toplevel):
 
     # TODO: optimize this code using try-except and much less if conditions
     def save_transfer(self, serve, source, target, amount):
+
         if source == target:
-            serve.show_popup_message(self.root, "Pockets cannot be the same!")
-        else:
-            new_target_amount = self.calc_new_amount(target, int(amount), False)
+            serve.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
+        elif source != self.EXTERNAL_SOURCE:
+            amount_in_source = self.get_amount_from_pocket(source)
+            if self.is_amount_valid(amount_in_source, amount):
 
-            # TODO: validate new amounts
-
-            if source == self.EXTERNAL_SOURCE:
-                serve.update_pocket_amount(target, new_target_amount)
-            else:
+                new_target_amount = self.calc_new_amount(amount_in_source, int(amount), False)
                 new_source_amount = self.calc_new_amount(source, int(amount), True)
                 serve.update_pocket_amount(source, new_source_amount)
                 serve.update_pocket_amount(target, new_target_amount)
 
+                serve.show_popup_message(self.root,"Success!")
+                self.get_pockets(serve)
+            else:
+                serve.show_popup_message(self.root, "Amount is not valid!")
+        else:
+            amount_in_target = self.get_amount_from_pocket(target)
+            new_target_amount = self.calc_new_amount(amount_in_target, int(amount), False)
+
+            serve.update_pocket_amount(target, new_target_amount)
+            self.get_pockets(serve)
             serve.show_popup_message(self.root,"Success!")
 
-    def calc_new_amount(self, pocket_name, amount_to_transfer,
-                        source_or_target):
-        original_amount = self.get_pocket_by_name(pocket_name).amount
+    @staticmethod
+    def is_amount_valid(amount_in_source, amount):
+        if len(amount) > 0 and amount.isnumeric():
+            if amount_in_source >= int(amount):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    @staticmethod
+    def calc_new_amount(original_amount, amount_to_transfer, source_or_target):
         if source_or_target:
             new_amount = original_amount - amount_to_transfer
         else:
@@ -78,7 +95,13 @@ class PopTransferToPocket(Toplevel):
 
         return new_amount
 
+    def get_amount_from_pocket(self, pocket):
+        return int(self.get_pocket_by_name(pocket).amount)
+
     def get_pocket_by_name(self, pocket_name):
         for pocket in self.pockets:
             if pocket_name == pocket.name:
                 return pocket
+
+    def get_pockets(self, serve):
+        self.pockets = serve.get_pockets()
