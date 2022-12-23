@@ -51,16 +51,17 @@ class PopTransferToPocket(Toplevel):
         dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
     # TODO: optimize this code using try-except and much less if conditions
-    def save_transfer(self, serve, source, target, amount):
+    def save_transfer(self, serve, source, target, amount_being_transferred):
 
         if source == target:
             serve.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
         elif source != self.EXTERNAL_SOURCE:
             amount_in_source = self.get_amount_from_pocket(source)
-            if self.is_amount_valid(amount_in_source, amount):
+            amount_in_target = self.get_amount_from_pocket(target)
+            if self.is_amount_valid(amount_in_source, amount_being_transferred):
 
-                new_target_amount = self.calc_new_amount(amount_in_source, int(amount), False)
-                new_source_amount = self.calc_new_amount(source, int(amount), True)
+                new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
+                new_source_amount = self.calc_new_amount(amount_in_source, int(amount_being_transferred), True)
                 serve.update_pocket_amount(source, new_source_amount)
                 serve.update_pocket_amount(target, new_target_amount)
 
@@ -70,7 +71,7 @@ class PopTransferToPocket(Toplevel):
                 serve.show_popup_message(self.root, "Amount is not valid!")
         else:
             amount_in_target = self.get_amount_from_pocket(target)
-            new_target_amount = self.calc_new_amount(amount_in_target, int(amount), False)
+            new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
 
             serve.update_pocket_amount(target, new_target_amount)
             self.get_pockets(serve)
