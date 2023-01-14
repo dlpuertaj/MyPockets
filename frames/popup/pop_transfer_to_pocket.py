@@ -5,7 +5,7 @@ from frames.popup.popup_message import PopupGenericMessage
 
 
 class PopTransferToPocket(Toplevel):
-    """ Class that creates the popup for creating, updating or deleting a pocket"""
+    """ Class that creates the popup for the transfer of amounts between pockets"""
 
     def __init__(self, root, pockets):
         Toplevel.__init__(self, root)

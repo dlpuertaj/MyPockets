@@ -7,6 +7,7 @@ from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
 from frames.popup.popup_message import PopupGenericMessage
+from frames.popup.popup_options_message import PopupOptionsMessage
 
 
 class Services:
@@ -204,6 +205,10 @@ class Services:
         error_popup = PopupGenericMessage(root, message)
         error_popup.grab_set()
         root.wait_window(error_popup)
+
+    @staticmethod
+    def show_options_popup_message(root, message):
+        return PopupOptionsMessage(root, message)
 
     def pocket_name_in_database(self,pocket_name):
         return self.get_pocket_by_name(pocket_name) is not None
