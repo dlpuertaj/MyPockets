@@ -87,22 +87,33 @@ class PopPocket(Toplevel):
                 pass
                 serve.show_popup_message(self.root, "Pocket does not exist!")
             else:
-                popup = serve.show_options_popup_message(self.root, "Pockets amount will be deleted. "
-                                                                    "Are you sure?")
+                self.show_choice_popup()
 
-                self.handle_popup(popup)
-                self.choice = popup.get_choice()
-
-                response = self.choice
-
-                if response == "Yes":
+                if self.choice == "Yes":
                     print("Yes")
                 else:
                     print("No")
         else:
             serve.show_popup_message(self.root, "Name entered is invalid")
 
-    def handle_popup(self,popup):
+    def show_choice_popup(self):
+        popup = Toplevel(self.root)
+
+        def set_choice(choice):
+            self.choice = choice
+            popup.destroy()
+
+        popup.title("Alert!")
+        popup.geometry("250x150")
+
+        popup_label = Label(popup, text="Are you sure?")
+
+        popup_label.grid(column=0,row=0)
+        yes_button = Button(popup, text="YES", command=lambda:set_choice("Yes"))
+        no_button = Button(popup, text="NO", command=lambda:set_choice("No"))
+        yes_button.grid(column=0, row=1)
+        no_button.grid(column=2, row=1)
+
         popup.grab_set()
         self.root.wait_window(popup)
 
