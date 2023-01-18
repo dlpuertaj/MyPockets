@@ -219,3 +219,10 @@ class Services:
             return result
         else:
             return None
+
+    def delete_pocket(self, pocket_name):
+        result = self.connect_and_execute(db_constants.DELETE_POCKET_BY_NAME,pocket_name,False)
+        if result is not None:
+            return result
+        else:
+            return None

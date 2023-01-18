@@ -7,6 +7,7 @@ class PopPocket(Toplevel):
     def __init__(self, root, new_pocket):
         Toplevel.__init__(self, root)
         self.pockets = None
+        self.account_pocket = None
         self.clicked_pocket = StringVar()
         self.clicked_pocket_id = None
         self.pocket_amount_entry = Entry(self)
@@ -90,9 +91,13 @@ class PopPocket(Toplevel):
                 self.show_choice_popup()
 
                 if self.choice == "Yes":
-                    print("Yes")
-                else:
-                    print("No")
+                    if pocket_amount is not None or pocket_amount != "0":
+                        print("Positive amount, transferring to Account")
+                        serve.update_pocket_amount("Account", int(pocket_amount) + int(self.account_pocket.get_amount()))
+                        serve.update_pocket_amount(pocket_name, "0")
+                        serve.delete_pocket(pocket_name)
+                    else:
+                        serve.delete_poquet(pocket_name)
         else:
             serve.show_popup_message(self.root, "Name entered is invalid")
 
@@ -145,6 +150,8 @@ class PopPocket(Toplevel):
         self.pockets = serve.get_pockets()
         for pocket in self.pockets:
             pocket_options.append(pocket.name)
+            if pocket.get_name() == "Account":
+                self.account_pocket = pocket
 
         return pocket_options
 
