@@ -1,10 +1,8 @@
 from unittest.mock import patch
 
-import services
 from entities.pocket import Pocket
 from unittest import TestCase
 
-from frames import window_manager
 
 class TestEntities(TestCase):
 

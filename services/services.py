@@ -1,4 +1,4 @@
-from database.database_manager import DatabaseManager as db
+from database import database_manager as db
 from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
@@ -13,7 +13,6 @@ from frames.popup.popup_options_message import PopupOptionsMessage
 class Services:
 
     def __init__(self):
-        self.db_manager = db()
         self.is_logged_in = False
 
     def connect_and_execute(self, query, data, multi):

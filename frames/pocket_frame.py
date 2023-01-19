@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 
 from frames.popup.pop_transfer_to_pocket import PopTransferToPocket
-from services import Services as serve
+from services.services import Services as serve
 
 
 class PocketFrame(Frame):

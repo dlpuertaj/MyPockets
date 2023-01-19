@@ -1,6 +1,6 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
-import global_constants
+from util import global_constants
 from frames.popup.popup_message import PopupGenericMessage
 
 

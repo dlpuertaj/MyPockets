@@ -1,8 +1,8 @@
-from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu, Scrollbar
+from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
 from tkinter import ttk
 
-import global_constants
-from services import Services as serve
+from util import global_constants
+from services.services import Services as serve
 
 import calendar as calendar
 
@@ -71,7 +71,7 @@ class TransactionsFrame(Frame):
         incomes_by_month = self.serve.get_incomes_by_month((month,))
         expenses_by_month = self.serve.get_expenses_by_month((month,))
         expense_type_names = self.get_expense_type_names()
-        days = calendar.monthrange(global_constants.CURRENT_YEAR,int(month))[1]
+        days = calendar.monthrange(global_constants.CURRENT_YEAR, int(month))[1]
 
         iid = 0
 

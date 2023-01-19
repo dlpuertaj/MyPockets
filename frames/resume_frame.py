@@ -2,7 +2,7 @@ from tkinter import Frame, W, NO, BOTH, Button, Label
 from tkinter import ttk
 
 from frames.popup.pop_new_type import PopNewType
-from services import Services as serve
+from services.services import Services as serve
 
 import calendar as calendar
 

@@ -1,5 +1,5 @@
 from tkinter import Toplevel, Label, Entry, Button
-import global_constants as glob_const
+from util import global_constants as glob_const
 
 
 class PopLogin(Toplevel):
