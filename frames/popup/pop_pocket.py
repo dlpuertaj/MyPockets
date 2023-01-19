@@ -35,8 +35,6 @@ class PopPocket(Toplevel):
                                                                                        self.pocket_name_entry.get(),
                                                                                        self.pocket_amount_entry.get()))
 
-        # close_button = Button(self, text="Close", command=self.destroy)
-
         pocket_name_label.grid(column=0, row=grid_row, sticky=E)
         self.pocket_name_entry.grid(column=1, row=grid_row, sticky=E)
 
@@ -50,8 +48,8 @@ class PopPocket(Toplevel):
     def add_edit_pocket_components(self, serve):
         pocket_options = self.get_pockets(serve)
         self.add_select_dropdown(pocket_options, "Pocket: ", 0)
-        self.pocket_name_entry.insert(0, str(self.pockets[0].get_name()))
-        self.pocket_amount_entry.insert(0, str(self.pockets[0].get_amount()))
+        self.pocket_name_entry.insert(0, str(self.account_pocket.get_name()))
+        self.pocket_amount_entry.insert(0, str(self.account_pocket.get_amount()))
         self.pocket_amount_entry.config(state="disabled")
 
     def update_edit_pocket_components(self, serve):
@@ -109,7 +107,7 @@ class PopPocket(Toplevel):
             popup.destroy()
 
         popup.title("Alert!")
-        popup.geometry("250x150")
+        popup.geometry("150x120")
 
         popup_label = Label(popup, text="Are you sure?")
 
@@ -140,10 +138,13 @@ class PopPocket(Toplevel):
         dropdown.grid(column=1, row=grid_row, sticky=(E, W))
 
     def pocket_selection_callback(self, *clicked_item):
+        self.pocket_amount_entry.config(state="normal")
+        self.pocket_amount_entry.delete(0, END)
         self.pocket_name_entry.delete(0, END)
         self.pocket_name_entry.insert(0, self.clicked_pocket.get())
         pocket = self.get_pocket_from_callback(self.clicked_pocket.get())
         self.pocket_amount_entry.insert(0, pocket.get_amount())
+        self.pocket_amount_entry.config(state="disabled")
 
     def get_pockets(self, serve):
         pocket_options = []
