@@ -13,6 +13,7 @@ from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
 from services.services import Services as serve
+from services import data_services
 
 
 class WindowManager:
@@ -33,7 +34,7 @@ class WindowManager:
 
     def __init__(self):
         self.root = tk.Tk()
-        self.serve = serve()
+        self.db = data_services.get_database_connection()
 
         self.year = "2022"
         self.load_pockets_and_types()
@@ -64,9 +65,9 @@ class WindowManager:
         self.build_main_frame()
 
     def load_pockets_and_types(self):
-        self.pockets = self.serve.get_pockets()
-        self.income_types = self.serve.get_income_types()
-        self.expense_types = self.serve.get_expense_types()
+        self.pockets = data_services.get_pockets(self.db)
+        self.income_types = data_services.get_income_types(self.db)
+        self.expense_types = data_services.get_expense_types(self.db)
 
     def load_types(self):
         self.income_types = self.serve.get_income_types()
