@@ -70,8 +70,8 @@ class WindowManager:
         self.expense_types = data_services.get_expense_types(self.db)
 
     def load_types(self):
-        self.income_types = self.serve.get_income_types()
-        self.expense_types = self.serve.get_expense_types()
+        self.income_types = data_services.get_income_types(self.db)
+        self.expense_types = data_services.get_expense_types(self.db)
 
     def build_main_frame(self):
         """ Method that calls the creation of the pocket frame and the resume frame.
@@ -160,7 +160,7 @@ class WindowManager:
         self.update_pockets_table()
 
     def update_pockets_table(self):
-        self.pockets = self.serve.get_pockets()
+        self.pockets = data_services.get_pockets(self.db)
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table()
 

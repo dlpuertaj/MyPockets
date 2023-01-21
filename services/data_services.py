@@ -50,7 +50,7 @@ def get_income_types(database_connection):
     else:
         return None
 
-def get_expense_type_names(db_connection):
+def get_expense_types(db_connection):
     result = execute_query(db_connection,db_constants.GET_EXPENSE_TYPES, None, True)
     types = []
     if result is not None:
