@@ -15,6 +15,7 @@ def get_database_connection():
 
     return connection
 
+
 def execute_query(db_connection, query, parameters, multiple_results):
     result = None
     try:
@@ -27,6 +28,7 @@ def execute_query(db_connection, query, parameters, multiple_results):
 
     return result
 
+
 def get_pockets(database_connection):
     result_set = execute_query(database_connection, db_constants.SELECT_POCKETS, None, True)
     pockets = []
@@ -38,8 +40,8 @@ def get_pockets(database_connection):
     else:
         return None
 
-def get_income_types(database_connection):
 
+def get_income_types(database_connection):
     result = execute_query(database_connection, db_constants.GET_INCOME_TYPES, None, True)
     types = []
     if result is not None:
@@ -50,8 +52,9 @@ def get_income_types(database_connection):
     else:
         return None
 
+
 def get_expense_types(db_connection):
-    result = execute_query(db_connection,db_constants.GET_EXPENSE_TYPES, None, True)
+    result = execute_query(db_connection, db_constants.GET_EXPENSE_TYPES, None, True)
     types = []
     if result is not None:
         for r in result:
@@ -60,3 +63,9 @@ def get_expense_types(db_connection):
         return types
     else:
         return None
+
+
+def verify_user_for_login(db_connection, username, password):
+    result = execute_query(db_connection, db_constants.SEARCH_USER_BY_USERNAME_AND_PASSWORD,
+                           (username, password), False)
+    return result

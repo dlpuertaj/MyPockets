@@ -1,5 +1,5 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
-
+from services import data_services
 
 class PopNewType(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
@@ -35,9 +35,9 @@ class PopNewType(Toplevel):
         save_button.grid(column=0,row=3,pady=7,sticky=(E, W))
         cancel_button.grid(column=1,row=3,pady=7,sticky=(E, W))
 
-    def save(self,serve,name, note):
+    def save(self,name, note):
         if self.type:
-            serve.insert_expense_type(name,note)
+            data_services.insert_expense_type(name,note)
         else:
-            serve.insert_income_type(name,note)
+            data_services.insert_income_type(name,note)
         serve.show_popup_message(self.root, "Success!")

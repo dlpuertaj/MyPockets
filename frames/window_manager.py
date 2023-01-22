@@ -12,7 +12,6 @@ from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
-from services.services import Services as serve
 from services import data_services
 
 
@@ -60,7 +59,7 @@ class WindowManager:
 
     def login(self):
         """ Method that creates and shows the popup for the user login."""
-        pop_login = PopLogin(self.root, self.serve)
+        pop_login = PopLogin(self.root, self.db)
         self.root.wait_window(pop_login)
         self.build_main_frame()
 
