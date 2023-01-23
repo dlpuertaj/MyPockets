@@ -119,7 +119,7 @@ class WindowManager:
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)
-        pop_new_type.create_and_show_popup(self.serve)
+        pop_new_type.create_and_show_popup(self.db)
         self.root.wait_window(pop_new_type)
         self.load_types()
         self.update_tables()

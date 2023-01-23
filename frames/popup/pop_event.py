@@ -2,6 +2,7 @@ from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
 from util import global_constants
 from frames.popup.popup_message import PopupGenericMessage
+from services import data_services
 
 
 class PopEvent(Toplevel):
@@ -15,7 +16,6 @@ class PopEvent(Toplevel):
     def __init__(self, root, event_type):
         Toplevel.__init__(self,root)
         self.root = root
-        #self.geometry('250x200')
         self.resizable(width=False,height=False)
         self.event_type = event_type
         self.create_or_update_title = ''
@@ -29,8 +29,8 @@ class PopEvent(Toplevel):
         else:
             self.create_or_update_title = self.NEW_LABEL
 
-    def create_and_show_popup(self,serve, pockets):
-        options = self.get_options_for_dropdown(serve, False) # TODO: Get type from object
+    def create_and_show_popup(self,db_connection, pockets):
+        options = self.get_options_for_dropdown(db_connection, False) # TODO: Get type from object
 
         type_options = []
         pockets_options = []
@@ -59,8 +59,8 @@ class PopEvent(Toplevel):
         note_entry = Entry(self)
 
         save_button = Button(self, text="Save", command=lambda: self.save_event(
-            serve, options, pockets, clicked_type.get(), amount_entry.get(), date_entry.get(),
-            note_entry.get(),clicked_pocket.get()))
+            db_connection,options, pockets, clicked_type.get(), amount_entry.get(),
+            date_entry.get(), note_entry.get(),clicked_pocket.get()))
 
         close_button = Button(self, text="Close", command=self.destroy)
 
@@ -76,11 +76,11 @@ class PopEvent(Toplevel):
         save_button.grid(column=0,row=6,pady=7, padx=2,sticky=(E, W))
         close_button.grid(column=1,row=6,pady=7, padx=2,sticky=(E, W))
 
-    def get_options_for_dropdown(self,serve,get_pockets):
+    def get_options_for_dropdown(self,db_connection,get_pockets):
         if get_pockets:
-            return serve.get_pockets()
+            return data_services.get_pockets(db_connection)
         else:
-            return serve.get_events_by_type(self.event_type)
+            return data_services.get_events_by_type(db_connection, self.event_type)
 
     def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
@@ -89,7 +89,7 @@ class PopEvent(Toplevel):
         dropdown = OptionMenu(self, clicked, *options)
         dropdown.grid(column=1,row=grid_row,sticky=W)
 
-    def save_event(self, serve, types, pockets, event_type, amount, current_date,
+    def save_event(self, db_connection, types, pockets, event_type, amount, current_date,
                    note, pocket):
         used_pocket = None
         for t in types:
@@ -105,15 +105,22 @@ class PopEvent(Toplevel):
 
         type_of_event = str(type(self.event_type))
         if "income" in type_of_event:
-            serve.insert_event(True,amount,event_type, current_date, note, pocket)
-            serve.update_pocket_amount(used_pocket.get_id(), (used_pocket.get_amount() + int(amount)))
+            data_services.insert_event(db_connection, True, amount,
+                                       event_type, current_date, note, pocket)
+
+            data_services.update_pocket_amount(db_connection,used_pocket.get_id(),
+                                               (used_pocket.get_amount() + int(amount)))
+
             self.show_popup_message(global_constants.SUCCESS_OPERATION)
         else:
             if used_pocket.get_amount() < int(amount):
                 self.show_popup_message(global_constants.AMOUNT_GRATER_THAN_POCKET_AMOUNT)
             else:
-                serve.insert_event(False,amount,event_type, current_date, note, pocket)
-                serve.update_pocket_amount(used_pocket.get_id(), (used_pocket.get_amount() - int(amount)))
+                data_services.insert_event(db_connection, False,amount,event_type,
+                                           current_date, note, pocket)
+
+                data_services.update_pocket_amount(db_connection, used_pocket.get_id(),
+                                                   (used_pocket.get_amount() - int(amount)))
                 self.show_popup_message(global_constants.SUCCESS_OPERATION)
 
     def show_popup_message(self,message):
