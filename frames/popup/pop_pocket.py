@@ -1,5 +1,6 @@
 from tkinter import Toplevel, Button, Label, Entry, E, W, OptionMenu, StringVar, END
-
+from services import data_services
+from services import gui_services
 
 class PopPocket(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
@@ -17,23 +18,25 @@ class PopPocket(Toplevel):
         self.grab_set()
         self.choice = None
 
-    def create_and_show_popup(self, serve):
+    def create_and_show_popup(self, db_connection):
 
         grid_row = 0
         if not self.new_pocket:
-            self.add_edit_pocket_components(serve)
+            self.add_edit_pocket_components(db_connection)
             grid_row = 1
 
         pocket_name_label = Label(self, text="Name: ")
         pocket_amount_label = Label(self, text="Initial Amount: ")
 
-        save_button = Button(self, text="Save", command=lambda: self.save_pocket(serve,
-                                                                                 self.pocket_name_entry.get(),
-                                                                                 self.pocket_amount_entry.get()))
+        save_button = Button(self, text="Save",
+                             command=lambda: self.save_pocket(db_connection,
+                                                              self.pocket_name_entry.get(),
+                                                              self.pocket_amount_entry.get()))
 
-        delete_button = Button(self, text="Delete", command=lambda: self.delete_pocket(serve,
-                                                                                       self.pocket_name_entry.get(),
-                                                                                       self.pocket_amount_entry.get()))
+        delete_button = Button(self, text="Delete",
+                               command=lambda: self.delete_pocket(db_connection,
+                                                                  self.pocket_name_entry.get(),
+                                                                  self.pocket_amount_entry.get()))
 
         pocket_name_label.grid(column=0, row=grid_row, sticky=E)
         self.pocket_name_entry.grid(column=1, row=grid_row, sticky=E)
@@ -45,8 +48,8 @@ class PopPocket(Toplevel):
         delete_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
         # close_button.grid(column=2, row=grid_row + 2, sticky=(E, W))
 
-    def add_edit_pocket_components(self, serve):
-        pocket_options = self.get_pockets(serve)
+    def add_edit_pocket_components(self, db_connection):
+        pocket_options = self.get_pockets(db_connection)
         self.add_select_dropdown(pocket_options, "Pocket: ", 0)
         self.pocket_name_entry.insert(0, str(self.account_pocket.get_name()))
         self.pocket_amount_entry.insert(0, str(self.account_pocket.get_amount()))
@@ -56,18 +59,18 @@ class PopPocket(Toplevel):
         pockets_options = self.get_pockets(serve)
         self.add_select_dropdown(pockets_options, "Pocket: ", 0)
 
-    def save_pocket(self, serve, pocket_name, pocket_amount):
+    def save_pocket(self, db_connection, pocket_name, pocket_amount):
 
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
-                if not serve.pocket_name_in_database(pocket_name):
+                if data_services.get_pocket_by_name(db_connection, pocket_name) is not None:
 
                     if self.new_pocket:
-                        serve.insert_pocket(pocket_name, pocket_amount)
+                        data_services.insert_pocket(pocket_name, pocket_amount)
                     else:
                         if self.clicked_pocket_id is None:
                             self.clicked_pocket_id = self.get_pocket_from_name(self.clicked_pocket.get()).get_id()
-                        serve.update_pocket(pocket_name, self.clicked_pocket_id)
+                        data_services.update_pocket(pocket_name, self.clicked_pocket_id)
                         self.update_edit_pocket_components(serve)
                     serve.show_popup_message(self.root, "Success!")
 
@@ -76,13 +79,13 @@ class PopPocket(Toplevel):
             else:
                 serve.show_popup_message(self.root, "Name entered is invalid")
         else:
-            serve.insert_pocket(pocket_name, "0")
+            data_services.insert_pocket(db_connection, pocket_name, "0")
             serve.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
 
-    def delete_pocket(self, serve, pocket_name, pocket_amount):
+    def delete_pocket(self, db_connection, pocket_name, pocket_amount):
 
         if pocket_name != "":
-            if not serve.pocket_name_in_database(pocket_name):
+            if data_services.get_pocket_by_name(db_connection, pocket_name) is not None:
                 pass
                 serve.show_popup_message(self.root, "Pocket does not exist!")
             else:
@@ -91,11 +94,12 @@ class PopPocket(Toplevel):
                 if self.choice == "Yes":
                     if pocket_amount is not None or pocket_amount != "0":
                         print("Positive amount, transferring to Account")
-                        serve.update_pocket_amount("Account", int(pocket_amount) + int(self.account_pocket.get_amount()))
-                        serve.update_pocket_amount(pocket_name, "0")
-                        serve.delete_pocket(pocket_name)
+                        data_services.update_pocket_amount(db_connection, "Account",
+                                                           int(pocket_amount) + int(self.account_pocket.get_amount()))
+                        data_services.update_pocket_amount(db_connection, pocket_name, "0")
+                        data_services.delete_pocket(db_connection, pocket_name)
                     else:
-                        serve.delete_poquet(pocket_name)
+                        data_services.delete_pocket(pocket_name)
         else:
             serve.show_popup_message(self.root, "Name entered is invalid")
 
@@ -146,9 +150,9 @@ class PopPocket(Toplevel):
         self.pocket_amount_entry.insert(0, pocket.get_amount())
         self.pocket_amount_entry.config(state="disabled")
 
-    def get_pockets(self, serve):
+    def get_pockets(self, db_connection):
         pocket_options = []
-        self.pockets = serve.get_pockets()
+        self.pockets = data_services.get_pockets(db_connection)
         for pocket in self.pockets:
             pocket_options.append(pocket.name)
             if pocket.get_name() == "Account":

@@ -132,7 +132,7 @@ class WindowManager:
         else:
             if self.event_options_in_database(event_type):
                 pop_event = PopEvent(self.root,event_type)
-                pop_event.create_and_show_popup(self.serve,self.pockets)
+                pop_event.create_and_show_popup(self.db,self.pockets)
                 self.root.wait_window(pop_event)
                 self.update_tables()
                 self.load_types()
@@ -140,7 +140,7 @@ class WindowManager:
                 self.load_types()
                 if self.event_options_in_database(event_type):
                     pop_event = PopEvent(self.root, event_type)
-                    pop_event.create_and_show_popup(self.serve, self.pockets)
+                    pop_event.create_and_show_popup(self.db, self.pockets)
                     self.root.wait_window(pop_event)
                     self.update_tables()
                     self.load_types()
@@ -155,7 +155,7 @@ class WindowManager:
 
     def show_pocket_popup(self, new_or_edit):
         pop_new_pocket = PopPocket(self.root, new_or_edit)
-        pop_new_pocket.create_and_show_popup(self.serve)
+        pop_new_pocket.create_and_show_popup(self.db)
         self.root.wait_window(pop_new_pocket)
         self.update_pockets_table()
 

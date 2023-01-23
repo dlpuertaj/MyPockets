@@ -39,6 +39,12 @@ def get_pockets(database_connection):
     else:
         return None
 
+def get_pocket_by_name(db_connection, pocket_name):
+    result = execute_query(db_connection, db_constants.SELECT_POCKET_BY_NAME, (pocket_name,),False)
+    if result is not None:
+        return result
+    else:
+        return None
 
 def update_pocket(db_connection, pocket_name, pocket_id):
     result = execute_query(db_connection, db_constants.UPDATE_POCKET_NAME_BY_ID,(pocket_name, pocket_id),False)
@@ -55,6 +61,19 @@ def update_pocket_amount(db_connection, pocket,amount):
     else:
         return None
 
+def insert_pocket(db_connection,pocket_name,amount):
+    result = execute_query(db_connection, db_constants.INSERT_POCKET,(pocket_name,amount),False)
+    if result is not None:
+        return result
+    else:
+        return None
+
+def delete_pocket(db_connection, pocket_name):
+    result = execute_query(db_connection, db_constants.DELETE_POCKET_BY_NAME,(pocket_name,),False)
+    if result is not None:
+        return result
+    else:
+        return None
 
 def get_income_types(database_connection):
     result = execute_query(database_connection, db_constants.GET_INCOME_TYPES, None, True)

@@ -28,32 +28,7 @@ class Services:
 
         return result
 
-    def verify_user_for_login(self, username, password):
-        result = self.connect_and_execute(db_constants.SEARCH_USER_BY_USERNAME_AND_PASSWORD, (username, password),
-                                          False)
-        if result is not None:
-            self.is_logged_in = True
-
-    def get_pockets(self):
-        result_set = self.connect_and_execute(db_constants.SELECT_POCKETS, None, True)
-        pockets = []
-        if result_set is not None:
-            for result in result_set:
-                pocket = Pocket(pocket_id=result[0], name=result[1], amount=result[2])
-                pockets.append(pocket)
-            return pockets
-        else:
-            return None
-
-    def get_pocket_by_name(self, pocket_name):
-        result = self.connect_and_execute(db_constants.SELECT_POCKET_BY_NAME, (pocket_name,),False)
-        if result is not None:
-            return result
-        else:
-            return None
-
     def get_expense_type_names(self):
-
         result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
 
         if result is not None:
@@ -133,23 +108,6 @@ class Services:
         else:
             return None
 
-    def insert_pocket(self,pocket_name,amount):
-        result = self.connect_and_execute(db_constants.INSERT_POCKET,(pocket_name,amount),False)
-        if result is not None:
-            return result
-        else:
-            return None
-
     @staticmethod
     def show_options_popup_message(root, message):
         return PopupOptionsMessage(root, message)
-
-    def pocket_name_in_database(self,pocket_name):
-        return self.get_pocket_by_name(pocket_name) is not None
-
-    def delete_pocket(self, pocket_name):
-        result = self.connect_and_execute(db_constants.DELETE_POCKET_BY_NAME,(pocket_name,),False)
-        if result is not None:
-            return result
-        else:
-            return None
