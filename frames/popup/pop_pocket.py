@@ -46,7 +46,6 @@ class PopPocket(Toplevel):
 
         save_button.grid(column=0, row=grid_row + 2, sticky=(E, W))
         delete_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
-        # close_button.grid(column=2, row=grid_row + 2, sticky=(E, W))
 
     def add_edit_pocket_components(self, db_connection):
         pocket_options = self.get_pockets(db_connection)
@@ -55,8 +54,8 @@ class PopPocket(Toplevel):
         self.pocket_amount_entry.insert(0, str(self.account_pocket.get_amount()))
         self.pocket_amount_entry.config(state="disabled")
 
-    def update_edit_pocket_components(self, serve):
-        pockets_options = self.get_pockets(serve)
+    def update_edit_pocket_components(self, db_connection):
+        pockets_options = self.get_pockets(db_connection)
         self.add_select_dropdown(pockets_options, "Pocket: ", 0)
 
     def save_pocket(self, db_connection, pocket_name, pocket_amount):
@@ -66,30 +65,31 @@ class PopPocket(Toplevel):
                 if data_services.get_pocket_by_name(db_connection, pocket_name) is not None:
 
                     if self.new_pocket:
-                        data_services.insert_pocket(pocket_name, pocket_amount)
+                        data_services.insert_pocket(db_connection, pocket_name, pocket_amount)
                     else:
                         if self.clicked_pocket_id is None:
-                            self.clicked_pocket_id = self.get_pocket_from_name(self.clicked_pocket.get()).get_id()
-                        data_services.update_pocket(pocket_name, self.clicked_pocket_id)
-                        self.update_edit_pocket_components(serve)
-                    serve.show_popup_message(self.root, "Success!")
+                            self.clicked_pocket_id = data_services.get_pocket_by_name(
+                                db_connection, self.clicked_pocket.get()).get_name()
+                        data_services.update_pocket(db_connection, pocket_name, self.clicked_pocket_id)
+                        self.update_edit_pocket_components(db_connection)
+                    gui_services.show_popup_message(self.root, "Success!")
 
                 else:
-                    serve.show_popup_message(self.root, "Pocket exists!")
+                    gui_services.show_popup_message(self.root, "Pocket exists!")
             else:
-                serve.show_popup_message(self.root, "Name entered is invalid")
+                gui_services.show_popup_message(self.root, "Name entered is invalid")
         else:
             data_services.insert_pocket(db_connection, pocket_name, "0")
-            serve.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
+            gui_services.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
 
     def delete_pocket(self, db_connection, pocket_name, pocket_amount):
 
         if pocket_name != "":
             if data_services.get_pocket_by_name(db_connection, pocket_name) is not None:
                 pass
-                serve.show_popup_message(self.root, "Pocket does not exist!")
+                gui_services.show_popup_message(self.root, "Pocket does not exist!")
             else:
-                self.show_choice_popup()
+                gui_services.show_choice_popup(self.root,self.choice)
 
                 if self.choice == "Yes":
                     if pocket_amount is not None or pocket_amount != "0":
@@ -99,30 +99,9 @@ class PopPocket(Toplevel):
                         data_services.update_pocket_amount(db_connection, pocket_name, "0")
                         data_services.delete_pocket(db_connection, pocket_name)
                     else:
-                        data_services.delete_pocket(pocket_name)
+                        data_services.delete_pocket(db_connection, pocket_name)
         else:
-            serve.show_popup_message(self.root, "Name entered is invalid")
-
-    def show_choice_popup(self):
-        popup = Toplevel(self.root)
-
-        def set_choice(choice):
-            self.choice = choice
-            popup.destroy()
-
-        popup.title("Alert!")
-        popup.geometry("150x120")
-
-        popup_label = Label(popup, text="Are you sure?")
-
-        popup_label.grid(column=0,row=0)
-        yes_button = Button(popup, text="YES", command=lambda:set_choice("Yes"))
-        no_button = Button(popup, text="NO", command=lambda:set_choice("No"))
-        yes_button.grid(column=0, row=1)
-        no_button.grid(column=2, row=1)
-
-        popup.grab_set()
-        self.root.wait_window(popup)
+            gui_services.show_popup_message(self.root, "Name entered is invalid")
 
     @staticmethod
     def validate_initial_amount(amount):
