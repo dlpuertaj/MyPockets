@@ -13,6 +13,7 @@ from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
 from services import data_services
+from services import gui_services
 
 
 class WindowManager:
@@ -127,7 +128,7 @@ class WindowManager:
     """ Method that shows a popup for the creation of a new expense event"""
     def new_event(self, event_type):
         if len(self.pockets) == 0:
-            serve.show_popup_message(self.root, "No pockets created")
+            gui_services.show_popup_message(self.root, "No pockets created")
         else:
             if self.event_options_in_database(event_type):
                 pop_event = PopEvent(self.root,event_type)
@@ -144,7 +145,7 @@ class WindowManager:
                     self.update_tables()
                     self.load_types()
                 else:
-                    serve.show_popup_message(self.root, "No type created")
+                    gui_services.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
         self.resume_frame.set_expense_types(self.expense_types)

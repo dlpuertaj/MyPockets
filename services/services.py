@@ -2,12 +2,10 @@ from database import database_constants as db_constants
 from sqlite3 import Error as error_sqlite
 
 from entities.expense_event import ExpenseEvent
-from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
-from frames.popup.popup_message import PopupGenericMessage
 from frames.popup.popup_options_message import PopupOptionsMessage
-
+from database import database_manager as db_manager
 
 class Services:
 
@@ -17,8 +15,8 @@ class Services:
     def connect_and_execute(self, query, data, multi):
         connection = None
         try:
-            connection = self.db_manager.create_connection(True)
-            result = self.db_manager.execute_sqlite_query(connection,
+            connection = db_manager.create_connection(True)
+            result = db_manager.execute_sqlite_query(connection,
                                                           query,
                                                           data,
                                                           multi)
@@ -141,12 +139,6 @@ class Services:
             return result
         else:
             return None
-
-    @staticmethod
-    def show_popup_message(root, message):
-        error_popup = PopupGenericMessage(root, message)
-        error_popup.grab_set()
-        root.wait_window(error_popup)
 
     @staticmethod
     def show_options_popup_message(root, message):
