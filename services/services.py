@@ -1,69 +1,13 @@
 from database import database_constants as db_constants
-from sqlite3 import Error as error_sqlite
 
 from entities.expense_event import ExpenseEvent
 from entities.income_event import IncomeEvent
-from entities.pocket import Pocket
 from frames.popup.popup_options_message import PopupOptionsMessage
-from database import database_manager as db_manager
 
 class Services:
 
     def __init__(self):
         self.is_logged_in = False
-
-    def connect_and_execute(self, query, data, multi):
-        connection = None
-        try:
-            connection = db_manager.create_connection(True)
-            result = db_manager.execute_sqlite_query(connection,
-                                                          query,
-                                                          data,
-                                                          multi)
-        except error_sqlite as e:
-            print(e)
-        finally:
-            if connection is not None:
-                connection.close()
-
-        return result
-
-    def get_expense_type_names(self):
-        result = self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
-
-        if result is not None:
-            return result
-        else:
-            return None
-
-    def get_names_by_event_type(self, event_type):
-        type_of_event = str(type(event_type))
-        if "expense" in type_of_event:
-            return self.connect_and_execute(db_constants.GET_EXPENSE_TYPE_NAMES, None, True)
-        elif "income" in type_of_event:
-            return self.connect_and_execute(db_constants.GET_INCOME_TYPE_NAMES, None, True)
-
-    def get_resume_data(self, month):
-
-        result = self.connect_and_execute(db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH, month, True)
-
-        if result is not None:
-            if len(result) == 0:
-                return [('None',0)]
-            return result
-        else:
-            return None
-
-    def get_payroll_by_month(self, month):
-
-        result = self.connect_and_execute(db_constants.GET_PAYROLL_BY_MONTH, month, False)
-
-        if result is not None:
-            if len(result) == 0:
-                return 0
-            return result
-        else:
-            return 0
 
     def get_incomes_by_month(self, month):
         results = self.connect_and_execute(db_constants.GET_INCOME_EVENTS_BY_MONTH, month, True)

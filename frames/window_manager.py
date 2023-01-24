@@ -78,7 +78,7 @@ class WindowManager:
             It also adds the resume frame and the transactions frame to the Notebook """
         initial_month = '01' # TODO: get current month
         self.pocket_frame.create_pocket_frame()
-        self.resume_frame.create_resume_frame()
+        self.resume_frame.create_resume_frame(self.db)
         self.transactions_frame.create_transaction_frame(initial_month)
         self.resume_notebook.add(self.resume_frame, text=global_constants.EXPENSE_RESUME_TEXT)
         self.resume_notebook.add(self.transactions_frame, text=global_constants.MONTHLY_TRANSACTIONS_TEXT)

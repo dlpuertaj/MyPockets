@@ -130,18 +130,41 @@ def get_events_by_type(db_connection, event_type):
 
 
 # TODO: insert event using event object
-def insert_event(self, is_income, amount,event_type, date, note, pocket):
+def insert_event(db_connection, is_income, amount,event_type, date, note, pocket):
     if is_income:
-        result = self.connect_and_execute(db_constants.INSERT_INCOME_EVENT,
-                                          (amount,event_type, date, note, pocket), False)
+        result = execute_query(db_connection, db_constants.INSERT_INCOME_EVENT,
+                               (amount,event_type, date, note, pocket), False)
     else:
-        result = self.connect_and_execute(db_constants.INSERT_EXPENSE_EVENT,
-                                          (amount,event_type, date, note, pocket), False)
+        result = execute_query(db_connection, db_constants.INSERT_EXPENSE_EVENT,
+                               (amount,event_type, date, note, pocket), False)
     if result is not None:
         return result
     else:
         return None
 
+
+""" RESUME data """
+def get_resume_data_by_month(db_connection, month):
+    result = execute_query(db_connection, db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH, (month,), True)
+
+    if result is not None:
+        if len(result) == 0:
+            return [('None', 0)]
+        return result
+    else:
+        return None
+
+
+def get_payroll_by_month(db_connection, month):
+
+    result = execute_query(db_connection, db_constants.GET_PAYROLL_BY_MONTH, (month,), False)
+
+    if result is not None:
+        if len(result) == 0:
+            return 0
+        return result
+    else:
+        return 0
 
 def verify_user_for_login(db_connection, username, password):
     result = execute_query(db_connection, db_constants.SEARCH_USER_BY_USERNAME_AND_PASSWORD,
