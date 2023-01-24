@@ -2,7 +2,9 @@ from database import database_manager as db
 from database import database_constants as db_constants
 from sqlite3 import Error as eqlite_exception
 
+from entities.expense_event import ExpenseEvent
 from entities.generic_type import GenericType
+from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
 
 
@@ -98,11 +100,35 @@ def get_expense_types(db_connection):
     else:
         return None
 
+def get_expense_type_by_id(db_connection, expense_id):
+    result = execute_query(db_connection, db_constants.GET_EXPENSE_TYPE_BY_ID, (expense_id,), False)
+    if result is not None:
+        return result[0]
+    else:
+        return None
+
+def insert_expense_type(db_connection,name,note):
+    result = execute_query(db_constants.INSERT_EXPENSE_TYPE,(name,note),False)
+    if result is not None:
+        return result[0]
+    else:
+        return None
 
 def insert_expense_type(db_connection, name, note):
     result = execute_query(db_connection, db_constants.INSERT_EXPENSE_TYPE, (name, note), False)
     if result is not None:
         return result[0]
+    else:
+        return None
+
+def get_expenses_by_month(db_connection, month):
+    result_set = execute_query(db_connection, db_constants.GET_EXPENSE_EVENTS_BY_MONTH, (month,), True)
+    expense_events = []
+    if result_set is not None:
+        for rs in result_set:
+            expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
+            expense_events.append(expense)
+        return expense_events
     else:
         return None
 
@@ -114,6 +140,16 @@ def insert_income_type(db_connection, name, note):
     else:
         return None
 
+def get_incomes_by_month(db_connection, month):
+    results = execute_query(db_connection, db_constants.GET_INCOME_EVENTS_BY_MONTH, (month,), True)
+    income_events = []
+    if results is not None:
+        for rs in results:
+            event = IncomeEvent(rs[0], rs[1], rs[2], rs[3], rs[5])
+            income_events.append(event)
+        return income_events
+    else:
+        return None
 
 def get_events_by_type(db_connection, event_type):
     result = None
