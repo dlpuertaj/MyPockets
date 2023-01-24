@@ -137,6 +137,7 @@ class TransactionsFrame(Frame):
     def callback(self, *clicked):
         db_connection = data_services.get_database_connection()
         self.update_transactions_table(db_connection)
+        db_connection.close()
 
     def update_transactions_table(self, db_connection):
         self.transactions_table.destroy()

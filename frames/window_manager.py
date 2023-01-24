@@ -32,10 +32,9 @@ class WindowManager:
     expense_types = None
     income_types = None
 
-    def __init__(self):
+    def __init__(self, database_connection):
         self.root = tk.Tk()
-        self.db = data_services.get_database_connection()
-        # TODO: remove database connection from wm and create it in main
+        self.db = database_connection
 
         self.year = "2022"
         self.load_pockets_and_types()
