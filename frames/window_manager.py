@@ -110,9 +110,9 @@ class WindowManager:
         file_menu.add_separator()
 
         file_menu.add_command(label=global_constants.NEW_EXPENSE_TYPE_LABEL,
-                              command=lambda: self.resume_frame.create_type(True))
+                              command=lambda: self.resume_frame.create_type(self.db, True))
         file_menu.add_command(label=global_constants.NEW_INCOME_TYPE_LABEL,
-                              command=lambda: self.resume_frame.create_type(False))
+                              command=lambda: self.resume_frame.create_type(self.db,False))
 
         file_menu.add_separator()
 
@@ -149,8 +149,8 @@ class WindowManager:
 
     def update_tables(self):
         self.resume_frame.set_expense_types(self.expense_types)
-        self.resume_frame.update_resume_table()
-        self.transactions_frame.update_transactions_table()
+        self.resume_frame.update_resume_table(self.db)
+        self.transactions_frame.update_transactions_table(self.db)
         self.update_pockets_table()
 
     def show_pocket_popup(self, new_or_edit):
@@ -162,7 +162,7 @@ class WindowManager:
     def update_pockets_table(self):
         self.pockets = data_services.get_pockets(self.db)
         self.pocket_frame.set_pockets(self.pockets)
-        self.pocket_frame.update_pockets_table()
+        self.pocket_frame.update_pockets_table(self.db)
 
     def event_options_in_database(self, event_type):
         type_of_event = str(type(event_type))

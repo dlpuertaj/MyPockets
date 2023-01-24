@@ -108,7 +108,7 @@ def get_expense_type_by_id(db_connection, expense_id):
         return None
 
 def insert_expense_type(db_connection,name,note):
-    result = execute_query(db_constants.INSERT_EXPENSE_TYPE,(name,note),False)
+    result = execute_query(db_connection, db_constants.INSERT_EXPENSE_TYPE,(name,note),False)
     if result is not None:
         return result[0]
     else:

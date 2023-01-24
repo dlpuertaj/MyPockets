@@ -103,8 +103,8 @@ class ResumeFrame(Frame):
             month_label.pack()
             resume_table.pack()
 
-    def create_type(self, db_connection, expense_or_income):
-        pop_new_type = PopNewType(self.root, expense_or_income)
+    def create_type(self, db_connection, is_expense):
+        pop_new_type = PopNewType(self.root, is_expense)
         pop_new_type.create_and_show_popup(db_connection)
         self.root.wait_window(pop_new_type)
         self.update_resume_table(db_connection)
