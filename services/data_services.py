@@ -1,6 +1,6 @@
 from database import database_manager as db
 from database import database_constants as db_constants
-from sqlite3 import Error as eqlite_exception
+from sqlite3 import Error as sqlite_exception
 
 from entities.expense_event import ExpenseEvent
 from entities.generic_type import GenericType
@@ -12,7 +12,7 @@ def get_database_connection():
     connection = None
     try:
         connection = db.create_connection(True)
-    except eqlite_exception as e:
+    except sqlite_exception as e:
         print(e)
 
     return connection
@@ -23,7 +23,7 @@ def execute_query(db_connection, query, parameters, multiple_results):
     try:
         result = db.execute_sqlite_query(db_connection, query,
                                          parameters, multiple_results)
-    except eqlite_exception as e:
+    except sqlite_exception as e:
         print(e)
 
     return result
@@ -114,13 +114,6 @@ def insert_expense_type(db_connection,name,note):
     else:
         return None
 
-def insert_expense_type(db_connection, name, note):
-    result = execute_query(db_connection, db_constants.INSERT_EXPENSE_TYPE, (name, note), False)
-    if result is not None:
-        return result[0]
-    else:
-        return None
-
 def get_expenses_by_month(db_connection, month):
     result_set = execute_query(db_connection, db_constants.GET_EXPENSE_EVENTS_BY_MONTH, (month,), True)
     expense_events = []
@@ -151,7 +144,7 @@ def get_incomes_by_month(db_connection, month):
     else:
         return None
 
-def get_events_by_type(db_connection, event_type):
+def get_event_types_by_event(db_connection, event_type):
     result = None
     type_of_event = str(type(event_type))
     if "expense" in type_of_event:

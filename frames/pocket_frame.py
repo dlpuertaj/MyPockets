@@ -44,7 +44,6 @@ class PocketFrame(Frame):
     """ Method that query the data of all the pockets from the database and inserts them in the table"""
     def load_pockets_to_table(self):
         iid = 0
-        #self.pockets = self.serve.get_pockets()
         for pocket in self.pockets:
             self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent",
                                       values=(pocket.name, pocket.amount))

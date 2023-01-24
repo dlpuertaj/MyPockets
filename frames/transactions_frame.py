@@ -107,7 +107,13 @@ class TransactionsFrame(Frame):
 
                     self.transactions_table.item(row, text="", values=row_with_new_expense)
 
-    """ Method that adds the buttons to the transactions table"""
+    def get_expense_name_by_id(self,expense_id):
+        for expense_type in self.expense_types:
+            if expense_type.get_id() == expense_id:
+                return expense_type.get_name()
+        return None
+
+    """ Method that adds the buttons to the transactions table """
     def create_and_pack_buttons(self):
         new_income_button = Button(self, text="New Income", command="")
         new_expense_button = Button(self, text="New Expense", command="")
@@ -121,12 +127,6 @@ class TransactionsFrame(Frame):
             return split[1]
 
         return split
-
-    def get_expense_name_by_id(self,expense_id):
-        for expense_type in self.expense_types:
-            if expense_type.get_id() == expense_id:
-                return expense_type.get_name()
-        return None
 
     def get_expense_type_names(self):
         names = []

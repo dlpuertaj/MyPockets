@@ -110,13 +110,12 @@ class ResumeFrame(Frame):
         self.update_resume_table(db_connection)
 
     def update_resume_table(self, db_connection):
-
         self.clear_tables_and_labels()
-
+        self.expense_types = data_services.get_expense_types(db_connection)
         if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
             self.new_expense_type_button.destroy()
-            for month in range(1, 12):
+            for month in range(1, 13):
                 resume_table = self.build_resume_table()
                 month_name = calendar.month_name[month]
                 month_label = Label(self, text=month_name)
