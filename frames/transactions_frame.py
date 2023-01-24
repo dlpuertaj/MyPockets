@@ -37,7 +37,7 @@ class TransactionsFrame(Frame):
     def create_select_month_option_menu(self, db_connection):
         # months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
         self.clicked_month.set('January')
-        self.clicked_month.trace("w", lambda : self.callback(db_connection))
+        self.clicked_month.trace("w", self.callback)
         type_label = Label(self, text="Month")
         type_label.pack()
         dropdown = OptionMenu(self, self.clicked_month, *self.months.keys())
@@ -134,7 +134,8 @@ class TransactionsFrame(Frame):
             names.append(expense.get_name())
         return names
 
-    def callback(self,db_connection, *clicked):
+    def callback(self, *clicked):
+        db_connection = data_services.get_database_connection()
         self.update_transactions_table(db_connection)
 
     def update_transactions_table(self, db_connection):

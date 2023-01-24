@@ -30,6 +30,8 @@ class ResumeFrame(Frame):
     """ Method that creates the resume frame and loads the data from the database"""
 
     def create_resume_frame(self, db_connection):
+        self.new_expense_type_button = Button(self, text="Create Expense Type",
+                                              command=lambda: self.create_type(db_connection, True))
         for month in self.months:
             if len(self.expense_types) > 0:
                 resume_table = self.build_resume_table()
@@ -38,8 +40,6 @@ class ResumeFrame(Frame):
                 self.load_resume_data_to_table(db_connection, resume_table, str(self.months[month]), month_label)
             else:
                 self.no_expense_types_label.pack()
-                self.new_expense_type_button = Button(self, text="Create Expense Type",
-                                                      command=lambda: self.create_type(db_connection, True))
                 self.new_expense_type_button.pack()
             self.pack(side="right", fill=BOTH, expand=1)
 
