@@ -5,7 +5,7 @@ from frames.popup.pop_transfer_to_pocket import PopTransferToPocket
 from services import data_services, gui_services
 
 
-class PocketFrame(Frame):
+class PocketFrame(ttkboot.Frame):
 
     """ Initialization method that instantiates the services class and the pocket table"""
     def __init__(self, root,pockets):
@@ -62,7 +62,7 @@ class PocketFrame(Frame):
     def update_pockets_table(self, db_connection):
         self.set_pockets(data_services.get_pockets(db_connection))
         self.pockets_table.destroy()
-        self.pockets_table = ttk.Treeview(self)
+        self.pockets_table = ttkboot.Treeview(self)
         self.build_pocket_table()
         self.load_pockets_to_table()
         self.pockets_table.pack()

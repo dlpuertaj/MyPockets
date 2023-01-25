@@ -1,7 +1,4 @@
-import tkinter as tk
 import ttkbootstrap as ttkboot
-
-from tkinter import ttk
 
 from util import global_constants
 from entities.expense_event import ExpenseEvent
@@ -36,25 +33,26 @@ class WindowManager:
     def __init__(self, database_connection):
         self.root = ttkboot.Window(themename=global_constants.THEME, title="Pockets")
         self.db = database_connection
-        self.ask_for_login()
+
         self.year = global_constants.CURRENT_YEAR
         self.load_pockets_and_types()
 
-        self.resume_notebook    = ttk.Notebook(self.root)
+        self.resume_notebook    = ttkboot.Notebook(self.root)
         self.transactions_frame = TransactionsFrame(self.resume_notebook,self.expense_types)
         self.resume_frame       = ResumeFrame(self.resume_notebook,self.expense_types)
-        self.resume_table       = ttk.Treeview(self.resume_frame)
+        self.resume_table       = ttkboot.Treeview(self.resume_frame)
 
         self.pocket_frame       = PocketFrame(self.root,self.pockets)
-        self.pockets_table      = ttk.Treeview(self.pocket_frame)
+        self.pockets_table      = ttkboot.Treeview(self.pocket_frame)
 
-        self.menu_bar           = tk.Menu(self.root)
+        self.menu_bar           = ttkboot.Menu(self.root)
         self.create_menu_bar()
+
+        self.ask_for_login()
 
     def ask_for_login(self):
         if global_constants.REQUIRES_LOGIN:
             self.login()
-            self.build_main_frame()
         else:
             self.build_main_frame()
 
@@ -62,6 +60,7 @@ class WindowManager:
         """ Method that creates and shows the popup for the user login."""
         pop_login = PopLogin(self.root, self.db)
         self.root.wait_window(pop_login)
+        self.build_main_frame()
 
     def load_pockets_and_types(self):
         self.pockets = data_services.get_pockets(self.db)
@@ -84,7 +83,7 @@ class WindowManager:
         self.resume_notebook.pack()
 
     def add_menu_to_menu_bar(self, label_for_new_menu):
-        new_menu = tk.Menu(self.menu_bar, tearoff=0)
+        new_menu = ttkboot.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
         return new_menu
 

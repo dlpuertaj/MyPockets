@@ -5,7 +5,7 @@ AMOUNT_GRATER_THAN_POCKET_AMOUNT = "The amount is greater than what you have in 
 SUCCESS_OPERATION = "Success!"
 
 # System Properties
-REQUIRES_LOGIN = True
+REQUIRES_LOGIN = False
 CURRENT_YEAR = 2023
 FILE_MENU = 'File'
 POCKETS_MENU = 'Pockets'
@@ -35,4 +35,4 @@ NEW_POCKET = 'New Pocket '
 EDIT_POCKETS = 'Edit Pockets'
 
 
-THEME = "superhero"
+THEME = "litera"
