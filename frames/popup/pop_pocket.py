@@ -62,7 +62,7 @@ class PopPocket(Toplevel):
 
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
-                if data_services.get_pocket_by_name(db_connection, pocket_name) is not None:
+                if data_services.get_pocket_by_name(db_connection, pocket_name) is None:
 
                     if self.new_pocket:
                         data_services.insert_pocket(db_connection, pocket_name, pocket_amount)
