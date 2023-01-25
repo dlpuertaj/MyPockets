@@ -117,10 +117,10 @@ class PopEvent(Toplevel):
             data_services.update_pocket_amount(db_connection,used_pocket.get_id(),
                                                (used_pocket.get_amount() + int(amount)))
 
-            gui_services.show_popup_message(global_constants.SUCCESS_OPERATION)
+            gui_services.show_popup_message(self.root,global_constants.SUCCESS_OPERATION)
         else:
             if used_pocket.get_amount() < int(amount):
-                gui_services.show_popup_message(global_constants.AMOUNT_GRATER_THAN_POCKET_AMOUNT)
+                gui_services.show_popup_message(self.root, global_constants.AMOUNT_GRATER_THAN_POCKET_AMOUNT)
             else:
                 data_services.insert_event(db_connection=db_connection,
                                            is_income=False,

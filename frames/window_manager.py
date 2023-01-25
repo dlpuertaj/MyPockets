@@ -130,16 +130,12 @@ class WindowManager:
         self.load_types()
         if len(self.pockets) == 0:
             gui_services.show_popup_message(self.root, "No pockets created")
-        elif len(self.expense_types) > 0 or len(self.income_types) > 0:
-
+        elif self.check_event_type(new_event):
             pop_event = PopEvent(self.root,self.pockets, self.expense_types, self.income_types, new_event)
             pop_event.create_and_show_popup(self.db)
             self.root.wait_window(pop_event)
             self.update_tables()
             self.load_types()
-
-        else:
-            gui_services.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
         self.resume_frame.set_expense_types(self.expense_types)
@@ -158,6 +154,12 @@ class WindowManager:
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table(self.db)
 
+    def check_event_type(self, new_event):
+        if (new_event.show_type() == "Expense" and len(self.expense_types) == 0) or (new_event.show_type() == "Income" and len(self.income_types) == 0):
+            gui_services.show_popup_message(self.root, "No " + new_event.show_type() + " types in database")
+            return False
+        else:
+            return True
 
 
 
