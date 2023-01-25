@@ -132,7 +132,7 @@ class WindowManager:
             gui_services.show_popup_message(self.root, "No pockets created")
         elif len(self.expense_types) > 0 or len(self.income_types) > 0:
 
-            pop_event = PopEvent(self.root,self.pockets, self.expense_types, self.income_types, new_event) #TODO: Add list of event types as a parameter
+            pop_event = PopEvent(self.root,self.pockets, self.expense_types, self.income_types, new_event)
             pop_event.create_and_show_popup(self.db)
             self.root.wait_window(pop_event)
             self.update_tables()
