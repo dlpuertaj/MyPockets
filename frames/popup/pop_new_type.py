@@ -1,19 +1,18 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
-from services import data_services
-from services import gui_services
+
 
 class PopNewType(Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
 
-    def __init__(self, root, expense_or_income):
+    def __init__(self, root, type):
         Toplevel.__init__(self, root)
         self.root = root
         self.resizable(width=False, height=False)
         self.grab_set()
-        self.expense_or_income = expense_or_income
-        self.type_name = "Expense" if self.expense_or_income else "Income"
+        self.type = type
+        self.type_name = "Expense" if self.type else "Income"
 
-    def create_and_show_popup(self,db_connection):
+    def create_and_show_popup(self,serve):
 
         type_name_label = Label(self, text="Name: ")
         type_name_entry = Entry(self)
@@ -22,10 +21,7 @@ class PopNewType(Toplevel):
         type_note_entry = Entry(self)
 
         save_button = Button(self,text="Save",
-                             command=lambda: self.save_type(db_connection,
-                                                            type_name_entry.get(),
-                                                            type_note_entry.get()))
-
+                             command=lambda: self.save(serve,type_name_entry.get(),type_note_entry.get()))
         cancel_button = Button(self,text="Close", command=self.destroy)
 
         title_label = Label(self, text="==== New " + str(self.type_name) + " Type ====")
@@ -39,9 +35,9 @@ class PopNewType(Toplevel):
         save_button.grid(column=0,row=3,pady=7,sticky=(E, W))
         cancel_button.grid(column=1,row=3,pady=7,sticky=(E, W))
 
-    def save_type(self,db_connection, name, note):
-        if self.expense_or_income:
-            data_services.insert_expense_type(db_connection, name,note)
+    def save(self,serve,name, note):
+        if self.type:
+            serve.insert_expense_type(name,note)
         else:
-            data_services.insert_income_type(db_connection, name,note)
-        gui_services.show_popup_message(self.root, "Success!")
+            serve.insert_income_type(name,note)
+        serve.show_popup_message(self.root, "Success!")

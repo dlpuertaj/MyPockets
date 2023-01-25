@@ -12,8 +12,8 @@ from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
+from services.services import Services as serve
 from services import data_services
-from services import gui_services
 
 
 class WindowManager:
@@ -32,11 +32,11 @@ class WindowManager:
     expense_types = None
     income_types = None
 
-    def __init__(self, database_connection):
+    def __init__(self):
         self.root = tk.Tk()
-        self.db = database_connection
+        self.db = data_services.get_database_connection()
 
-        self.year = "2023"
+        self.year = "2022"
         self.load_pockets_and_types()
 
         self.resume_notebook    = ttk.Notebook(self.root)
@@ -60,7 +60,7 @@ class WindowManager:
 
     def login(self):
         """ Method that creates and shows the popup for the user login."""
-        pop_login = PopLogin(self.root, self.db)
+        pop_login = PopLogin(self.root, self.serve)
         self.root.wait_window(pop_login)
         self.build_main_frame()
 
@@ -77,9 +77,9 @@ class WindowManager:
         """ Method that calls the creation of the pocket frame and the resume frame.
             It also adds the resume frame and the transactions frame to the Notebook """
         initial_month = '01' # TODO: get current month
-        self.pocket_frame.create_pocket_frame(self.db)
-        self.resume_frame.create_resume_frame(self.db)
-        self.transactions_frame.create_transaction_frame(self.db,initial_month)
+        self.pocket_frame.create_pocket_frame()
+        self.resume_frame.create_resume_frame()
+        self.transactions_frame.create_transaction_frame(initial_month)
         self.resume_notebook.add(self.resume_frame, text=global_constants.EXPENSE_RESUME_TEXT)
         self.resume_notebook.add(self.transactions_frame, text=global_constants.MONTHLY_TRANSACTIONS_TEXT)
         self.resume_notebook.pack()
@@ -103,16 +103,16 @@ class WindowManager:
 
     def add_commands_to_file_menu(self, file_menu):
         file_menu.add_command(label=global_constants.NEW_INCOME_LABEL,
-                              command=lambda: self.create_event(IncomeEvent(None, None, None, "", "")))
+                              command=lambda: self.new_event(IncomeEvent(None, None, None, "", "")))
         file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,
-                              command=lambda: self.create_event(ExpenseEvent(None, None, None, "", "")))
+                              command=lambda: self.new_event(ExpenseEvent(None, None, None, "", "")))
 
         file_menu.add_separator()
 
         file_menu.add_command(label=global_constants.NEW_EXPENSE_TYPE_LABEL,
-                              command=lambda: self.create_type(True))
+                              command=lambda: self.resume_frame.create_type(True))
         file_menu.add_command(label=global_constants.NEW_INCOME_TYPE_LABEL,
-                              command=lambda: self.create_type(False))
+                              command=lambda: self.resume_frame.create_type(False))
 
         file_menu.add_separator()
 
@@ -120,48 +120,53 @@ class WindowManager:
 
     def create_type(self, expense_or_income):
         pop_new_type = PopNewType(self.root, expense_or_income)
-        pop_new_type.create_and_show_popup(self.db)
+        pop_new_type.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_type)
         self.load_types()
         self.update_tables()
 
-    """ Method that shows a popup for the creation of a new expense or income event"""
-    def create_event(self, new_event):
-        self.load_types()
+    """ Method that shows a popup for the creation of a new expense event"""
+    def new_event(self, event_type):
         if len(self.pockets) == 0:
-            gui_services.show_popup_message(self.root, "No pockets created")
-        elif self.check_event_type(new_event):
-            pop_event = PopEvent(self.root,self.pockets, self.expense_types, self.income_types, new_event)
-            pop_event.create_and_show_popup(self.db)
-            self.root.wait_window(pop_event)
-            self.update_tables()
-            self.load_types()
+            serve.show_popup_message(self.root, "No pockets created")
+        else:
+            if self.event_options_in_database(event_type):
+                pop_event = PopEvent(self.root,event_type)
+                pop_event.create_and_show_popup(self.serve,self.pockets)
+                self.root.wait_window(pop_event)
+                self.update_tables()
+                self.load_types()
+            else:
+                self.load_types()
+                if self.event_options_in_database(event_type):
+                    pop_event = PopEvent(self.root, event_type)
+                    pop_event.create_and_show_popup(self.serve, self.pockets)
+                    self.root.wait_window(pop_event)
+                    self.update_tables()
+                    self.load_types()
+                else:
+                    serve.show_popup_message(self.root, "No type created")
 
     def update_tables(self):
         self.resume_frame.set_expense_types(self.expense_types)
-        self.resume_frame.update_resume_table(self.db)
-        self.transactions_frame.update_transactions_table(self.db)
+        self.resume_frame.update_resume_table()
+        self.transactions_frame.update_transactions_table()
         self.update_pockets_table()
 
     def show_pocket_popup(self, new_or_edit):
         pop_new_pocket = PopPocket(self.root, new_or_edit)
-        pop_new_pocket.create_and_show_popup(self.db)
+        pop_new_pocket.create_and_show_popup(self.serve)
         self.root.wait_window(pop_new_pocket)
         self.update_pockets_table()
 
     def update_pockets_table(self):
         self.pockets = data_services.get_pockets(self.db)
         self.pocket_frame.set_pockets(self.pockets)
-        self.pocket_frame.update_pockets_table(self.db)
+        self.pocket_frame.update_pockets_table()
 
-    def check_event_type(self, new_event):
-        if (new_event.show_type() == "Expense" and len(self.expense_types) == 0) or (new_event.show_type() == "Income" and len(self.income_types) == 0):
-            gui_services.show_popup_message(self.root, "No " + new_event.show_type() + " types in database")
-            return False
+    def event_options_in_database(self, event_type):
+        type_of_event = str(type(event_type))
+        if "income" in type_of_event:
+            return len(self.income_types) > 0
         else:
-            return True
-
-
-
-
-
+            return len(self.expense_types) > 0

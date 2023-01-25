@@ -1,5 +1,5 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
-from services import data_services, gui_services
+
 
 class PopTransferToPocket(Toplevel):
     """ Class that creates the popup for the transfer of amounts between pockets"""
@@ -11,7 +11,7 @@ class PopTransferToPocket(Toplevel):
         self.pockets = pockets
         self.EXTERNAL_SOURCE = "External Source"
 
-    def create_and_show_popup(self, db_connection):
+    def create_and_show_popup(self, serve):
         pocket_options = [self.EXTERNAL_SOURCE]
         for pocket in self.pockets:
             pocket_options.append(pocket.name)
@@ -27,7 +27,7 @@ class PopTransferToPocket(Toplevel):
 
         transfer_button = Button(self, text="Transfer",
                                  command=lambda: self.save_transfer(
-                                     db_connection,
+                                     serve,
                                      clicked_source_pocket.get(),
                                      clicked_target_pocket.get(),
                                      transfer_amount_entry.get()))
@@ -48,10 +48,10 @@ class PopTransferToPocket(Toplevel):
         dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
     # TODO: optimize this code using try-except and much less if conditions
-    def save_transfer(self, db_connection, source, target, amount_being_transferred):
+    def save_transfer(self, serve, source, target, amount_being_transferred):
 
         if source == target:
-            gui_services.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
+            serve.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
         elif source != self.EXTERNAL_SOURCE:
             amount_in_source = self.get_amount_from_pocket(source)
             amount_in_target = self.get_amount_from_pocket(target)
@@ -59,20 +59,20 @@ class PopTransferToPocket(Toplevel):
 
                 new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
                 new_source_amount = self.calc_new_amount(amount_in_source, int(amount_being_transferred), True)
-                data_services.update_pocket_amount(db_connection, source, new_source_amount)
-                data_services.update_pocket_amount(db_connection, target, new_target_amount)
+                serve.update_pocket_amount(source, new_source_amount)
+                serve.update_pocket_amount(target, new_target_amount)
 
-                gui_services.show_popup_message(self.root,"Success!")
-                self.pockets = data_services.get_pockets(db_connection)
+                serve.show_popup_message(self.root,"Success!")
+                self.get_pockets(serve)
             else:
-                gui_services.show_popup_message(self.root, "Amount is not valid!")
+                serve.show_popup_message(self.root, "Amount is not valid!")
         else:
             amount_in_target = self.get_amount_from_pocket(target)
             new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
 
-            data_services.update_pocket_amount(db_connection, target, new_target_amount)
-            self.pockets = data_services.get_pockets(db_connection)
-            gui_services.show_popup_message(self.root,"Success!")
+            serve.update_pocket_amount(target, new_target_amount)
+            self.get_pockets(serve)
+            serve.show_popup_message(self.root,"Success!")
 
     @staticmethod
     def is_amount_valid(amount_in_source, amount):
@@ -100,3 +100,6 @@ class PopTransferToPocket(Toplevel):
         for pocket in self.pockets:
             if pocket_name == pocket.name:
                 return pocket
+
+    def get_pockets(self, serve):
+        self.pockets = serve.get_pockets()

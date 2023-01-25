@@ -2,7 +2,7 @@ from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
 from tkinter import ttk
 
 from util import global_constants
-from services import data_services
+from services.services import Services as serve
 
 import calendar as calendar
 
@@ -15,8 +15,9 @@ class TransactionsFrame(Frame):
         Frame.__init__(self, root_notebook)
         self.set_months()
         self.clicked_month = StringVar()
+        self.serve = serve()
         self.expense_columns = {}
-        self.expense_types = expense_types
+        self.expense_types = expense_types # self.serve.get_expense_types()
         self.transactions_table = ttk.Treeview(self,height=31)
 
     def set_months(self):
@@ -26,15 +27,15 @@ class TransactionsFrame(Frame):
                 self.months[month] = '0'+self.months[month]
 
     """ Method that creates de transactions frame"""
-    def create_transaction_frame(self, db_connection, month):
-        self.create_select_month_option_menu(db_connection)
+    def create_transaction_frame(self, month):
+        self.create_select_month_option_menu()
         self.build_transactions_table()
-        self.data_to_transactions_table_by_month(db_connection, month)
+        self.data_to_transactions_table_by_month(month)
         self.pack(side="right", fill=BOTH, expand=1)
         self.transactions_table.pack()
         # self.create_and_pack_buttons()
 
-    def create_select_month_option_menu(self, db_connection):
+    def create_select_month_option_menu(self):
         # months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
         self.clicked_month.set('January')
         self.clicked_month.trace("w", self.callback)
@@ -46,6 +47,7 @@ class TransactionsFrame(Frame):
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
         columns = ["Income", "Note", "Day"]
+        #expense_types = self.serve.get_expense_type_names()
         index = 3
         for expense_type in self.expense_types:
             self.expense_columns[expense_type.get_name()] = index
@@ -65,9 +67,9 @@ class TransactionsFrame(Frame):
             self.transactions_table.heading(column, text=column, anchor=W)
 
     """ Method that adds the database data to the table"""
-    def data_to_transactions_table_by_month(self, db_connection,month):
-        incomes_by_month = data_services.get_incomes_by_month(db_connection, month)
-        expenses_by_month = data_services.get_expenses_by_month(db_connection, month)
+    def data_to_transactions_table_by_month(self, month):
+        incomes_by_month = self.serve.get_incomes_by_month((month,))
+        expenses_by_month = self.serve.get_expenses_by_month((month,))
         expense_type_names = self.get_expense_type_names()
         days = calendar.monthrange(global_constants.CURRENT_YEAR, int(month))[1]
 
@@ -107,13 +109,7 @@ class TransactionsFrame(Frame):
 
                     self.transactions_table.item(row, text="", values=row_with_new_expense)
 
-    def get_expense_name_by_id(self,expense_id):
-        for expense_type in self.expense_types:
-            if expense_type.get_id() == expense_id:
-                return expense_type.get_name()
-        return None
-
-    """ Method that adds the buttons to the transactions table """
+    """ Method that adds the buttons to the transactions table"""
     def create_and_pack_buttons(self):
         new_income_button = Button(self, text="New Income", command="")
         new_expense_button = Button(self, text="New Expense", command="")
@@ -128,21 +124,25 @@ class TransactionsFrame(Frame):
 
         return split
 
+    def get_expense_name_by_id(self,expense_id):
+        for expense_type in self.expense_types:
+            if expense_type.get_id() == expense_id:
+                return expense_type.get_name()
+        return None
+
     def get_expense_type_names(self):
         names = []
         for expense in self.expense_types:
             names.append(expense.get_name())
         return names
 
-    def callback(self, *clicked):
-        db_connection = data_services.get_database_connection()
-        self.update_transactions_table(db_connection)
-        db_connection.close()
+    def callback(self,*clicked):
+        self.update_transactions_table()
 
-    def update_transactions_table(self, db_connection):
+    def update_transactions_table(self):
         self.transactions_table.destroy()
         self.transactions_table = ttk.Treeview(self)
         self.build_transactions_table()
-        self.data_to_transactions_table_by_month(db_connection=db_connection,
-                                                 month=self.months[self.clicked_month.get()])
+        self.data_to_transactions_table_by_month(
+            self.months[self.clicked_month.get()])
         self.transactions_table.pack()
