@@ -1,4 +1,5 @@
 import tkinter as tk
+import ttkbootstrap as ttkboot
 
 from tkinter import ttk
 
@@ -33,10 +34,10 @@ class WindowManager:
     income_types = None
 
     def __init__(self, database_connection):
-        self.root = tk.Tk()
+        self.root = ttkboot.Window(themename=global_constants.THEME, title="Pockets")
         self.db = database_connection
-
-        self.year = "2023"
+        self.ask_for_login()
+        self.year = global_constants.CURRENT_YEAR
         self.load_pockets_and_types()
 
         self.resume_notebook    = ttk.Notebook(self.root)
@@ -50,11 +51,10 @@ class WindowManager:
         self.menu_bar           = tk.Menu(self.root)
         self.create_menu_bar()
 
-        self.ask_for_login()
-
     def ask_for_login(self):
         if global_constants.REQUIRES_LOGIN:
             self.login()
+            self.build_main_frame()
         else:
             self.build_main_frame()
 
@@ -62,7 +62,6 @@ class WindowManager:
         """ Method that creates and shows the popup for the user login."""
         pop_login = PopLogin(self.root, self.db)
         self.root.wait_window(pop_login)
-        self.build_main_frame()
 
     def load_pockets_and_types(self):
         self.pockets = data_services.get_pockets(self.db)

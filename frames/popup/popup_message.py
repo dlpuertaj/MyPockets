@@ -1,4 +1,4 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar
+from tkinter import Toplevel, Button, Label
 
 """ Generic popup for error, alert or any message"""
 class PopupGenericMessage(Toplevel):

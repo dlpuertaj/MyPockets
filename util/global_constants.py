@@ -1,12 +1,12 @@
 # System Messages
-NEED_LOGIN_MESSAGE = "Login to use de application"
+NEED_LOGIN_MESSAGE = "Login to use the application"
 WRONG_USER_OR_PASSWORD = "Wrong user or password"
 AMOUNT_GRATER_THAN_POCKET_AMOUNT = "The amount is greater than what you have in the pocket!"
 SUCCESS_OPERATION = "Success!"
 
 # System Properties
-REQUIRES_LOGIN = False
-CURRENT_YEAR = 2022
+REQUIRES_LOGIN = True
+CURRENT_YEAR = 2023
 FILE_MENU = 'File'
 POCKETS_MENU = 'Pockets'
 CREDIT_CARDS_MENU = 'Credit Cards'
@@ -33,3 +33,6 @@ MONTHLY_TRANSACTIONS_TEXT = 'Monthly Transactions'
 
 NEW_POCKET = 'New Pocket '
 EDIT_POCKETS = 'Edit Pockets'
+
+
+THEME = "superhero"
