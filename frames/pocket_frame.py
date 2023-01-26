@@ -3,7 +3,7 @@ from tkinter import W
 import ttkbootstrap as ttkboot
 
 from frames.popup.pop_transfer_to_pocket import PopTransferToPocket
-from services import data_services, gui_services
+from services import db_services,data_services, gui_services
 
 
 class PocketFrame(ttkboot.Frame):
@@ -49,8 +49,9 @@ class PocketFrame(ttkboot.Frame):
     def load_pockets_to_table(self):
         iid = 0
         for pocket in self.pockets:
-            pocket_parent = self.pockets_table.insert(parent='', index='end', iid=iid, text=pocket.name,
-                                                      values=('Total', pocket.amount))
+            pocket_parent = self.pockets_table.insert(parent='', index='end', iid=iid,
+                                                      text=pocket.name,
+                                                      values=('', '', pocket.amount,''))
             self.load_transactions_to_table(pocket_parent, pocket.get_list())
             iid = iid + 1
 
@@ -74,7 +75,7 @@ class PocketFrame(ttkboot.Frame):
             self.update_pockets_table(db_connection)
 
     def update_pockets_table(self, db_connection):
-        self.set_pockets(data_services.get_pockets(db_connection))
+        self.set_pockets(db_services.get_pockets(db_connection))
         self.pockets_table.destroy()
         self.pockets_table = ttkboot.Treeview(self)
         self.build_pocket_table()
