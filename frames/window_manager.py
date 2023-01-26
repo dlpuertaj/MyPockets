@@ -10,7 +10,7 @@ from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
-from services import data_services
+from services import db_services
 from services import gui_services
 
 
@@ -63,13 +63,13 @@ class WindowManager:
         self.build_main_frame()
 
     def load_pockets_and_types(self):
-        self.pockets = data_services.get_pockets(self.db)
-        self.income_types = data_services.get_income_types(self.db)
-        self.expense_types = data_services.get_expense_types(self.db)
+        self.pockets = db_services.get_pockets(self.db)
+        self.income_types = db_services.get_income_types(self.db)
+        self.expense_types = db_services.get_expense_types(self.db)
 
     def load_types(self):
-        self.income_types = data_services.get_income_types(self.db)
-        self.expense_types = data_services.get_expense_types(self.db)
+        self.income_types = db_services.get_income_types(self.db)
+        self.expense_types = db_services.get_expense_types(self.db)
 
     def build_main_frame(self):
         """ Method that calls the creation of the pocket frame and the resume frame.
@@ -148,7 +148,7 @@ class WindowManager:
         self.update_pockets_table()
 
     def update_pockets_table(self):
-        self.pockets = data_services.get_pockets(self.db)
+        self.pockets = db_services.get_pockets(self.db)
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table(self.db)
 

@@ -1,4 +1,4 @@
-from tkinter import NO, W
+from tkinter import W
 
 import ttkbootstrap as ttkboot
 
@@ -32,22 +32,36 @@ class PocketFrame(ttkboot.Frame):
 
     """ Method that builds the pocket table with the headers and columns"""
     def build_pocket_table(self):
-        self.pockets_table['columns'] = ("Event", "Amount")
+        self.pockets_table['columns'] = ("Source","Event", "Amount", "Date")
 
         self.pockets_table.heading("#0", text="Pocket", anchor=W)
-        self.pockets_table.heading("Event", text="Name", anchor=W)
+        self.pockets_table.heading("Source", text="Source", anchor=W)
+        self.pockets_table.heading("Event", text="Event", anchor=W)
         self.pockets_table.heading("Amount", text="Amount", anchor=W)
+        self.pockets_table.heading("Date", text="Date", anchor=W)
 
+        self.pockets_table.column("Source", anchor=W, width=100)
         self.pockets_table.column("Event", anchor=W, width=100)
         self.pockets_table.column("Amount", anchor=W, width=100)
+        self.pockets_table.column("Date", anchor=W, width=100)
 
     """ Method that query the data of all the pockets from the database and inserts them in the table"""
     def load_pockets_to_table(self):
         iid = 0
         for pocket in self.pockets:
-            self.pockets_table.insert(parent='', index='end', iid=iid, text=pocket.name,
-                                      values=('Total', pocket.amount))
+            pocket_parent = self.pockets_table.insert(parent='', index='end', iid=iid, text=pocket.name,
+                                                      values=('Total', pocket.amount))
+            self.load_transactions_to_table(pocket_parent, pocket.get_list())
             iid = iid + 1
+
+    def load_transactions_to_table(self, pocket_parent, transaction_list):
+        for transaction in transaction_list:
+            source_pocket = data_services.get_name_from_pocket_id(self.pockets,transaction.source_pocket_id)
+            event_type = data_services.get_event_type_from_pocket_transaction(transaction)
+            self.pockets_table.insert(pocket_parent, "end", text="", values=(source_pocket,
+                                                                             event_type,
+                                                                             transaction.amount,
+                                                                             transaction.date))
 
     def transfer_to_pocket(self,db_connection):
 

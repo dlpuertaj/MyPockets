@@ -2,7 +2,7 @@ from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
 from tkinter import ttk
 
 from util import global_constants
-from services import data_services
+from services import db_services
 
 import calendar as calendar
 
@@ -66,8 +66,8 @@ class TransactionsFrame(Frame):
 
     """ Method that adds the database data to the table"""
     def data_to_transactions_table_by_month(self, db_connection,month):
-        incomes_by_month = data_services.get_incomes_by_month(db_connection, month)
-        expenses_by_month = data_services.get_expenses_by_month(db_connection, month)
+        incomes_by_month = db_services.get_incomes_by_month(db_connection, month)
+        expenses_by_month = db_services.get_expenses_by_month(db_connection, month)
         expense_type_names = self.get_expense_type_names()
         days = calendar.monthrange(global_constants.CURRENT_YEAR, int(month))[1]
 
@@ -135,7 +135,7 @@ class TransactionsFrame(Frame):
         return names
 
     def callback(self, *clicked):
-        db_connection = data_services.get_database_connection()
+        db_connection = db_services.get_database_connection()
         self.update_transactions_table(db_connection)
         db_connection.close()
 

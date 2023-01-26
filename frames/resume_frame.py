@@ -2,7 +2,7 @@ from tkinter import Frame, W, NO, BOTH, Button, Label
 from tkinter import ttk
 
 from frames.popup.pop_new_type import PopNewType
-from services import data_services
+from services import db_services
 
 import calendar as calendar
 
@@ -66,8 +66,8 @@ class ResumeFrame(Frame):
     """ Method that adds the database data to the resume table"""
 
     def load_resume_data_to_table(self, db_connection, resume_table, month, month_label):
-        resume_data = data_services.get_resume_data_by_month(db_connection, month)
-        payroll = data_services.get_payroll_by_month(db_connection, month)
+        resume_data = db_services.get_resume_data_by_month(db_connection, month)
+        payroll = db_services.get_payroll_by_month(db_connection, month)
 
         amount_for_table = []
         percent_for_table = []
@@ -111,7 +111,7 @@ class ResumeFrame(Frame):
 
     def update_resume_table(self, db_connection):
         self.clear_tables_and_labels()
-        self.expense_types = data_services.get_expense_types(db_connection)
+        self.expense_types = db_services.get_expense_types(db_connection)
         if len(self.expense_types) > 0:
             self.no_expense_types_label.destroy()
             self.new_expense_type_button.destroy()

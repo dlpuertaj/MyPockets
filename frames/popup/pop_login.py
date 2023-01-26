@@ -4,7 +4,7 @@ from tkinter import Toplevel, Label, Entry, Button
 from ttkbootstrap import PRIMARY, DANGER
 
 from util import global_constants as glob_const
-from services import data_services
+from services import db_services
 
 class PopLogin(ttkboot.Toplevel):
     LARGE_FONT = ("Verdana", 12)

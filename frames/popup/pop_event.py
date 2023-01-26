@@ -2,7 +2,7 @@ from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from datetime import date
 from util import global_constants
 from frames.popup.popup_message import PopupGenericMessage
-from services import data_services, gui_services
+from services import db_services, gui_services
 
 
 class PopEvent(Toplevel):

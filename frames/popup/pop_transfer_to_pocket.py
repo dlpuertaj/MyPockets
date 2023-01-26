@@ -1,5 +1,5 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
-from services import data_services, gui_services
+from services import db_services, gui_services
 
 class PopTransferToPocket(Toplevel):
     """ Class that creates the popup for the transfer of amounts between pockets"""
