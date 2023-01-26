@@ -1,5 +1,6 @@
-from tkinter import *
-from tkinter import ttk
+from tkinter import NO, W
+
+import ttkbootstrap as ttkboot
 
 from frames.popup.pop_transfer_to_pocket import PopTransferToPocket
 from services import data_services, gui_services
@@ -9,9 +10,9 @@ class PocketFrame(ttkboot.Frame):
 
     """ Initialization method that instantiates the services class and the pocket table"""
     def __init__(self, root,pockets):
-        Frame.__init__(self, root)
+        ttkboot.Frame.__init__(self, root)
         self.root = root
-        self.pockets_table = ttk.Treeview(self)  # tabla
+        self.pockets_table = ttkboot.Treeview(self, bootstyle="primary")  # tabla
         self.pockets = pockets
 
     """ Method that creates and shows the pocket frame with the database data"""
@@ -19,34 +20,33 @@ class PocketFrame(ttkboot.Frame):
         self.add_transfer_button(db_connection)
         self.build_pocket_table()
         self.load_pockets_to_table()
-        self.pack(side="left", fill=BOTH, expand=1)
+        self.pack(side="left", expand=1)
         self.pockets_table.pack()
 
     """ Method that creates the button that creates a new money transfer to a pocket"""
     def add_transfer_button(self, db_connection):
-        add_to_pocket_button = Button(self,
-                                      text="Transfer to Pocket",
-                                      command=lambda: self.transfer_to_pocket(db_connection))
+        add_to_pocket_button = ttkboot.Button(self, text="Transfer to Pocket",
+                                              bootstyle="success",
+                                              command=lambda: self.transfer_to_pocket(db_connection))
         add_to_pocket_button.pack()
 
     """ Method that builds the pocket table with the headers and columns"""
     def build_pocket_table(self):
-        self.pockets_table['columns'] = ("Name", "Amount")
-        self.pockets_table.heading("0", text="", anchor=W)
-        self.pockets_table.column("#0", width=0, stretch=NO)
+        self.pockets_table['columns'] = ("Event", "Amount")
 
-        self.pockets_table.column("Name", anchor=W, width=100)
-        self.pockets_table.column("Amount", anchor=W, width=100)
-
-        self.pockets_table.heading("Name", text="Name", anchor=W)
+        self.pockets_table.heading("#0", text="Pocket", anchor=W)
+        self.pockets_table.heading("Event", text="Name", anchor=W)
         self.pockets_table.heading("Amount", text="Amount", anchor=W)
+
+        self.pockets_table.column("Event", anchor=W, width=100)
+        self.pockets_table.column("Amount", anchor=W, width=100)
 
     """ Method that query the data of all the pockets from the database and inserts them in the table"""
     def load_pockets_to_table(self):
         iid = 0
         for pocket in self.pockets:
-            self.pockets_table.insert(parent='', index='end', iid=iid, text="Parent",
-                                      values=(pocket.name, pocket.amount))
+            self.pockets_table.insert(parent='', index='end', iid=iid, text=pocket.name,
+                                      values=('Total', pocket.amount))
             iid = iid + 1
 
     def transfer_to_pocket(self,db_connection):
