@@ -1,8 +1,7 @@
 from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
 from tkinter import ttk
 
-from util import global_constants
-from services import db_services
+from services import db_services, global_constants
 
 import calendar as calendar
 

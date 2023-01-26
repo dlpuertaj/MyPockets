@@ -3,7 +3,7 @@ from tkinter import W
 import ttkbootstrap as ttkboot
 
 from frames.popup.pop_transfer_to_pocket import PopTransferToPocket
-from services import db_services,data_services, gui_services
+from services import db_services,util_services, gui_services
 
 
 class PocketFrame(ttkboot.Frame):
@@ -57,8 +57,8 @@ class PocketFrame(ttkboot.Frame):
 
     def load_transactions_to_table(self, pocket_parent, transaction_list):
         for transaction in transaction_list:
-            source_pocket = data_services.get_name_from_pocket_id(self.pockets,transaction.source_pocket_id)
-            event_type = data_services.get_event_type_from_pocket_transaction(transaction)
+            source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.source_pocket_id)
+            event_type = util_services.get_event_type_from_pocket_transaction(transaction)
             self.pockets_table.insert(pocket_parent, "end", text="", values=(source_pocket,
                                                                              event_type,
                                                                              transaction.amount,

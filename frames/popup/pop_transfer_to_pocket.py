@@ -59,19 +59,19 @@ class PopTransferToPocket(Toplevel):
 
                 new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
                 new_source_amount = self.calc_new_amount(amount_in_source, int(amount_being_transferred), True)
-                data_services.update_pocket_amount(db_connection, source, new_source_amount)
-                data_services.update_pocket_amount(db_connection, target, new_target_amount)
+                db_services.update_pocket_amount(db_connection, source, new_source_amount)
+                db_services.update_pocket_amount(db_connection, target, new_target_amount)
 
                 gui_services.show_popup_message(self.root,"Success!")
-                self.pockets = data_services.get_pockets(db_connection)
+                self.pockets = db_services.get_pockets(db_connection)
             else:
                 gui_services.show_popup_message(self.root, "Amount is not valid!")
         else:
             amount_in_target = self.get_amount_from_pocket(target)
             new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
 
-            data_services.update_pocket_amount(db_connection, target, new_target_amount)
-            self.pockets = data_services.get_pockets(db_connection)
+            db_services.update_pocket_amount(db_connection, target, new_target_amount)
+            self.pockets = db_services.get_pockets(db_connection)
             gui_services.show_popup_message(self.root,"Success!")
 
     @staticmethod

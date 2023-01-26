@@ -1,10 +1,10 @@
 import ttkbootstrap as ttkboot
-from tkinter import Toplevel, Label, Entry, Button
+from tkinter import Toplevel
 
 from ttkbootstrap import PRIMARY, DANGER
 
-from util import global_constants as glob_const
-from services import db_services
+from services import db_services, global_constants as glob_const
+
 
 class PopLogin(ttkboot.Toplevel):
     LARGE_FONT = ("Verdana", 12)
@@ -44,7 +44,7 @@ class PopLogin(ttkboot.Toplevel):
 
     """ Method that executes the validation of the information entered by the user for the login"""
     def login(self,username,password):
-        user_found = data_services.verify_user_for_login(self.db_connection, username, password)
+        user_found = db_services.verify_user_for_login(self.db_connection, username, password)
         if user_found is not None:
             self.grab_release()
             self.destroy()

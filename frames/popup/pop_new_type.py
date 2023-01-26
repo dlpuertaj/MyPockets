@@ -41,7 +41,7 @@ class PopNewType(Toplevel):
 
     def save_type(self,db_connection, name, note):
         if self.expense_or_income:
-            data_services.insert_expense_type(db_connection, name,note)
+            db_services.insert_expense_type(db_connection, name,note)
         else:
-            data_services.insert_income_type(db_connection, name,note)
+            db_services.insert_income_type(db_connection, name,note)
         gui_services.show_popup_message(self.root, "Success!")

@@ -1,6 +1,5 @@
 import ttkbootstrap as ttkboot
 
-from util import global_constants
 from entities.expense_event import ExpenseEvent
 from entities.income_event import IncomeEvent
 from frames.pocket_frame import PocketFrame
@@ -10,7 +9,7 @@ from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
-from services import db_services
+from services import db_services, global_constants
 from services import gui_services
 
 

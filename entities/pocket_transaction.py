@@ -6,4 +6,3 @@ class PocketTransaction:
         self.expense_type_id = expense_type_id
         self.amount = amount
         self.date = date
-
