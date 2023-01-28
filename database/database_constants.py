@@ -85,6 +85,6 @@ DELETE_POCKET_BY_NAME = """DELETE FROM pocket WHERE name = ?"""
 
 """ TRANSACTIONS """
 INSERT_TRANSACTION = """INSERT INTO pocket_transaction 
-(pocket_id, pocket_source_id, income_type_id, expense_type_id, amount, transaction_date) VALUES (?,?,?,?,?,?)"""
+(pocket_id, target_pocket_id, amount, transaction_date) VALUES (?,?,?,?)"""
 
-SELECT_TRANSACTIONS_BY_POCKET_ID = """SELECT * FROM pocket_transaction WHERE pocket_id = ?"""
+SELECT_TRANSACTIONS_BY_POCKET_ID = """SELECT * FROM pocket_transaction WHERE pocket_id = ? OR target_pocket_id = ?"""

@@ -55,10 +55,10 @@ class PocketFrame(ttkboot.Frame):
 
     def load_transactions_to_table(self, pocket_parent, transaction_list):
         for transaction in transaction_list:
-            source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.source_pocket_id)
-            event_type = util_services.get_event_type_from_pocket_transaction(transaction)
+            source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.pocket_id)
+            target_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.target_pocket_id)
             self.pockets_table.insert(pocket_parent, "end", text="", values=(source_pocket,
-                                                                             event_type,
+                                                                             target_pocket,
                                                                              transaction.amount,
                                                                              transaction.date))
 
