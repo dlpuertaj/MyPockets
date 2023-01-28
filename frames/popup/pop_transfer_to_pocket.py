@@ -64,7 +64,7 @@ class PopTransferToPocket(Toplevel):
                 db_services.save_pocket_transaction(source,target, amount_being_transferred,'DD-MM-AAAA')
 
                 gui_services.show_popup_message(self.root,"Success!")
-                self.pockets = db_services.get_pockets(db_connection)
+                self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
             else:
                 gui_services.show_popup_message(self.root, "Make sure the amount entered is valid")
         else:
@@ -72,7 +72,7 @@ class PopTransferToPocket(Toplevel):
             new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
 
             db_services.update_pocket_amount(db_connection, target, new_target_amount)
-            self.pockets = db_services.get_pockets(db_connection)
+            self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
             gui_services.show_popup_message(self.root,"Success!")
 
     @staticmethod
