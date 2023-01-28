@@ -74,7 +74,7 @@ class PopPocket(ttkboot.Toplevel):
             if pocket_name != "":
                 if db_services.get_pocket_by_name(db_connection, pocket_name) is None:
 
-                    if self.new_pocket:
+                    if self.is_new_pocket:
                         db_services.insert_pocket(db_connection, pocket_name, pocket_amount)
                     else:
                         if self.clicked_pocket_id is None:
