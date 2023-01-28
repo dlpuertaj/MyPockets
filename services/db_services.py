@@ -6,6 +6,7 @@ from entities.expense_event import ExpenseEvent
 from entities.generic_type import GenericType
 from entities.income_event import IncomeEvent
 from entities.pocket import Pocket
+from entities.pocket_transaction import PocketTransaction
 
 
 def get_database_connection():
@@ -16,7 +17,6 @@ def get_database_connection():
         print(e)
 
     return connection
-
 
 def execute_query(db_connection, query, parameters, multiple_results):
     result = None
@@ -74,6 +74,37 @@ def delete_pocket(db_connection, pocket_name):
     result = execute_query(db_connection, db_constants.DELETE_POCKET_BY_NAME,(pocket_name,),False)
     if result is not None:
         return result
+    else:
+        return None
+
+""" TRANSACTIONS """
+
+def insert_transaction(db_connection, pocket_id, source_pocket_id, income_type_id, expense_type_id, amount, date):
+    result = execute_query(db_connection, db_constants.INSERT_TRANSACTION, (pocket_id,
+                                                                            source_pocket_id,
+                                                                            income_type_id,
+                                                                            expense_type_id,
+                                                                            amount, date),
+                           True)
+    if result is not None:
+        return result
+    else:
+        return None
+
+def get_transactions_by_pocket_id(db_connection, pocket_id):
+    result_set = execute_query(db_connection, db_constants.SELECT_TRANSACTIONS_BY_POCKET_ID, (pocket_id,), True)
+    if result_set is not None:
+        transactions = []
+        for result in result_set:
+            transaction = PocketTransaction(pocket_id=result[0],
+                                            source_pocket_id=result[1],
+                                            income_type_id=result[2],
+                                            expense_type_id=result[3],
+                                            amount=result[4],
+                                            transaction_date=result[5])
+            transactions.append(transaction)
+
+        return transactions
     else:
         return None
 

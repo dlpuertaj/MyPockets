@@ -5,4 +5,4 @@ class PocketTransaction:
         self.income_type_id = income_type_id
         self.expense_type_id = expense_type_id
         self.amount = amount
-        self.date = date
+        self.transaction_date = date
