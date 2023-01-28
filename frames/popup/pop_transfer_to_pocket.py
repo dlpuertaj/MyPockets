@@ -26,11 +26,10 @@ class PopTransferToPocket(Toplevel):
         transfer_amount_entry = Entry(self)
 
         transfer_button = Button(self, text="Transfer",
-                                 command=lambda: self.save_transfer(
-                                     db_connection,
-                                     clicked_source_pocket.get(),
-                                     clicked_target_pocket.get(),
-                                     transfer_amount_entry.get()))
+                                 command=lambda: self.save_transfer(db_connection,
+                                                                    clicked_source_pocket.get(),
+                                                                    clicked_target_pocket.get(),
+                                                                    transfer_amount_entry.get()))
 
         close_button = Button(self, text="Close", command=self.destroy)
 
@@ -62,10 +61,12 @@ class PopTransferToPocket(Toplevel):
                 db_services.update_pocket_amount(db_connection, source, new_source_amount)
                 db_services.update_pocket_amount(db_connection, target, new_target_amount)
 
+                db_services.save_pocket_transaction(source,target, amount_being_transferred,'DD-MM-AAAA')
+
                 gui_services.show_popup_message(self.root,"Success!")
                 self.pockets = db_services.get_pockets(db_connection)
             else:
-                gui_services.show_popup_message(self.root, "Amount is not valid!")
+                gui_services.show_popup_message(self.root, "Make sure the amount entered is valid")
         else:
             amount_in_target = self.get_amount_from_pocket(target)
             new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)

@@ -79,11 +79,9 @@ def delete_pocket(db_connection, pocket_name):
 
 """ TRANSACTIONS """
 
-def insert_transaction(db_connection, pocket_id, source_pocket_id, income_type_id, expense_type_id, amount, date):
+def insert_transaction(db_connection, pocket_id, target_pocket_id, amount, date):
     result = execute_query(db_connection, db_constants.INSERT_TRANSACTION, (pocket_id,
-                                                                            source_pocket_id,
-                                                                            income_type_id,
-                                                                            expense_type_id,
+                                                                            target_pocket_id,
                                                                             amount, date),
                            True)
     if result is not None:
@@ -97,9 +95,7 @@ def get_transactions_by_pocket_id(db_connection, pocket_id):
         transactions = []
         for result in result_set:
             transaction = PocketTransaction(pocket_id=result[0],
-                                            source_pocket_id=result[1],
-                                            income_type_id=result[2],
-                                            expense_type_id=result[3],
+                                            target_pocket_id=result[1],
                                             amount=result[4],
                                             transaction_date=result[5])
             transactions.append(transaction)

@@ -1,8 +1,6 @@
 class PocketTransaction:
-    def __init__(self, pocket_id, source_pocket_id, income_type_id, expense_type_id, amount, date):
+    def __init__(self, pocket_id, target_pocket_id, amount, transaction_date):
         self.pocket_id = pocket_id
-        self.source_pocket_id = source_pocket_id
-        self.income_type_id = income_type_id
-        self.expense_type_id = expense_type_id
+        self.target_pocket_id = target_pocket_id
         self.amount = amount
-        self.transaction_date = date
+        self.transaction_date = transaction_date
