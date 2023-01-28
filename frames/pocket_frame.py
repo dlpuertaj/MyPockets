@@ -32,16 +32,14 @@ class PocketFrame(ttkboot.Frame):
 
     """ Method that builds the pocket table with the headers and columns"""
     def build_pocket_table(self):
-        self.pockets_table['columns'] = ("Source","Event", "Amount", "Date")
+        self.pockets_table['columns'] = ("Target", "Amount", "Date")
 
         self.pockets_table.heading("#0", text="Pocket", anchor=W)
-        self.pockets_table.heading("Source", text="Source", anchor=W)
-        self.pockets_table.heading("Event", text="Event", anchor=W)
+        self.pockets_table.heading("Target", text="Target", anchor=W)
         self.pockets_table.heading("Amount", text="Amount", anchor=W)
         self.pockets_table.heading("Date", text="Date", anchor=W)
 
-        self.pockets_table.column("Source", anchor=W, width=100)
-        self.pockets_table.column("Event", anchor=W, width=100)
+        self.pockets_table.column("Target", anchor=W, width=100)
         self.pockets_table.column("Amount", anchor=W, width=100)
         self.pockets_table.column("Date", anchor=W, width=100)
 

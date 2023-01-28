@@ -1,5 +1,6 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from services import db_services, gui_services
+from entities.pocket_transaction import PocketTransaction
 
 class PopTransferToPocket(Toplevel):
     """ Class that creates the popup for the transfer of amounts between pockets"""
@@ -61,18 +62,31 @@ class PopTransferToPocket(Toplevel):
                 db_services.update_pocket_amount(db_connection, source, new_source_amount)
                 db_services.update_pocket_amount(db_connection, target, new_target_amount)
 
-                db_services.save_pocket_transaction(source,target, amount_being_transferred,'DD-MM-AAAA')
+                source_pocket = self.get_pocket_by_name(source)
+                target_pocket = self.get_pocket_by_name(target)
+                transaction = PocketTransaction(source_pocket.get_id(), target_pocket.get_id(),
+                                                amount_being_transferred, 'DD-MM-AAAA')
+                db_services.insert_transaction(db_connection,transaction)
 
                 gui_services.show_popup_message(self.root,"Success!")
-                self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
+                source_pocket.add_transaction(transaction)
+                #self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
             else:
                 gui_services.show_popup_message(self.root, "Make sure the amount entered is valid")
         else:
             amount_in_target = self.get_amount_from_pocket(target)
             new_target_amount = self.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
 
+            source_pocket = self.get_pocket_by_name(source)
+            target_pocket = self.get_pocket_by_name(target)
+            transaction = PocketTransaction(source_pocket.get_id(), target_pocket.get_id(),
+                                            amount_being_transferred, 'DD-MM-AAAA')
+
             db_services.update_pocket_amount(db_connection, target, new_target_amount)
-            self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
+            source_pocket.add_transaction(transaction)
+
+            source_pocket.add_transaction(transaction)
+            #self.pockets = db_services.get_pockets(db_connection) # TODO: add transaction to to pocket object
             gui_services.show_popup_message(self.root,"Success!")
 
     @staticmethod
@@ -97,7 +111,7 @@ class PopTransferToPocket(Toplevel):
     def get_amount_from_pocket(self, pocket):
         return int(self.get_pocket_by_name(pocket).amount)
 
-    def get_pocket_by_name(self, pocket_name):
+    def get_pocket_by_name(self, pocket_name): # TODO: Move this to util_services
         for pocket in self.pockets:
             if pocket_name == pocket.name:
                 return pocket

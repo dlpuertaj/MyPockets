@@ -55,7 +55,6 @@ def update_pocket(db_connection, pocket_name, pocket_id):
     else:
         return None
 
-
 def update_pocket_amount(db_connection, pocket,amount):
     result = execute_query(db_connection, db_constants.UPDATE_POCKET_AMOUNT_BY_NAME,(amount,pocket),False)
     if result is not None:
@@ -77,12 +76,13 @@ def delete_pocket(db_connection, pocket_name):
     else:
         return None
 
-""" TRANSACTIONS """
 
-def insert_transaction(db_connection, pocket_id, target_pocket_id, amount, date):
-    result = execute_query(db_connection, db_constants.INSERT_TRANSACTION, (pocket_id,
-                                                                            target_pocket_id,
-                                                                            amount, date),
+""" TRANSACTIONS """
+def insert_transaction(db_connection, transaction):
+    result = execute_query(db_connection, db_constants.INSERT_TRANSACTION, (transaction.pocket_id,
+                                                                            transaction.target_pocket_id,
+                                                                            transaction.amount,
+                                                                            transaction.transaction_date),
                            True)
     if result is not None:
         return result
