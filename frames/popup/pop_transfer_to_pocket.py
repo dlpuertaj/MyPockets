@@ -1,6 +1,7 @@
 from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
 from services import db_services, gui_services, util_services
 from entities.pocket_transaction import PocketTransaction
+from datetime import date
 
 class PopTransferToPocket(Toplevel):
     """ Class that creates the popup for the transfer of amounts between pockets"""
@@ -87,6 +88,7 @@ class PopTransferToPocket(Toplevel):
             gui_services.show_popup_message(self.root,"Success!")
 
     def save_transfer_gpt(self, db_connection, source, target, amount_being_transferred):
+        today = date.today()
         if source == target:
             gui_services.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
         elif source != self.EXTERNAL_SOURCE:
@@ -101,7 +103,7 @@ class PopTransferToPocket(Toplevel):
                 db_services.update_pocket_amount(db_connection, target, new_target_amount)
 
                 transaction = PocketTransaction(source_pocket.get_id(), target_pocket.get_id(),
-                                                amount_being_transferred, 'DD-MM-AAAA')
+                                                amount_being_transferred, today)
                 db_services.insert_transaction(db_connection, transaction)
 
                 gui_services.show_popup_message(self.root, "Success!")
@@ -114,7 +116,7 @@ class PopTransferToPocket(Toplevel):
                                                               False)
             db_services.update_pocket_amount(db_connection, target, new_target_amount)
 
-            transaction = PocketTransaction(None, target_pocket.get_id(), amount_being_transferred, '2023-01-05')
+            transaction = PocketTransaction(None, target_pocket.get_id(), amount_being_transferred, today)
             target_pocket.add_transaction(transaction)
             db_services.insert_transaction(db_connection, transaction)
             gui_services.show_popup_message(self.root, "Success!")
