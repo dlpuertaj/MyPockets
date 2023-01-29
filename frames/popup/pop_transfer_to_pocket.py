@@ -48,45 +48,6 @@ class PopTransferToPocket(Toplevel):
         dropdown = OptionMenu(self, clicked, *options)
         dropdown.grid(column=1,row=grid_row,sticky=(E,W))
 
-    # TODO: optimize this code using try-except and much less if conditions
-    def save_transfer(self, db_connection, source, target, amount_being_transferred):
-        if source == target:
-            gui_services.show_popup_message(self.root, "Source pocket and target pocket cannot be the same!")
-        elif source != self.EXTERNAL_SOURCE:
-            amount_in_source = self.get_amount_from_pocket(source)
-            amount_in_target = self.get_amount_from_pocket(target)
-            if util_services.is_amount_valid(amount_in_source, amount_being_transferred):
-
-                new_target_amount = util_services.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
-                new_source_amount = util_services.calc_new_amount(amount_in_source, int(amount_being_transferred), True)
-                db_services.update_pocket_amount(db_connection, source, new_source_amount)
-                db_services.update_pocket_amount(db_connection, target, new_target_amount)
-
-                source_pocket = util_services.get_pocket_by_name(self.pockets, source)
-                target_pocket = util_services.get_pocket_by_name(self.pockets, target)
-                transaction = PocketTransaction(source_pocket.get_id(), target_pocket.get_id(),
-                                                amount_being_transferred, 'DD-MM-AAAA')
-                db_services.insert_transaction(db_connection,transaction)
-
-                gui_services.show_popup_message(self.root,"Success!")
-                source_pocket.add_transaction(transaction)
-            else:
-                gui_services.show_popup_message(self.root, "Make sure the amount entered is valid")
-        else:
-            amount_in_target = self.get_amount_from_pocket(target)
-            new_target_amount = util_services.calc_new_amount(amount_in_target, int(amount_being_transferred), False)
-
-            source_pocket = util_services.get_pocket_by_name(self.pockets,source)
-            target_pocket = util_services.get_pocket_by_name(self.pockets,target)
-            transaction = PocketTransaction(source_pocket.get_id(), target_pocket.get_id(),
-                                            amount_being_transferred, 'DD-MM-AAAA')
-
-            db_services.update_pocket_amount(db_connection, target, new_target_amount)
-            source_pocket.add_transaction(transaction)
-
-            source_pocket.add_transaction(transaction)
-            gui_services.show_popup_message(self.root,"Success!")
-
     def save_transfer_gpt(self, db_connection, source, target, amount_being_transferred):
         today = date.today()
         if source == target:
