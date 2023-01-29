@@ -44,7 +44,10 @@ def get_pockets(database_connection):
             transactions_result = execute_query(database_connection,
                                                 db_constants.SELECT_TRANSACTIONS_BY_POCKET_ID,
                                                 (pocket_instance.get_id(),pocket_instance.get_id()), True)
-            pocket_instance.transaction_list = transactions_result
+            for transaction in transactions_result:
+                transaction_inst = PocketTransaction('External Source' if transaction[0] is None else transaction[0],
+                                                     transaction[1], transaction[2], transaction[3])
+                pocket_instance.add_transaction(transaction_inst)
             pockets.append(pocket_instance)
         return pockets
     else:

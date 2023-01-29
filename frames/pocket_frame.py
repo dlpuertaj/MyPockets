@@ -32,13 +32,15 @@ class PocketFrame(ttkboot.Frame):
 
     """ Method that builds the pocket table with the headers and columns"""
     def build_pocket_table(self):
-        self.pockets_table['columns'] = ("Target", "Amount", "Date")
+        self.pockets_table['columns'] = ("Total","Target", "Amount", "Date")
 
         self.pockets_table.heading("#0", text="Pocket", anchor=W)
+        self.pockets_table.heading("Total", text="Total", anchor=W)
         self.pockets_table.heading("Target", text="Target", anchor=W)
         self.pockets_table.heading("Amount", text="Amount", anchor=W)
         self.pockets_table.heading("Date", text="Date", anchor=W)
 
+        self.pockets_table.column("Total", anchor=W, width=100)
         self.pockets_table.column("Target", anchor=W, width=100)
         self.pockets_table.column("Amount", anchor=W, width=100)
         self.pockets_table.column("Date", anchor=W, width=100)
@@ -49,18 +51,18 @@ class PocketFrame(ttkboot.Frame):
         for pocket in self.pockets:
             pocket_parent = self.pockets_table.insert(parent='', index='end', iid=iid,
                                                       text=pocket.name,
-                                                      values=('', '', pocket.amount,''))
+                                                      values=(pocket.amount, '', '', ''))
             self.load_transactions_to_table(pocket_parent, pocket.get_list())
             iid = iid + 1
 
     def load_transactions_to_table(self, pocket_parent, transaction_list):
         for transaction in transaction_list:
-            source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.pocket_id)
+            #source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.pocket_id)
             target_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.target_pocket_id)
-            self.pockets_table.insert(pocket_parent, "end", text="", values=(source_pocket,
+            self.pockets_table.insert(pocket_parent, "end", text="", values=('',
                                                                              target_pocket,
                                                                              transaction.amount,
-                                                                             transaction.date))
+                                                                             transaction.transaction_date))
 
     def transfer_to_pocket(self,db_connection):
 
