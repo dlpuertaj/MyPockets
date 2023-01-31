@@ -115,8 +115,8 @@ class WindowManager:
 
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
-    def create_type(self, expense_or_income):
-        pop_new_type = PopNewType(self.root, expense_or_income)
+    def create_type(self, is_expense):
+        pop_new_type = PopNewType(self.root, is_expense)
         pop_new_type.create_and_show_popup(self.db)
         self.root.wait_window(pop_new_type)
         self.load_types()
