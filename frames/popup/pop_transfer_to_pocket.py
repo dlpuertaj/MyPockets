@@ -1,13 +1,14 @@
-from tkinter import Toplevel, Button, Label, Entry, OptionMenu, StringVar, E, W
+import ttkbootstrap as ttkboot
+from tkinter import OptionMenu, E, W, RIGHT, LEFT
 from services import db_services, gui_services, util_services
 from entities.pocket_transaction import PocketTransaction
 from datetime import date
 
-class PopTransferToPocket(Toplevel):
+class PopTransferToPocket(ttkboot.Toplevel):
     """ Class that creates the popup for the transfer of amounts between pockets"""
 
     def __init__(self, root, pockets):
-        Toplevel.__init__(self, root)
+        ttkboot.Toplevel.__init__(self, root)
         self.root = root
         self.grab_set()
         self.pockets = pockets
@@ -18,35 +19,35 @@ class PopTransferToPocket(Toplevel):
         for pocket in self.pockets:
             pocket_options.append(pocket.name)
 
-        clicked_source_pocket = StringVar()
+        clicked_source_pocket = ttkboot.StringVar()
         self.add_select_dropdown(pocket_options, clicked_source_pocket, "From: ",0)
 
-        clicked_target_pocket = StringVar()
+        clicked_target_pocket = ttkboot.StringVar()
         self.add_select_dropdown(pocket_options[1:], clicked_target_pocket, "To: ",1)
 
-        transfer_amount_label = Label(self, text="Amount: ")
-        transfer_amount_entry = Entry(self)
+        transfer_amount_label = ttkboot.Label(self, text="Amount: ")
+        transfer_amount_entry = ttkboot.Entry(self)
 
-        transfer_button = Button(self, text="Transfer",
-                                 command=lambda: self.save_transfer_gpt(db_connection,
-                                                                        clicked_source_pocket.get(),
-                                                                        clicked_target_pocket.get(),
-                                                                        transfer_amount_entry.get()))
+        transfer_button = ttkboot.Button(self, text="Transfer", width=10,
+                                         command=lambda: self.save_transfer_gpt(db_connection,
+                                                                                clicked_source_pocket.get(),
+                                                                                clicked_target_pocket.get(),
+                                                                                transfer_amount_entry.get()))
 
-        close_button = Button(self, text="Close", command=self.destroy)
+        close_button = ttkboot.Button(self, text="Close", width=10, command=self.destroy, bootstyle='danger')
 
-        transfer_amount_label.grid(column=0,row=2,sticky=E)
-        transfer_amount_entry.grid(column=1,row=2,sticky=E)
+        transfer_amount_label.grid(column=0,row=2,padx=5,pady=5)
+        transfer_amount_entry.grid(column=1,row=2,padx=5,pady=5)
 
-        transfer_button.grid(column=0,row=3,sticky=(E,W))
-        close_button.grid(column=1,row=3,sticky=(E,W))
+        transfer_button.grid(column=0,row=3,padx=5,pady=5,sticky=W)
+        close_button.grid(column=1,row=3,padx=5,pady=5,sticky=E)
 
     def add_select_dropdown(self, options, clicked, label,grid_row):
         clicked.set(options[0])
-        type_label = Label(self, text=label)
-        type_label.grid(column=0,row=grid_row,sticky=(E,W))
-        dropdown = OptionMenu(self, clicked, *options)
-        dropdown.grid(column=1,row=grid_row,sticky=(E,W))
+        type_label = ttkboot.Label(self, text=label)
+        type_label.grid(column=0,row=grid_row,padx=5,pady=5)
+        dropdown = ttkboot.Combobox(self, textvariable=clicked, values=options)
+        dropdown.grid(column=1,row=grid_row,padx=5,pady=5)
 
     def save_transfer_gpt(self, db_connection, source, target, amount_being_transferred):
         today = date.today()

@@ -57,7 +57,6 @@ class PocketFrame(ttkboot.Frame):
 
     def load_transactions_to_table(self, pocket_parent, transaction_list):
         for transaction in transaction_list:
-            #source_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.pocket_id)
             target_pocket = util_services.get_name_from_pocket_id(self.pockets,transaction.target_pocket_id)
             self.pockets_table.insert(pocket_parent, "end", text="", values=('',
                                                                              target_pocket,
@@ -70,6 +69,7 @@ class PocketFrame(ttkboot.Frame):
             gui_services.show_popup_message(self.root, "No pockets created")
         else:
             pop_transfer = PopTransferToPocket(self.root, self.pockets)
+            pop_transfer.title('Transfer to Pocket')
             pop_transfer.create_and_show_popup(db_connection)
             self.root.wait_window(pop_transfer)
             self.update_pockets_table(db_connection)
