@@ -1,5 +1,5 @@
 import ttkbootstrap as ttkboot
-from tkinter import OptionMenu, E, W, RIGHT, LEFT
+from tkinter import E, W
 from services import db_services, gui_services, util_services
 from entities.pocket_transaction import PocketTransaction
 from datetime import date
