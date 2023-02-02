@@ -69,6 +69,8 @@ VALUES (?, ?, ?, ?, ?)"""
 INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, income_date, description, pocket)
 VALUES (?, ?, ?, ?, ?)"""
 
+""" POCKETS """
+
 INSERT_POCKET = """INSERT INTO pocket (name,amount) VALUES (?,?)"""
 
 SELECT_POCKET_BY_NAME = """SELECT name FROM pocket WHERE name = ?"""
@@ -80,3 +82,10 @@ UPDATE_POCKET_NAME_BY_ID = """UPDATE pocket SET name = ? WHERE id = ?"""
 UPDATE_POCKET_BY_ID = """UPDATE pocket SET name = ?, amount = ? WHERE id = ?"""
 
 DELETE_POCKET_BY_NAME = """DELETE FROM pocket WHERE name = ?"""
+
+""" TRANSACTIONS """
+INSERT_TRANSACTION = """INSERT INTO pocket_transaction 
+(pocket_id, target_pocket_id, amount, transaction_date) VALUES (?,?,?,?)"""
+
+SELECT_TRANSACTIONS_BY_POCKET_ID = """SELECT * FROM pocket_transaction WHERE pocket_id = ? OR 
+(pocket_id IS NULL AND target_pocket_id = ?)"""

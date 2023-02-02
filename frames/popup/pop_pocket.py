@@ -1,124 +1,117 @@
-from tkinter import Toplevel, Button, Label, Entry, E, W, OptionMenu, StringVar, END
+import ttkbootstrap as ttkboot
 
+from tkinter import E, W, END
+from services import db_services
+from services import gui_services
 
-class PopPocket(Toplevel):
+class PopPocket(ttkboot.Toplevel):
     """ Class that creates the popup for creating, updating or deleting a pocket"""
 
-    def __init__(self, root, new_pocket):
-        Toplevel.__init__(self, root)
+    def __init__(self, root, is_new_pocket):
+        if is_new_pocket:
+            ttkboot.Toplevel.__init__(self,title='New Pocket')
+        else:
+            ttkboot.Toplevel.__init__(self,title='Edit Pocket')
         self.pockets = None
         self.account_pocket = None
-        self.clicked_pocket = StringVar()
+        self.clicked_pocket = ttkboot.StringVar()
         self.clicked_pocket_id = None
-        self.pocket_amount_entry = Entry(self)
-        self.pocket_name_entry = Entry(self)
-        self.new_pocket = new_pocket
+        self.pocket_amount_entry = ttkboot.Entry(self)
+        self.pocket_name_entry = ttkboot.Entry(self)
+        self.is_new_pocket = is_new_pocket
         self.root = root
         self.grab_set()
         self.choice = None
 
-    def create_and_show_popup(self, serve):
+    def create_and_show_popup(self, db_connection):
 
         grid_row = 0
-        if not self.new_pocket:
-            self.add_edit_pocket_components(serve)
+        if not self.is_new_pocket:
+            self.title("Edit Pocket")
+            self.add_edit_pocket_components(db_connection)
             grid_row = 1
+        else:
+            self.title("New Pocket")
 
-        pocket_name_label = Label(self, text="Name: ")
-        pocket_amount_label = Label(self, text="Initial Amount: ")
+        pocket_name_label = ttkboot.Label(self, text="Name: ")
+        pocket_amount_label = ttkboot.Label(self, text="Initial Amount: ")
 
-        save_button = Button(self, text="Save", command=lambda: self.save_pocket(serve,
-                                                                                 self.pocket_name_entry.get(),
-                                                                                 self.pocket_amount_entry.get()))
+        save_button = ttkboot.Button(self, text="Save",
+                                     bootstyle='primary',
+                                     command=lambda: self.save_pocket(db_connection,
+                                                                      self.pocket_name_entry.get(),
+                                                                      self.pocket_amount_entry.get()))
 
-        delete_button = Button(self, text="Delete", command=lambda: self.delete_pocket(serve,
-                                                                                       self.pocket_name_entry.get(),
-                                                                                       self.pocket_amount_entry.get()))
+        delete_button = ttkboot.Button(self, text="Delete",
+                                       bootstyle='danger',
+                                       command=lambda: self.delete_pocket(db_connection,
+                                                                          self.pocket_name_entry.get(),
+                                                                          self.pocket_amount_entry.get()))
 
-        pocket_name_label.grid(column=0, row=grid_row, sticky=E)
+        pocket_name_label.grid(column=0, row=grid_row, padx=2,pady=2,sticky=W)
         self.pocket_name_entry.grid(column=1, row=grid_row, sticky=E)
 
-        pocket_amount_label.grid(column=0, row=grid_row + 1, sticky=E)
+        pocket_amount_label.grid(column=0, row=grid_row + 1, padx=2, pady=2, sticky=W)
         self.pocket_amount_entry.grid(column=1, row=grid_row + 1, sticky=E)
 
-        save_button.grid(column=0, row=grid_row + 2, sticky=(E, W))
-        delete_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
-        # close_button.grid(column=2, row=grid_row + 2, sticky=(E, W))
+        save_button.grid(column=0, row=grid_row + 2, columnspan=2, padx=2,pady=2, sticky=(E, W))
+        delete_button.grid(column=0, row=grid_row + 3, columnspan=2, padx=2, pady=2, sticky=(E, W))
 
-    def add_edit_pocket_components(self, serve):
-        pocket_options = self.get_pockets(serve)
+    def add_edit_pocket_components(self, db_connection):
+        pocket_options = self.get_pockets(db_connection)
         self.add_select_dropdown(pocket_options, "Pocket: ", 0)
         self.pocket_name_entry.insert(0, str(self.account_pocket.get_name()))
         self.pocket_amount_entry.insert(0, str(self.account_pocket.get_amount()))
         self.pocket_amount_entry.config(state="disabled")
 
-    def update_edit_pocket_components(self, serve):
-        pockets_options = self.get_pockets(serve)
+    def update_edit_pocket_components(self, db_connection):
+        pockets_options = self.get_pockets(db_connection)
         self.add_select_dropdown(pockets_options, "Pocket: ", 0)
 
-    def save_pocket(self, serve, pocket_name, pocket_amount):
+    def save_pocket(self, db_connection, pocket_name, pocket_amount):
 
         if self.validate_initial_amount(pocket_amount):
             if pocket_name != "":
-                if not serve.pocket_name_in_database(pocket_name):
+                if db_services.get_pocket_by_name(db_connection, pocket_name) is None:
 
-                    if self.new_pocket:
-                        serve.insert_pocket(pocket_name, pocket_amount)
+                    if self.is_new_pocket:
+                        db_services.insert_pocket(db_connection, pocket_name, pocket_amount)
                     else:
                         if self.clicked_pocket_id is None:
-                            self.clicked_pocket_id = self.get_pocket_from_name(self.clicked_pocket.get()).get_id()
-                        serve.update_pocket(pocket_name, self.clicked_pocket_id)
-                        self.update_edit_pocket_components(serve)
-                    serve.show_popup_message(self.root, "Success!")
+                            self.clicked_pocket_id = db_services.get_pocket_by_name(
+                                db_connection, self.clicked_pocket.get()).get_name()
+                        db_services.update_pocket(db_connection, pocket_name, self.clicked_pocket_id)
+                        self.update_edit_pocket_components(db_connection)
+                    gui_services.show_popup_message(self.root, "Success!")
 
                 else:
-                    serve.show_popup_message(self.root, "Pocket exists!")
+                    gui_services.show_popup_message(self.root, "Pocket exists!")
             else:
-                serve.show_popup_message(self.root, "Name entered is invalid")
+                gui_services.show_popup_message(self.root, "Name entered is invalid")
         else:
-            serve.insert_pocket(pocket_name, "0")
-            serve.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
+            db_services.insert_pocket(db_connection, pocket_name, "0")
+            gui_services.show_popup_message(self.root, "Created empty pocket named: " + pocket_name)
 
-    def delete_pocket(self, serve, pocket_name, pocket_amount):
+    def delete_pocket(self, db_connection, pocket_name, pocket_amount):
 
         if pocket_name != "":
-            if not serve.pocket_name_in_database(pocket_name):
+            if db_services.get_pocket_by_name(db_connection, pocket_name) is not None:
                 pass
-                serve.show_popup_message(self.root, "Pocket does not exist!")
+                gui_services.show_popup_message(self.root, "Pocket does not exist!")
             else:
-                self.show_choice_popup()
+                gui_services.show_choice_popup(self.root,self.choice)
 
                 if self.choice == "Yes":
                     if pocket_amount is not None or pocket_amount != "0":
                         print("Positive amount, transferring to Account")
-                        serve.update_pocket_amount("Account", int(pocket_amount) + int(self.account_pocket.get_amount()))
-                        serve.update_pocket_amount(pocket_name, "0")
-                        serve.delete_pocket(pocket_name)
+                        db_services.update_pocket_amount(db_connection, "Account",
+                                                         int(pocket_amount) + int(self.account_pocket.get_amount()))
+                        db_services.update_pocket_amount(db_connection, pocket_name, "0")
+                        db_services.delete_pocket(db_connection, pocket_name)
                     else:
-                        serve.delete_poquet(pocket_name)
+                        db_services.delete_pocket(db_connection, pocket_name)
         else:
-            serve.show_popup_message(self.root, "Name entered is invalid")
-
-    def show_choice_popup(self):
-        popup = Toplevel(self.root)
-
-        def set_choice(choice):
-            self.choice = choice
-            popup.destroy()
-
-        popup.title("Alert!")
-        popup.geometry("150x120")
-
-        popup_label = Label(popup, text="Are you sure?")
-
-        popup_label.grid(column=0,row=0)
-        yes_button = Button(popup, text="YES", command=lambda:set_choice("Yes"))
-        no_button = Button(popup, text="NO", command=lambda:set_choice("No"))
-        yes_button.grid(column=0, row=1)
-        no_button.grid(column=2, row=1)
-
-        popup.grab_set()
-        self.root.wait_window(popup)
+            gui_services.show_popup_message(self.root, "Name entered is invalid")
 
     @staticmethod
     def validate_initial_amount(amount):
@@ -132,9 +125,9 @@ class PopPocket(Toplevel):
         self.clicked_pocket.set(pocket_options[0])
         self.clicked_pocket.trace("w", self.pocket_selection_callback)
 
-        type_label = Label(self, text=label)
-        type_label.grid(column=0, row=grid_row, sticky=(E, W))
-        dropdown = OptionMenu(self, self.clicked_pocket, *pocket_options)
+        type_label = ttkboot.Label(self, text=label)
+        type_label.grid(column=0, row=grid_row, padx=2,pady=2,sticky=W)
+        dropdown = ttkboot.Combobox(self, textvariable=self.clicked_pocket, values=pocket_options)
         dropdown.grid(column=1, row=grid_row, sticky=(E, W))
 
     def pocket_selection_callback(self, *clicked_item):
@@ -146,9 +139,9 @@ class PopPocket(Toplevel):
         self.pocket_amount_entry.insert(0, pocket.get_amount())
         self.pocket_amount_entry.config(state="disabled")
 
-    def get_pockets(self, serve):
+    def get_pockets(self, db_connection):
         pocket_options = []
-        self.pockets = serve.get_pockets()
+        self.pockets = db_services.get_pockets(db_connection)
         for pocket in self.pockets:
             pocket_options.append(pocket.name)
             if pocket.get_name() == "Account":
