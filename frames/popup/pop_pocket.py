@@ -1,6 +1,6 @@
 import ttkbootstrap as ttkboot
 
-from tkinter import E, W, OptionMenu, StringVar, END
+from tkinter import E, W, END
 from services import db_services
 from services import gui_services
 
@@ -14,7 +14,7 @@ class PopPocket(ttkboot.Toplevel):
             ttkboot.Toplevel.__init__(self,title='Edit Pocket')
         self.pockets = None
         self.account_pocket = None
-        self.clicked_pocket = StringVar()
+        self.clicked_pocket = ttkboot.StringVar()
         self.clicked_pocket_id = None
         self.pocket_amount_entry = ttkboot.Entry(self)
         self.pocket_name_entry = ttkboot.Entry(self)
@@ -27,11 +27,11 @@ class PopPocket(ttkboot.Toplevel):
 
         grid_row = 0
         if not self.is_new_pocket:
-            self.title = "Edit Pocket"
+            self.title("Edit Pocket")
             self.add_edit_pocket_components(db_connection)
             grid_row = 1
         else:
-            self.title = "New Pocket"
+            self.title("New Pocket")
 
         pocket_name_label = ttkboot.Label(self, text="Name: ")
         pocket_amount_label = ttkboot.Label(self, text="Initial Amount: ")
@@ -48,14 +48,14 @@ class PopPocket(ttkboot.Toplevel):
                                                                           self.pocket_name_entry.get(),
                                                                           self.pocket_amount_entry.get()))
 
-        pocket_name_label.grid(column=0, row=grid_row, sticky=E)
+        pocket_name_label.grid(column=0, row=grid_row, padx=2,pady=2,sticky=W)
         self.pocket_name_entry.grid(column=1, row=grid_row, sticky=E)
 
-        pocket_amount_label.grid(column=0, row=grid_row + 1, sticky=E)
+        pocket_amount_label.grid(column=0, row=grid_row + 1, padx=2, pady=2, sticky=W)
         self.pocket_amount_entry.grid(column=1, row=grid_row + 1, sticky=E)
 
-        save_button.grid(column=0, row=grid_row + 2, sticky=(E, W))
-        delete_button.grid(column=1, row=grid_row + 2, sticky=(E, W))
+        save_button.grid(column=0, row=grid_row + 2, columnspan=2, padx=2,pady=2, sticky=(E, W))
+        delete_button.grid(column=0, row=grid_row + 3, columnspan=2, padx=2, pady=2, sticky=(E, W))
 
     def add_edit_pocket_components(self, db_connection):
         pocket_options = self.get_pockets(db_connection)
@@ -126,8 +126,8 @@ class PopPocket(ttkboot.Toplevel):
         self.clicked_pocket.trace("w", self.pocket_selection_callback)
 
         type_label = ttkboot.Label(self, text=label)
-        type_label.grid(column=0, row=grid_row, sticky=(E, W))
-        dropdown = OptionMenu(self, self.clicked_pocket, *pocket_options)
+        type_label.grid(column=0, row=grid_row, padx=2,pady=2,sticky=W)
+        dropdown = ttkboot.Combobox(self, textvariable=self.clicked_pocket, values=pocket_options)
         dropdown.grid(column=1, row=grid_row, sticky=(E, W))
 
     def pocket_selection_callback(self, *clicked_item):
