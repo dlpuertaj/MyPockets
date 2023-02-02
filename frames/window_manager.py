@@ -1,8 +1,5 @@
-import tkinter as tk
+import ttkbootstrap as ttkboot
 
-from tkinter import ttk
-
-from util import global_constants
 from entities.expense_event import ExpenseEvent
 from entities.income_event import IncomeEvent
 from frames.pocket_frame import PocketFrame
@@ -12,7 +9,7 @@ from frames.popup.pop_new_type import PopNewType
 from frames.popup.pop_pocket import PopPocket
 from frames.resume_frame import ResumeFrame
 from frames.transactions_frame import TransactionsFrame
-from services import data_services
+from services import db_services, global_constants
 from services import gui_services
 
 
@@ -33,21 +30,21 @@ class WindowManager:
     income_types = None
 
     def __init__(self, database_connection):
-        self.root = tk.Tk()
+        self.root = ttkboot.Window(themename=global_constants.THEME, title="Pockets")
         self.db = database_connection
 
-        self.year = "2023"
+        self.year = global_constants.CURRENT_YEAR
         self.load_pockets_and_types()
 
-        self.resume_notebook    = ttk.Notebook(self.root)
+        self.resume_notebook    = ttkboot.Notebook(self.root)
         self.transactions_frame = TransactionsFrame(self.resume_notebook,self.expense_types)
         self.resume_frame       = ResumeFrame(self.resume_notebook,self.expense_types)
-        self.resume_table       = ttk.Treeview(self.resume_frame)
+        self.resume_table       = ttkboot.Treeview(self.resume_frame)
 
         self.pocket_frame       = PocketFrame(self.root,self.pockets)
-        self.pockets_table      = ttk.Treeview(self.pocket_frame)
+        self.pockets_table      = ttkboot.Treeview(self.pocket_frame)
 
-        self.menu_bar           = tk.Menu(self.root)
+        self.menu_bar           = ttkboot.Menu(self.root)
         self.create_menu_bar()
 
         self.ask_for_login()
@@ -65,13 +62,13 @@ class WindowManager:
         self.build_main_frame()
 
     def load_pockets_and_types(self):
-        self.pockets = data_services.get_pockets(self.db)
-        self.income_types = data_services.get_income_types(self.db)
-        self.expense_types = data_services.get_expense_types(self.db)
+        self.pockets = db_services.get_pockets(self.db)
+        self.income_types = db_services.get_income_types(self.db)
+        self.expense_types = db_services.get_expense_types(self.db)
 
     def load_types(self):
-        self.income_types = data_services.get_income_types(self.db)
-        self.expense_types = data_services.get_expense_types(self.db)
+        self.income_types = db_services.get_income_types(self.db)
+        self.expense_types = db_services.get_expense_types(self.db)
 
     def build_main_frame(self):
         """ Method that calls the creation of the pocket frame and the resume frame.
@@ -85,7 +82,7 @@ class WindowManager:
         self.resume_notebook.pack()
 
     def add_menu_to_menu_bar(self, label_for_new_menu):
-        new_menu = tk.Menu(self.menu_bar, tearoff=0)
+        new_menu = ttkboot.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label=label_for_new_menu,menu=new_menu)
         return new_menu
 
@@ -118,8 +115,8 @@ class WindowManager:
 
         file_menu.add_command(label=self.__QUIT, command=self.root.quit)
 
-    def create_type(self, expense_or_income):
-        pop_new_type = PopNewType(self.root, expense_or_income)
+    def create_type(self, is_expense):
+        pop_new_type = PopNewType(self.root, is_expense)
         pop_new_type.create_and_show_popup(self.db)
         self.root.wait_window(pop_new_type)
         self.load_types()
@@ -150,7 +147,7 @@ class WindowManager:
         self.update_pockets_table()
 
     def update_pockets_table(self):
-        self.pockets = data_services.get_pockets(self.db)
+        self.pockets = db_services.get_pockets(self.db)
         self.pocket_frame.set_pockets(self.pockets)
         self.pocket_frame.update_pockets_table(self.db)
 

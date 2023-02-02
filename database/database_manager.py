@@ -31,7 +31,8 @@ def execute_sqlite_query(connection, query, values, multi):
         else:
             cursor.execute(query)
     except db_error as e:
-        print(e)
+        cursor.close()
+        raise Exception(e)
 
     if multi:
         result = cursor.fetchall()

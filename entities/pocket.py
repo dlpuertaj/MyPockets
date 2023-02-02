@@ -4,6 +4,7 @@ class Pocket:
         self.pocket_id = pocket_id
         self.name = name
         self.amount = amount
+        self.transaction_list = []
 
     def get_name(self):
         return self.name
@@ -13,3 +14,12 @@ class Pocket:
 
     def get_amount(self):
         return self.amount
+
+    def add_transaction(self, transaction):
+        self.transaction_list.append(transaction)
+
+    def remove_object(self, transaction):
+        self.transaction_list.remove(transaction)
+
+    def get_list(self):
+        return self.transaction_list
