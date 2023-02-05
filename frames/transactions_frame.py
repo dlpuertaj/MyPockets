@@ -1,4 +1,4 @@
-from tkinter import ttk, W, NO, BOTH, Button, StringVar, Label, OptionMenu
+from tkinter import ttk, W, NO, BOTH, Button, StringVar, Label
 import ttkbootstrap as ttkboot
 
 from services import db_services, global_constants
@@ -46,6 +46,26 @@ class TransactionsFrame(ttkboot.Frame):
 
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
+        columns = ["Income", "Note", "Day"]
+        index = 3
+        for expense_type in self.expense_types:
+            self.expense_columns[expense_type.get_name()] = index
+            columns.append(expense_type.get_name())
+            index += 1
+
+        columns.append("Pocket")
+
+        self.transactions_table['columns'] = columns
+        self.transactions_table.heading("0", text="", anchor=W)
+        self.transactions_table.column("#0", width=20, stretch=NO)
+
+        for column in columns:
+            self.transactions_table.column(column, anchor=W, width=50)
+
+        for column in columns:
+            self.transactions_table.heading(column, text=column, anchor=W)
+
+    def build_required_expense_table(self):
         columns = ["Income", "Note", "Day"]
         index = 3
         for expense_type in self.expense_types:

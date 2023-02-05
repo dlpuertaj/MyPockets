@@ -143,7 +143,7 @@ def get_expense_types(db_connection):
     types = []
     if result is not None:
         for r in result:
-            expense_type = GenericType(r[0], r[1], r[2], r[3])
+            expense_type = GenericType(r[0], r[1], r[2])
             types.append(expense_type)
         return types
     else:
@@ -158,8 +158,8 @@ def get_expense_type_by_id(db_connection, expense_id):
         return None
 
 
-def insert_expense_type(db_connection, name, note, required):
-    result = execute_query(db_connection, db_constants.INSERT_EXPENSE_TYPE, (name, note, required), False)
+def insert_expense_type(db_connection, name, note):
+    result = execute_query(db_connection, db_constants.INSERT_EXPENSE_TYPE, (name, note), False)
     if result is not None:
         return result[0]
     else:

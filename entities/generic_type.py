@@ -1,10 +1,9 @@
 class GenericType(object):
 
-    def __init__(self, type_id, name, note, required):
+    def __init__(self, type_id, name, note):
         self.__type_id = type_id
         self.__name = name
         self.__note = note
-        self.__required = required
 
     def get_id(self):
         return self.__type_id
@@ -14,6 +13,3 @@ class GenericType(object):
 
     def get_note(self):
         return self.__note
-
-    def is_required_(self):
-        return self.__required
