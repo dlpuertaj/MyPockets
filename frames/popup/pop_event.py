@@ -60,6 +60,8 @@ class PopEvent(ttkboot.Toplevel):
         note_label = ttkboot.Label(self, text="Note: ")
         note_entry = ttkboot.Entry(self)
 
+        # TODO: Add required toggle
+
         save_button = ttkboot.Button(self, text="Save", width=10,command=lambda: self.save_event(db_connection,
                                                                                                  event_type_options,
                                                                                                  clicked_pocket.get(),

@@ -48,8 +48,8 @@ GET_INCOME_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.income_name, e.income_amount,
     WHERE strftime('%m', e.income_date) = ?;
     """
 
-GET_EXPENSE_EVENTS_WITH_NAME_BY_MONTH = """SELECT t.expense_name, e.expense_amount, e.expense_date, e.description, 
-    a.name FROM expense_event e 
+GET_EXPENSE_EVENTS_WITH_NAME_BY_MONTH = """SELECT 
+    t.expense_name, e.expense_amount, e.expense_date, e.description, a.name, e.required FROM expense_event e 
     INNER JOIN expense_type t ON e.expense_type = t.id
     INNER JOIN pocket a ON e.pocket = a.id 
     WHERE strftime('%m', e.expense_date) = ?
@@ -63,8 +63,8 @@ INSERT_EXPENSE_TYPE = "INSERT INTO expense_type (expense_name,note) VALUES (?,?,
 
 INSERT_INCOME_TYPE = "INSERT INTO income_type (income_name,note) VALUES (?,?)"
 
-INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, pocket)
-VALUES (?, ?, ?, ?, ?)"""
+INSERT_EXPENSE_EVENT = """INSERT INTO expense_event (expense_amount, expense_type, expense_date, description, pocket, 
+required) VALUES (?, ?, ?, ?, ?, ?) """
 
 INSERT_INCOME_EVENT = """INSERT INTO income_event (income_amount, income_type, income_date, description, pocket)
 VALUES (?, ?, ?, ?, ?)"""

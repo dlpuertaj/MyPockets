@@ -131,7 +131,7 @@ def get_income_types(database_connection):
     types = []
     if result is not None:
         for r in result:
-            income_type = GenericType(r[0], r[1], r[2], 0)
+            income_type = GenericType(r[0], r[1], r[2])
             types.append(income_type)
         return types
     else:
@@ -171,7 +171,7 @@ def get_expenses_by_month(db_connection, month):
     expense_events = []
     if result_set is not None:
         for rs in result_set:
-            expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
+            expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4],rs[5])
             expense_events.append(expense)
         return expense_events
     else:
@@ -213,13 +213,13 @@ def get_event_types_by_event(db_connection, event_type):
 
 
 # TODO: insert event using event object
-def insert_event(db_connection, is_income, amount, event_type, date, note, pocket):
+def insert_event(db_connection, is_income, amount, event_type, date, note, pocket, required):
     if is_income:
         result = execute_query(db_connection, db_constants.INSERT_INCOME_EVENT,
                                (amount, event_type, date, note, pocket), False)
     else:
         result = execute_query(db_connection, db_constants.INSERT_EXPENSE_EVENT,
-                               (amount, event_type, date, note, pocket), False)
+                               (amount, event_type, date, note, pocket, required), False)
     if result is not None:
         return result
     else:
