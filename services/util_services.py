@@ -36,3 +36,8 @@ def get_pocket_by_name(list_of_pockets, pocket_name):
     for pocket in list_of_pockets:
         if pocket_name == pocket.name:
             return pocket
+
+def get_type_id_from_selected_event(types, selected_event):
+    for t in types:
+        if t.get_name() == selected_event:
+            return t.get_id()
