@@ -102,7 +102,7 @@ class WindowManager:
         file_menu.add_command(label=global_constants.NEW_INCOME_LABEL,
                               command=lambda: self.create_event(IncomeEvent(None, None, None, "", "")))
         file_menu.add_command(label=global_constants.NEW_EXPENSE_LABEL,
-                              command=lambda: self.create_event(ExpenseEvent(None, None, None, "", "")))
+                              command=lambda: self.create_event(ExpenseEvent(None, None, None, "", "", 0)))
 
         file_menu.add_separator()
 

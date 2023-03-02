@@ -96,7 +96,6 @@ def delete_pocket(db_connection, pocket_name):
 
 """ TRANSACTIONS """
 
-
 def insert_transaction(db_connection, transaction):
     result = execute_query(db_connection, db_constants.INSERT_TRANSACTION, (transaction.pocket_id,
                                                                             transaction.target_pocket_id,
@@ -124,6 +123,8 @@ def get_transactions_by_pocket_id(db_connection, pocket_id):
     else:
         return None
 
+
+""" TYPES """
 
 def get_income_types(database_connection):
     result = execute_query(database_connection, db_constants.GET_INCOME_TYPES, None, True)
@@ -170,7 +171,7 @@ def get_expenses_by_month(db_connection, month):
     expense_events = []
     if result_set is not None:
         for rs in result_set:
-            expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4])
+            expense = ExpenseEvent(rs[0], rs[1], rs[2], rs[3], rs[4],rs[5])
             expense_events.append(expense)
         return expense_events
     else:
@@ -178,7 +179,7 @@ def get_expenses_by_month(db_connection, month):
 
 
 def insert_income_type(db_connection, name, note):
-    result = execute_query(db_connection, db_constants.INSERT_INCOME_TYPE, (name, note), False)
+    result = execute_query(db_connection, db_constants.INSERT_INCOME_TYPE, (name, note, 0), False)
     if result is not None:
         return result[0]
     else:
@@ -212,13 +213,13 @@ def get_event_types_by_event(db_connection, event_type):
 
 
 # TODO: insert event using event object
-def insert_event(db_connection, is_income, amount, event_type, date, note, pocket):
+def insert_event(db_connection, is_income, amount, event_type, date, note, pocket, required):
     if is_income:
         result = execute_query(db_connection, db_constants.INSERT_INCOME_EVENT,
                                (amount, event_type, date, note, pocket), False)
     else:
         result = execute_query(db_connection, db_constants.INSERT_EXPENSE_EVENT,
-                               (amount, event_type, date, note, pocket), False)
+                               (amount, event_type, date, note, pocket, required), False)
     if result is not None:
         return result
     else:
@@ -226,7 +227,6 @@ def insert_event(db_connection, is_income, amount, event_type, date, note, pocke
 
 
 """ RESUME data """
-
 
 def get_resume_data_by_month(db_connection, month):
     result = execute_query(db_connection, db_constants.GET_EXPENSE_SUM_BY_TYPE_AND_MONTH, (month,), True)

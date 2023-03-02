@@ -1,20 +1,21 @@
-from tkinter import Frame, W, NO, BOTH, Button, StringVar, Label, OptionMenu
-from tkinter import ttk
+from tkinter import ttk, W, NO, BOTH, Button, StringVar, Label
+import ttkbootstrap as ttkboot
 
 from services import db_services, global_constants
 
 import calendar as calendar
 
-class TransactionsFrame(Frame):
+class TransactionsFrame(ttkboot.Frame):
 
     months = {}
 
     """ Initializer method for the transactions frame"""
     def __init__(self, root_notebook,expense_types):
-        Frame.__init__(self, root_notebook)
+        ttkboot.Frame.__init__(self, root_notebook)
         self.set_months()
         self.clicked_month = StringVar()
         self.expense_columns = {}
+        self.required_expense_columns = {}
         self.expense_types = expense_types
         self.transactions_table = ttk.Treeview(self,height=31)
 
@@ -37,13 +38,34 @@ class TransactionsFrame(Frame):
         # months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
         self.clicked_month.set('January')
         self.clicked_month.trace("w", self.callback)
+        options = list(self.months.keys())
         type_label = Label(self, text="Month")
         type_label.pack()
-        dropdown = OptionMenu(self, self.clicked_month, *self.months.keys())
+        dropdown = ttkboot.Combobox(self, textvariable=self.clicked_month, values=options)
         dropdown.pack()
 
     """ Method that builds the transactions table with de database data"""
     def build_transactions_table(self):
+        columns = ["Income", "Note", "Day"]
+        index = 3
+        for expense_type in self.expense_types:
+            self.expense_columns[expense_type.get_name()] = index
+            columns.append(expense_type.get_name())
+            index += 1
+
+        columns.append("Pocket")
+
+        self.transactions_table['columns'] = columns
+        self.transactions_table.heading("0", text="", anchor=W)
+        self.transactions_table.column("#0", width=20, stretch=NO)
+
+        for column in columns:
+            self.transactions_table.column(column, anchor=W, width=50)
+
+        for column in columns:
+            self.transactions_table.heading(column, text=column, anchor=W)
+
+    def build_required_expense_table(self):
         columns = ["Income", "Note", "Day"]
         index = 3
         for expense_type in self.expense_types:
